@@ -19,6 +19,18 @@ program main
     local = mean_test()
     if (.not.local) overall = .false.
 
+    local = median_test_even()
+    if (.not.local) overall = .false.
+
+    local = median_test_odd()
+    if (.not.local) overall = .false.
+
+    local = variance_test()
+    if (.not.local) overall = .false.
+
+    local = std_dev_test()
+    if (.not.local) overall = .false.
+
     ! End
     if (overall) then
         print '(A)', "MEASUREMENT STATS TESTS COMPLETED SUCCESSFULLY."

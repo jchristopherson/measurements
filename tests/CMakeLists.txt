@@ -8,6 +8,7 @@ set(measurement_stats_files
 add_executable(MeasurementStatsTests ${measurement_stats_files})
 target_link_libraries(MeasurementStatsTests
     measurements
+    ${linalg_LIBRARIES}
 )
 
 # Run the tests
