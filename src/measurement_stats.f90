@@ -2,6 +2,8 @@
 
 submodule (measurements_core) measurement_stats
     use linalg_core
+    use nonlin_core
+    use nonlin_solve
 contains
 ! ------------------------------------------------------------------------------
 pure module function is_monotonic(x) result(rst)
@@ -135,6 +137,115 @@ pure module function standard_deviation(x) result(s)
     ! Process
     s = sqrt(variance(x))
 end function
+
+! ------------------------------------------------------------------------------
+pure module function data_range(x) result(r)
+    ! Arguments
+    real(real64), intent(in), dimension(:) :: x
+    real(real64) :: r
+
+    ! Local Variables
+    integer(int32) :: i, n
+    real(real64) :: maxx, minx
+
+    ! Initialization
+    r = 0.0d0
+    n = size(x)
+
+    ! Quick Return
+    if (n <= 1) return
+
+    ! Process
+    maxx = x(1)
+    minx = x(1)
+    do i = 2, n
+        if (x(i) > maxx) maxx = x(i)
+        if (x(i) < minx) minx = x(i)
+    end do
+    r = maxx - minx
+end function
+
+! ------------------------------------------------------------------------------
+module function z_score(c, err) result(z)
+    ! Arguments
+    real(real64), intent(in) :: c
+    class(errors), intent(inout), optional, target :: err
+    real(real64) :: z
+
+    ! Local Variables
+    type(fcn1var_helper) :: obj
+    procedure(fcn1var), pointer :: fcn
+    type(brent_solver) :: solver
+    type(value_pair) :: lim
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+
+    ! Input Check
+    if (c <= 0.0d0 .or. c >= 1.0d0) then
+        z = 0.0d0
+        call errmgr%report_error("z_score", "The confidence level must " // &
+            "be a value between 0 and 1 (nonlinclusive).", &
+            M_INVALID_INPUT_ERROR)
+        return
+    end if
+
+    ! Set solver tolerances
+    call solver%set_fcn_tolerance(1.0d-12)
+
+    ! Compute the solution
+    fcn => zfun
+    call obj%set_fcn(fcn)
+    z = 1.0d0
+    lim%x1 = 0.0d0
+    lim%x2 = 1.0d1
+    call solver%solve(obj, z, lim, err = errmgr)
+    
+contains
+    ! Compute the solution to: alpha = erf(z / sqrt(2)) for z.
+    function zfun(x) result(f)
+        real(real64), intent(in) :: x
+        real(real64) :: f
+        f = c - erf(x / sqrt(2.0d0))
+    end function
+end function
+
+! ------------------------------------------------------------------------------
+pure module function confidence_interval(x, zval) result(ci)
+    ! Arguments
+    real(real64), intent(in), dimension(:) :: x
+    real(real64), intent(in) :: zval
+    real(real64) :: ci
+
+    ! Local Variables
+    real(real64) :: stdev
+    integer(int32) :: n
+
+    ! Compute the standard deviation
+    stdev = standard_deviation(x)
+
+    ! Compute the interval
+    n = size(x)
+    ci = zval * stdev / sqrt(real(n))
+end function
+
+! ------------------------------------------------------------------------------
+! normal distribution
+
+! ------------------------------------------------------------------------------
+! t distribution
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
 

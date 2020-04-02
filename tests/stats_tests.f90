@@ -188,8 +188,88 @@ function std_dev_test() result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
+! range
 
 ! ------------------------------------------------------------------------------
+function z_score_test() result(rst)
+    ! Arguments
+    logical :: rst
+
+    ! Parameter
+    integer(int32), parameter :: npts = 10000
+    real(real64), parameter :: tol = 1.0d-8
+    real(real64), parameter :: z80 = 1.281551565545d0
+    real(real64), parameter :: z90 = 1.644853626951d0
+    real(real64), parameter :: z95 = 1.959963984540d0
+    real(real64), parameter :: z99 = 2.575829303549d0
+    real(real64), parameter :: z999 = 3.290526731492d0
+
+    ! Local Variables
+    real(real64) :: ans, computed, delta
+
+    ! Initialization
+    rst = .true.
+
+    ! 80%
+    ans = z80
+    computed = z_score(0.8d0)
+    delta = ans - computed
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "Z_SCORE_TEST 80% FAILED."
+        print *, "Expected: ", ans
+        print *, "Computed: ", computed
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+
+    ! 90%
+    ans = z90
+    computed = z_score(0.9d0)
+    delta = ans - computed
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "Z_SCORE_TEST 90% FAILED."
+        print *, "Expected: ", ans
+        print *, "Computed: ", computed
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+
+    ! 95%
+    ans = z95
+    computed = z_score(0.95d0)
+    delta = ans - computed
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "Z_SCORE_TEST 95% FAILED."
+        print *, "Expected: ", ans
+        print *, "Computed: ", computed
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+
+    ! 99%
+    ans = z99
+    computed = z_score(0.99d0)
+    delta = ans - computed
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "Z_SCORE_TEST 99% FAILED."
+        print *, "Expected: ", ans
+        print *, "Computed: ", computed
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+
+    ! 99.9%
+    ans = z999
+    computed = z_score(0.999d0)
+    delta = ans - computed
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "Z_SCORE_TEST 99.9% FAILED."
+        print *, "Expected: ", ans
+        print *, "Computed: ", computed
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+end function
 
 ! ------------------------------------------------------------------------------
 

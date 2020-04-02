@@ -5,6 +5,7 @@ module measurements_c_api
     use iso_c_binding
     use iso_fortran_env
     use measurements_core
+    use ferror
     implicit none
 contains
 ! ------------------------------------------------------------------------------
@@ -63,8 +64,6 @@ contains
 ! ------------------------------------------------------------------------------
     !> @brief Computes the sample variance of a data set.
     !!
-    !! @param[in] x The data set.
-    !!
     !! @param[in] n The number of data points.
     !! @param[in] x An N-element array containing the data set.
     !!
@@ -101,10 +100,75 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Computes the range of a data set.
+    !!
+    !! @param[in] n The number of data points.
+    !! @param[in] x An N-element array containing the data set.
+    !!
+    !! @return The range of the data set.
+    function c_data_range(n, x) bind(C, name = "c_data_range") result(r)
+        ! Arguments
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n)
+        real(c_double) :: r
+
+        ! Process
+        r = data_range(x)
+    end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Computes the z-score typically used in confidence interval
+    !! calculations.
+    !!
+    !! @param[in] c The confidence level.  This value must be between 0
+    !!  and 1 such that: 0 < c < 1.
+    !! @param[out] z The computed z-score.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_INVALID_INPUT_ERROR: Occurs if @p c is not within its allowed
+    !!      range.
+    function c_z_score(c, z) bind(C, name = "c_z_score") result(flag)
+        ! Arguments
+        real(c_double), intent(in), value :: c
+        real(c_double), intent(out) :: z
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        z = z_score(c, err)
+        if (err%has_error_occurred()) flag = err%get_error_code()
+    end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Computes the confidence interval of a data set.
+    !!
+    !! @param[in] n The number of data points.
+    !! @param[in] x An N-element array containing the data set.
+    !! @param[in] zval The critical value (z or t value).
+    !!
+    !! @return The confidence interval as referenced from the population
+    !!  mean.
+    !!
+    !! @remarks
+    !! This value is computed as follows.
+    !! \f$ CI = z^{*} \frac{\sigma}{\sqrt{n}} \f$
+    function c_confidence_interval(n, x, zval) &
+            bind(C, name = "c_confidence_interval") result(ci)
+        ! Arguments
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n), zval
+        real(c_double) :: ci
+
+        ! Process
+        ci = confidence_interval(x, zval)
+    end function
 
 ! ------------------------------------------------------------------------------
 

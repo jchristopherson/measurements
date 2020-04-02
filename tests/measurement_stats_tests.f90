@@ -31,6 +31,11 @@ program main
     local = std_dev_test()
     if (.not.local) overall = .false.
 
+    ! range
+
+    local = z_score_test()
+    if (.not.local) overall = .false.
+
     ! End
     if (overall) then
         print '(A)', "MEASUREMENT STATS TESTS COMPLETED SUCCESSFULLY."
