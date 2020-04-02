@@ -21,3 +21,34 @@ add_custom_target(
     run_measurement_stats_tests ALL 
     DEPENDS measurement_stats_tests_output
 )
+
+
+# ------------------------------------------------------------------------------
+# C API MEASUREMENT STATS TESTS
+# ------------------------------------------------------------------------------
+set(c_measurement_stats_files
+    c_stats_tests.c
+    c_array.c
+)
+
+# Locate headers
+include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/tests)
+
+# Build the executable
+add_executable(C_MeasurementStatsTests ${c_measurement_stats_files})
+target_link_libraries(C_MeasurementStatsTests
+    measurements
+    ${linalg_LIBRARIES}
+)
+
+# Run the tests
+add_custom_command(
+    OUTPUT c_measurement_stats_tests_output
+    DEPENDS ${c_measurement_stats_files}
+    COMMAND C_MeasurementStatsTests
+)
+add_custom_target(
+    run_c_measurement_stats_tests ALL 
+    DEPENDS c_measurement_stats_tests_output
+)
