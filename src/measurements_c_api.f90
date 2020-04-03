@@ -88,6 +88,10 @@ contains
     !! @param[in] x An N-element array containing the data set.
     !!
     !! @return The standard deviation of @p x.
+    !!
+    !! @remarks
+    !! The standard deviation is computed as \f$ \sigma = 
+    !! \sqrt{\frac{\sum_{i=1}^{n}(x_{i} - \mu)^{2}}{n - 1}} \f$
     function c_standard_deviation(n, x) bind(C, name = "c_standard_deviation") &
             result(s)
         ! Arguments

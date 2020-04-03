@@ -68,6 +68,10 @@ module measurements_core
         !! @param[in] x The data set.
         !!
         !! @return The standard deviation of @p x.
+        !!
+        !! @remarks
+        !! The standard deviation is computed as \f$ \sigma = 
+        !! \sqrt{\frac{\sum_{i=1}^{n}(x_{i} - \mu)^{2}}{n - 1}} \f$
         pure module function standard_deviation(x) result(s)
             real(real64), intent(in), dimension(:) :: x
             real(real64) :: s
