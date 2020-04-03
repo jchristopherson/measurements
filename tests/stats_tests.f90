@@ -188,7 +188,39 @@ function std_dev_test() result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-! range
+function range_test() result(rst)
+    ! Arguments
+    logical :: rst
+
+    ! Parameters
+    integer(int32), parameter :: npts = 10000
+    real(real64), parameter :: tol = 1.0d-8
+
+    ! Local Variables
+    real(real64) :: x(npts), ans, computed, delta
+
+    ! Initialization
+    rst = .true.
+
+    ! Create a random data set
+    call random_number(x)
+
+    ! Compute the solution
+    ans = maxval(x) - minval(x)
+
+    ! Process
+    computed = data_range(x)
+
+    ! Test
+    delta = ans - computed
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "RANGE_TEST FAILED."
+        print *, "Expected: ", ans
+        print *, "Computed: ", computed
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+end function
 
 ! ------------------------------------------------------------------------------
 function z_score_test() result(rst)
@@ -272,10 +304,13 @@ function z_score_test() result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
+! confidence interval test
 
 ! ------------------------------------------------------------------------------
+! normal distribution test
 
 ! ------------------------------------------------------------------------------
+! t distribution test
 
 ! ------------------------------------------------------------------------------
 end module

@@ -129,6 +129,12 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memitem:a8926790a5fa5878b8b3a889017644428"><td class="memItemLeft" align="right" valign="top">real(c_double) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a8926790a5fa5878b8b3a889017644428">c_confidence_interval</a> (n, x, zval)</td></tr>
 <tr class="memdesc:a8926790a5fa5878b8b3a889017644428"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the confidence interval of a data set.  <a href="namespacemeasurements__c__api.html#a8926790a5fa5878b8b3a889017644428">More...</a><br /></td></tr>
 <tr class="separator:a8926790a5fa5878b8b3a889017644428"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28dbb69df4b97f8ff2928cf921564eeb"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a28dbb69df4b97f8ff2928cf921564eeb">c_normal_distribution</a> (mu, sigma, n, x, f)</td></tr>
+<tr class="memdesc:a28dbb69df4b97f8ff2928cf921564eeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluates the probability distribution function of a normal distribution.  <a href="namespacemeasurements__c__api.html#a28dbb69df4b97f8ff2928cf921564eeb">More...</a><br /></td></tr>
+<tr class="separator:a28dbb69df4b97f8ff2928cf921564eeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa433b96aa6d5fc555e53ac331fc76f6"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#aaa433b96aa6d5fc555e53ac331fc76f6">c_t_distribution</a> (dof, n, t, f)</td></tr>
+<tr class="memdesc:aaa433b96aa6d5fc555e53ac331fc76f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evalautes the probability distribution function of Student's t-distribution.  <a href="namespacemeasurements__c__api.html#aaa433b96aa6d5fc555e53ac331fc76f6">More...</a><br /></td></tr>
+<tr class="separator:aaa433b96aa6d5fc555e53ac331fc76f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A module providing C bindings to the MEASUREMENTS library. </p>
@@ -341,6 +347,67 @@ Functions/Subroutines</h2></td></tr>
 
 </div>
 </div>
+<a id="a28dbb69df4b97f8ff2928cf921564eeb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28dbb69df4b97f8ff2928cf921564eeb">&#9670;&nbsp;</a></span>c_normal_distribution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine measurements_c_api::c_normal_distribution </td>
+          <td>(</td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>mu</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>sigma</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(out)&#160;</td>
+          <td class="paramname"><em>f</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Evaluates the probability distribution function of a normal distribution. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">mu</td><td>The population mean. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sigma</td><td>The population standard deviation. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The number of values at which to evaluat the function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>An N-element array containing the values at which to evaluate the distrubition funciton. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">f</td><td>An N-element array where the function output will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section remark"><dt>Remarks</dt><dd>The normal distribution has the form \( f(x) = \frac{1}{\sigma \sqrt{2 \pi}} \exp(-\frac{1}{2}(\frac{x-\mu}{\sigma})^{2}) \). </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00195">195</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
 <a id="a1f3e91f72356fece9e7cf9b6884e6e46"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1f3e91f72356fece9e7cf9b6884e6e46">&#9670;&nbsp;</a></span>c_standard_deviation()</h2>
 
@@ -379,6 +446,60 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section remark"><dt>Remarks</dt><dd>The standard deviation is computed as \( \sigma = \sqrt{\frac{\sum_{i=1}^{n}(x_{i} - \mu)^{2}}{n - 1}} \) </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00097">97</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="aaa433b96aa6d5fc555e53ac331fc76f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa433b96aa6d5fc555e53ac331fc76f6">&#9670;&nbsp;</a></span>c_t_distribution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine measurements_c_api::c_t_distribution </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>dof</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(out)&#160;</td>
+          <td class="paramname"><em>f</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Evalautes the probability distribution function of Student's t-distribution. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">dof</td><td>The number of degrees of freedom of the data set. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The number of values at which to evaluat the function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>An N-element array containing the values at which to evaluate the distrubition funciton. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">f</td><td>An N-element array where the function output will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Student's t-distribution has the form \( f(t) = \frac{\Gamma(\frac{\nu + 1}{2})}{\sqrt{\nu \pi} \Gamma(\frac{\nu}{2})} (1 + \frac{t^{2}}{\nu})^{-\frac{\nu + 1}{2}} \). </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00222">222</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>

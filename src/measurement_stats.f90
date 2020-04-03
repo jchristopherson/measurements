@@ -236,10 +236,36 @@ pure module function confidence_interval(x, zval) result(ci)
 end function
 
 ! ------------------------------------------------------------------------------
-! normal distribution
+pure elemental module function normal_distribution(mu, sigma, x) result(f)
+    ! Arguments
+    real(real64), intent(in) :: mu, sigma, x
+    real(real64) :: f
+
+    ! Constants
+    real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
+
+    ! Process
+    f = (1.0d0 / (sigma * sqrt(2.0d0 * pi))) * exp(-0.5 * ((x - mu) / sigma)**2)
+end function
 
 ! ------------------------------------------------------------------------------
-! t distribution
+pure elemental module function t_distribution(dof, t) result(f)
+    ! Arguments
+    integer(int32), intent(in) :: dof
+    real(real64), intent(in) :: t
+    real(real64) :: f
+
+    ! Constants
+    real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
+
+    ! Local Variables
+    real(real64) :: arg1
+
+    ! Process
+    arg1 = 0.5d0 * (dof + 1)
+    f = (gamma(arg1) / (gamma(0.5d0 * dof) * sqrt(dof * pi))) * &
+        (1.0d0 + t**2 / dof)**(-arg1)
+end function
 
 ! ------------------------------------------------------------------------------
 

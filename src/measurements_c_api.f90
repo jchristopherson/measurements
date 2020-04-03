@@ -147,7 +147,7 @@ contains
 
         ! Process
         z = z_score(c, err)
-        if (err%has_error_occurred()) flag = err%get_error_code()
+        if (err%has_error_occurred()) flag = err%get_error_flag()
     end function
 
 ! ------------------------------------------------------------------------------
@@ -175,8 +175,58 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Evaluates the probability distribution function of a normal
+    !! distribution.
+    !!
+    !! @param[in] mu The population mean.
+    !! @param[in] sigma The population standard deviation.
+    !! @param[in] n The number of values at which to evaluat the function.
+    !! @param[in] x An N-element array containing the values at which to 
+    !!  evaluate the distrubition funciton.
+    !! @param[out] f An N-element array where the function output will be
+    !!  written.
+    !!
+    !! @remarks
+    !! The normal distribution has the form 
+    !! \f$ f(x) = \frac{1}{\sigma \sqrt{2 \pi}} 
+    !! \exp(-\frac{1}{2}(\frac{x-\mu}{\sigma})^{2}) \f$.
+    subroutine c_normal_distribution(mu, sigma, n, x, f) &
+            bind(C, name = "c_normal_distribution")
+        ! Arguments
+        real(c_double), intent(in), value :: mu, sigma
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n)
+        real(c_double), intent(out) :: f(n)
+
+        ! Process
+        f = normal_distribution(mu, sigma, x)
+    end subroutine
 
 ! ------------------------------------------------------------------------------
+    !> @brief Evalautes the probability distribution function of Student's
+    !! t-distribution.
+    !!
+    !! @param[in] dof The number of degrees of freedom of the data set.
+    !! @param[in] n The number of values at which to evaluat the function.
+    !! @param[in] t An N-element array containing the values at which to 
+    !!  evaluate the distrubition funciton.
+    !! @param[out] f An N-element array where the function output will be
+    !!  written.
+    !!
+    !! @remarks
+    !! Student's t-distribution has the form \f$ f(t) = 
+    !! \frac{\Gamma(\frac{\nu + 1}{2})}{\sqrt{\nu \pi} 
+    !! \Gamma(\frac{\nu}{2})} (1 + \frac{t^{2}}{\nu})^{-\frac{\nu + 1}{2}} 
+    !! \f$.
+    subroutine c_t_distribution(dof, n, t, f) bind(C, name = "c_t_distribution")
+        ! Arguments
+        integer(c_int), intent(in), value :: dof, n
+        real(c_double), intent(in) :: t(n)
+        real(c_double), intent(out) :: f(n)
+
+        ! Process
+        f = t_distribution(dof, t)
+    end subroutine
 
 ! ------------------------------------------------------------------------------
 

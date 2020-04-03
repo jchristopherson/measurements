@@ -88,6 +88,34 @@ double c_data_range(int n, const double *x);
  */
 int c_z_score(double c, double *z);
 
+/**
+ * Evaluates the probability distribution function of a normal
+!! distribution.
+!!
+!! @param mu The population mean.
+!! @param sigma The population standard deviation.
+!! @param n The number of values at which to evaluat the function.
+!! @param x An N-element array containing the values at which to 
+!!  evaluate the distrubition funciton.
+!! @param f An N-element array where the function output will be
+!!  written.
+ */
+void c_normal_distribution(double mu, double sigma, int n, const double *x,
+    double *f);
+
+/**
+ * Evalautes the probability distribution function of Student's
+!! t-distribution.
+!!
+!! @param dof The number of degrees of freedom of the data set.
+!! @param n The number of values at which to evaluat the function.
+!! @param t An N-element array containing the values at which to 
+!!  evaluate the distrubition funciton.
+!! @param f An N-element array where the function output will be
+!!  written.
+ */
+void c_t_distribution(int dof, int n, const double *t, double *f);
+
 #ifdef __cplusplus
 }
 #endif  // __cplusplus

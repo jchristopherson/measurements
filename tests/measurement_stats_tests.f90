@@ -31,7 +31,8 @@ program main
     local = std_dev_test()
     if (.not.local) overall = .false.
 
-    ! range
+    local = range_test()
+    if (.not.local) overall = .false.
 
     local = z_score_test()
     if (.not.local) overall = .false.

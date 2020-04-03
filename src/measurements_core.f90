@@ -124,6 +124,45 @@ module measurements_core
             real(real64), intent(in) :: zval
             real(real64) :: ci
         end function
+
+        !> @brief Evaluates the probability distribution function of a normal
+        !! distribution.
+        !!
+        !! @param[in] mu The population mean.
+        !! @param[in] sigma The population standard deviation.
+        !! @param[in] x The value at which to evaluate the distrubition 
+        !!  funciton.
+        !!
+        !! @return The value of the distribution function at @p x.
+        !!
+        !! @remarks
+        !! The normal distribution has the form 
+        !! \f$ f(x) = \frac{1}{\sigma \sqrt{2 \pi}} 
+        !! \exp(-\frac{1}{2}(\frac{x-\mu}{\sigma})^{2}) \f$.
+        pure elemental module function normal_distribution(mu, sigma, x) &
+                result(f)
+            real(real64), intent(in) :: mu, sigma, x
+            real(real64) :: f
+        end function
+
+        !> @brief Evalautes the probability distribution function of Student's
+        !! t-distribution.
+        !!
+        !! @param[in] dof The number of degrees of freedom of the data set.
+        !! @param[in] t The value at which to evaluate the distribution.
+        !!
+        !! @return The value of the distribution function at @p t.
+        !!
+        !! @remarks
+        !! Student's t-distributino has the form \f$ f(t) = 
+        !! \frac{\Gamma(\frac{\nu + 1}{2})}{\sqrt{\nu \pi} 
+        !! \Gamma(\frac{\nu}{2})} (1 + \frac{t^{2}}{\nu})^{-\frac{\nu + 1}{2}} 
+        !! \f$.
+        pure elemental module function t_distribution(dof, t) result(f)
+            integer(int32), intent(in) :: dof
+            real(real64), intent(in) :: t
+            real(real64) :: f
+        end function
     end interface
 
 ! ------------------------------------------------------------------------------
