@@ -90,31 +90,55 @@ int c_z_score(double c, double *z);
 
 /**
  * Evaluates the probability distribution function of a normal
-!! distribution.
-!!
-!! @param mu The population mean.
-!! @param sigma The population standard deviation.
-!! @param n The number of values at which to evaluat the function.
-!! @param x An N-element array containing the values at which to 
-!!  evaluate the distrubition funciton.
-!! @param f An N-element array where the function output will be
-!!  written.
+ * distribution.
+ *
+ * @param mu The population mean.
+ * @param sigma The population standard deviation.
+ * @param n The number of values at which to evaluat the function.
+ * @param x An N-element array containing the values at which to 
+ *  evaluate the distrubition funciton.
+ * @param f An N-element array where the function output will be
+ *  written.
  */
 void c_normal_distribution(double mu, double sigma, int n, const double *x,
     double *f);
 
 /**
  * Evalautes the probability distribution function of Student's
-!! t-distribution.
-!!
-!! @param dof The number of degrees of freedom of the data set.
-!! @param n The number of values at which to evaluat the function.
-!! @param t An N-element array containing the values at which to 
-!!  evaluate the distrubition funciton.
-!! @param f An N-element array where the function output will be
-!!  written.
+ * t-distribution.
+ *
+ * @param dof The number of degrees of freedom of the data set.
+ * @param n The number of values at which to evaluat the function.
+ * @param t An N-element array containing the values at which to 
+ *  evaluate the distrubition funciton.
+ * @param f An N-element array where the function output will be
+ *  written.
  */
 void c_t_distribution(int dof, int n, const double *t, double *f);
+
+/**
+ * Computes the beta function.
+ *
+ * @param a The first argument of the function.
+ * @param b The second argument of the function.
+ *
+ * @return The value of the beta function at @p a and @p b.
+ */
+double c_beta(double a, double b);
+
+/**
+ * Evaluates the probability distribution function of a beta
+ * distribution.
+ *
+ * @param a The first argument of the function.
+ * @param b The second argument of the function.
+ * @param n The number of values at which to evaluat the function.
+ * @param x An N-element array containing the values at which to 
+ *  evaluate the distrubition funciton.
+ * @param f An N-element array where the function output will be
+ *  written.
+ */
+void c_beta_distribution(double a, double b, int n, const double *x, double *f);
 
 #ifdef __cplusplus
 }

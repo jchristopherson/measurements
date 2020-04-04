@@ -163,6 +163,77 @@ module measurements_core
             real(real64), intent(in) :: t
             real(real64) :: f
         end function
+
+        !> @brief Computes the beta function.
+        !!
+        !! @param[in] a The first argument of the function.
+        !! @param[in] b The second argument of the function.
+        !!
+        !! @return The value of the beta function at @p a and @p b.
+        !!
+        !! @remarks The beta function is related to the gamma function
+        !! by the following relationship \f$ \beta(a,b) = 
+        !! \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)} \f$.
+        pure elemental module function beta(a, b) result(z)
+            real(real64), intent(in) :: a, b
+            real(real64) :: z
+        end function
+
+        !> @brief Evaluates the probability distribution function of a beta
+        !! distribution.
+        !!
+        !! @param[in] a The first argument of the function.
+        !! @param[in] b The second argument of the function.
+        !! @param[in] x The value at which to evaluate the distrubition 
+        !!  funciton.
+        !!
+        !! @return The value of the distribution function at @p x.
+        !!
+        !! @remarks The beta distribution has the form \f$ f(x) = 
+        !! \frac{x^{a-1} (1 - x)^{b-1}}{\beta(a,b)} \f$.
+        pure elemental module function beta_distribution(a, b, x) result(z)
+            real(real64), intent(in) :: a, b, x
+            real(real64) :: z
+        end function
+
+        !> @brief Computes the value of the incomplete beta function.
+        !!
+        !! @param[in] x The upper limit of the integration.
+        !! @param[in] a The first argument of the function.
+        !! @param[in] b The second argument of the function.
+        !!
+        !! @return The value of the incomplete beta function at @p a and @p b.
+        !!
+        !! @remarks The incomplete beta function is defined as \f$ 
+        !! \beta_{x}(a, b) = \int_{0}^{x} u^{a-1} (1 - u)^{b-1} du \f$.
+        pure elemental module function incomplete_beta(x, a, b) result(z)
+            real(real64), intent(in) :: x, a, b
+            real(real64) :: z
+        end function
+
+        !> @brief Evaluates the probability distribution function of the
+        !! F distribution.
+        !!
+        !! @param[in] d1 A model parameter.
+        !! @param[in] d2 A model parameter.
+        !! @param[in] x The value at which to evaluate the distrubition 
+        !!  funciton.
+        !!
+        !! @return The value of the distribution function at @p x.
+        !!
+        !! @remarks The F distribution has the form 
+        !! @par
+        !! \f$ f(x) = 
+        !! \frac{\sqrt{\alpha}}{x \beta(\frac{d_1}{2}, \frac{d_2}{2})} \f$
+        !! @par
+        !! where
+        !! @par
+        !! \f$ \alpha = 
+        !! \frac{(d_1 x)^{d_1} d_{2}^{d_2}}{(d_1 x + d_2)^{d_1 + d_2}} \f$.
+        pure elemental module function f_distribution(d1, d2, x) result(z)
+            real(real64), intent(in) :: d1, d2, x
+            real(real64) :: z
+        end function
     end interface
 
 ! ------------------------------------------------------------------------------

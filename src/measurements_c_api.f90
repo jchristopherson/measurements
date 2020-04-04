@@ -229,12 +229,104 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
+    !> @brief Computes the beta function.
+    !!
+    !! @param[in] a The first argument of the function.
+    !! @param[in] b The second argument of the function.
+    !!
+    !! @return The value of the beta function at @p a and @p b.
+    !!
+    !! @remarks The beta function is related to the gamma function
+    !! by the following relationship \f$ \beta(a,b) = 
+    !! \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)} \f$.
+    function c_beta(a, b) bind(C, name = "c_beta") result(z)
+        ! Arguments
+        real(c_double), intent(in), value :: a, b
+        real(c_double) :: z
+
+        ! Process
+        z = beta(a, b)
+    end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Evaluates the probability distribution function of a beta
+    !! distribution.
+    !!
+    !! @param[in] a The first argument of the function.
+    !! @param[in] b The second argument of the function.
+    !! @param[in] n The number of values at which to evaluat the function.
+    !! @param[in] x An N-element array containing the values at which to 
+    !!  evaluate the distrubition funciton.
+    !! @param[out] f An N-element array where the function output will be
+    !!  written.
+    !!
+    !! @remarks The beta distribution has the form \f$ f(x) = 
+    !! \frac{x^{a-1} (1 - x)^{b-1}}{\beta(a,b)} \f$.
+    subroutine c_beta_distribution(a, b, n, x, f) &
+            bind(C, name = "c_beta_distribution")
+        ! Arguments
+        real(c_double), intent(in), value :: a, b
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n)
+        real(c_double), intent(out) :: f(n)
+
+        ! Process
+        f = beta_distribution(a, b, x)
+    end subroutine
 
 ! ------------------------------------------------------------------------------
+    !> @brief Computes the value of the incomplete beta function.
+    !!
+    !! @param[in] x The upper limit of the integration.
+    !! @param[in] a The first argument of the function.
+    !! @param[in] b The second argument of the function.
+    !!
+    !! @return The value of the incomplete beta function at @p a and @p b.
+    !!
+    !! @remarks The incomplete beta function is defined as \f$ 
+    !! \beta_{x}(a, b) = \int_{0}^{x} u^{a-1} (1 - u)^{b-1} du \f$.
+    function c_incomplete_beta(x, a, b) bind(C, name = "c_incomplete_beta") &
+            result(z)
+        ! Arguments
+        real(c_double), intent(in), value :: x, a, b
+        real(c_double) :: z
+
+        ! Process
+        z = incomplete_beta(x, a, b)
+    end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Evaluates the probability distribution function of the
+    !! F distribution.
+    !!
+    !! @param[in] d1 A model parameter.
+    !! @param[in] d2 A model parameter.
+    !! @param[in] n The number of values at which to evaluat the function.
+    !! @param[in] x An N-element array containing the values at which to 
+    !!  evaluate the distrubition funciton.
+    !! @param[out] f An N-element array where the function output will be
+    !!  written.
+    !!
+    !! @remarks The F distribution has the form 
+    !! @par
+    !! \f$ f(x) = 
+    !! \frac{\sqrt{\alpha}}{x \beta(\frac{d_1}{2}, \frac{d_2}{2})} \f$
+    !! @par
+    !! where
+    !! @par
+    !! \f$ \alpha = 
+    !! \frac{(d_1 x)^{d_1} d_{2}^{d_2}}{(d_1 x + d_2)^{d_1 + d_2}} \f$.
+    subroutine c_f_distribution(d1, d2, n, x, f) &
+            bind(C, name = "c_f_distribution")
+        ! Arguments
+        real(c_double), intent(in), value :: d1, d2
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n)
+        real(c_double), intent(out) :: f(n)
+
+        ! Process
+        f = f_distribution(d1, d2, x)
+    end subroutine
 
 ! ------------------------------------------------------------------------------
 end module

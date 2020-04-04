@@ -135,10 +135,124 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memitem:aaa433b96aa6d5fc555e53ac331fc76f6"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#aaa433b96aa6d5fc555e53ac331fc76f6">c_t_distribution</a> (dof, n, t, f)</td></tr>
 <tr class="memdesc:aaa433b96aa6d5fc555e53ac331fc76f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evalautes the probability distribution function of Student's t-distribution.  <a href="namespacemeasurements__c__api.html#aaa433b96aa6d5fc555e53ac331fc76f6">More...</a><br /></td></tr>
 <tr class="separator:aaa433b96aa6d5fc555e53ac331fc76f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dbb0cb09e32c1316de270604d17c9fb"><td class="memItemLeft" align="right" valign="top">real(c_double) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a7dbb0cb09e32c1316de270604d17c9fb">c_beta</a> (a, b)</td></tr>
+<tr class="memdesc:a7dbb0cb09e32c1316de270604d17c9fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the beta function.  <a href="namespacemeasurements__c__api.html#a7dbb0cb09e32c1316de270604d17c9fb">More...</a><br /></td></tr>
+<tr class="separator:a7dbb0cb09e32c1316de270604d17c9fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf7ed91fe143950f02421024d4ccb244"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#abf7ed91fe143950f02421024d4ccb244">c_beta_distribution</a> (a, b, n, x, f)</td></tr>
+<tr class="memdesc:abf7ed91fe143950f02421024d4ccb244"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluates the probability distribution function of a beta distribution.  <a href="namespacemeasurements__c__api.html#abf7ed91fe143950f02421024d4ccb244">More...</a><br /></td></tr>
+<tr class="separator:abf7ed91fe143950f02421024d4ccb244"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abaa301987185ab3150c889098dee9542"><td class="memItemLeft" align="right" valign="top">real(c_double) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#abaa301987185ab3150c889098dee9542">c_incomplete_beta</a> (x, a, b)</td></tr>
+<tr class="memdesc:abaa301987185ab3150c889098dee9542"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the value of the incomplete beta function.  <a href="namespacemeasurements__c__api.html#abaa301987185ab3150c889098dee9542">More...</a><br /></td></tr>
+<tr class="separator:abaa301987185ab3150c889098dee9542"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26c5ea47a150ff66b01a3d26389bc0cc"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a26c5ea47a150ff66b01a3d26389bc0cc">c_f_distribution</a> (d1, d2, n, x, f)</td></tr>
+<tr class="memdesc:a26c5ea47a150ff66b01a3d26389bc0cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluates the probability distribution function of the F distribution.  <a href="namespacemeasurements__c__api.html#a26c5ea47a150ff66b01a3d26389bc0cc">More...</a><br /></td></tr>
+<tr class="separator:a26c5ea47a150ff66b01a3d26389bc0cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A module providing C bindings to the MEASUREMENTS library. </p>
 </div><h2 class="groupheader">Function/Subroutine Documentation</h2>
+<a id="a7dbb0cb09e32c1316de270604d17c9fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dbb0cb09e32c1316de270604d17c9fb">&#9670;&nbsp;</a></span>c_beta()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(c_double) function measurements_c_api::c_beta </td>
+          <td>(</td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the beta function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>The first argument of the function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>The second argument of the function.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The value of the beta function at <code>a</code> and <code>b</code>.</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>The beta function is related to the gamma function by the following relationship \( \beta(a,b) = \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)} \). </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00243">243</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="abf7ed91fe143950f02421024d4ccb244"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf7ed91fe143950f02421024d4ccb244">&#9670;&nbsp;</a></span>c_beta_distribution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine measurements_c_api::c_beta_distribution </td>
+          <td>(</td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(out)&#160;</td>
+          <td class="paramname"><em>f</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Evaluates the probability distribution function of a beta distribution. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>The first argument of the function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>The second argument of the function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The number of values at which to evaluat the function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>An N-element array containing the values at which to evaluate the distrubition funciton. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">f</td><td>An N-element array where the function output will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section remark"><dt>Remarks</dt><dd>The beta distribution has the form \( f(x) = \frac{x^{a-1} (1 - x)^{b-1}}{\beta(a,b)} \). </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00267">267</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
 <a id="a8926790a5fa5878b8b3a889017644428"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8926790a5fa5878b8b3a889017644428">&#9670;&nbsp;</a></span>c_confidence_interval()</h2>
 
@@ -224,6 +338,118 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The range of the data set. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00114">114</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a26c5ea47a150ff66b01a3d26389bc0cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26c5ea47a150ff66b01a3d26389bc0cc">&#9670;&nbsp;</a></span>c_f_distribution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine measurements_c_api::c_f_distribution </td>
+          <td>(</td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>d1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>d2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(out)&#160;</td>
+          <td class="paramname"><em>f</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Evaluates the probability distribution function of the F distribution. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">d1</td><td></td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">d2</td><td></td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The number of values at which to evaluat the function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>An N-element array containing the values at which to evaluate the distrubition funciton. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">f</td><td>An N-element array where the function output will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section remark"><dt>Remarks</dt><dd>The F distribution has the form </dd></dl>
+<dl class="section user"><dt></dt><dd>\( f(x) = \frac{\sqrt{\alpha}}{x \beta(\frac{d_1}{2}, \frac{d_2}{2})} \) </dd></dl>
+<dl class="section user"><dt></dt><dd>where </dd></dl>
+<dl class="section user"><dt></dt><dd>\( \alpha = \frac{(d_1 x)^{d_1} d_{2}^{d_2}}{(d_1 x + d_2)^{d_1 + d_2}} \). </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00321">321</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="abaa301987185ab3150c889098dee9542"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abaa301987185ab3150c889098dee9542">&#9670;&nbsp;</a></span>c_incomplete_beta()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(c_double) function measurements_c_api::c_incomplete_beta </td>
+          <td>(</td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the value of the incomplete beta function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The upper limit of the integration. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>The first argument of the function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>The second argument of the function.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The value of the incomplete beta function at <code>a</code> and <code>b</code>.</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>The incomplete beta function is defined as \( \beta_{x}(a, b) = \int_{0}^{x} u^{a-1} (1 - u)^{b-1} du \). </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00290">290</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>

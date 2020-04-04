@@ -268,8 +268,60 @@ pure elemental module function t_distribution(dof, t) result(f)
 end function
 
 ! ------------------------------------------------------------------------------
+pure elemental module function beta(a, b) result(z)
+    ! Arguments
+    real(real64), intent(in) :: a, b
+    real(real64) :: z
+
+    ! Process
+    ! REF: https://en.wikipedia.org/wiki/Beta_function
+    z = gamma(a) * gamma(b) / gamma(a + b)
+end function
 
 ! ------------------------------------------------------------------------------
+pure elemental module function beta_distribution(a, b, x) result(z)
+    ! Arguments
+    real(real64), intent(in) :: a, b, x
+    real(real64) :: z
+
+    ! Process
+    z = x**(a - 1.0d0) * (1.0d0 - x)**(b - 1.0d0) / beta(a, b)
+end function
+
+! ------------------------------------------------------------------------------
+pure elemental module function incomplete_beta(x, a, b) result(z)
+    ! Arguments
+    real(real64), intent(in) :: x, a, b
+    real(real64) :: z
+
+    ! Process
+    ! REF: https://en.wikipedia.org/wiki/Beta_function
+    z = beta_distribution(a, b, x) * beta(a, b)
+end function
+
+! ------------------------------------------------------------------------------
+! incomplete gamma function
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+pure elemental module function f_distribution(d1, d2, x) result(z)
+    ! Arguments
+    real(real64), intent(in) :: d1, d2, x
+    real(real64) :: z
+
+    ! Local Variables
+    real(real64) :: arg
+
+    ! Process
+    arg = ((d1 * x)**d1) * (d2**d2) / ((d1 * x + d2)**(d1 + d2))
+    z = sqrt(arg) / (x * beta(0.5d0 * d1, 0.5d0 * d2))
+end function
+
+! ------------------------------------------------------------------------------
+! f test
 
 ! ------------------------------------------------------------------------------
 
