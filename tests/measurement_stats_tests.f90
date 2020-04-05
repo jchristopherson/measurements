@@ -37,6 +37,12 @@ program main
     local = z_score_test()
     if (.not.local) overall = .false.
 
+    local = confidence_interval_test()
+    if (.not.local) overall = .false.
+
+    local = normal_distribution_test()
+    if (.not.local) overall = .false.
+
     ! End
     if (overall) then
         print '(A)', "MEASUREMENT STATS TESTS COMPLETED SUCCESSFULLY."
