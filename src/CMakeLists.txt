@@ -3,6 +3,7 @@ set(measurements_sources
     measurements_core.f90
     measurement_stats.f90
     measurements_c_api.f90
+    measurements_special.f90
 )
 
 # Build the library

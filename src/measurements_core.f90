@@ -182,21 +182,6 @@ module measurements_core
             real(real64) :: f
         end function
 
-        !> @brief Computes the beta function.
-        !!
-        !! @param[in] a The first argument of the function.
-        !! @param[in] b The second argument of the function.
-        !!
-        !! @return The value of the beta function at @p a and @p b.
-        !!
-        !! @remarks The beta function is related to the gamma function
-        !! by the following relationship \f$ \beta(a,b) = 
-        !! \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)} \f$.
-        pure elemental module function beta(a, b) result(z)
-            real(real64), intent(in) :: a, b
-            real(real64) :: z
-        end function
-
         !> @brief Evaluates the beta distribution.
         !!
         !! @param[in] a The first argument of the function.
@@ -220,21 +205,6 @@ module measurements_core
                 result(z)
             real(real64), intent(in) :: a, b, x
             logical, intent(in), optional :: comp
-            real(real64) :: z
-        end function
-
-        !> @brief Computes the value of the incomplete beta function.
-        !!
-        !! @param[in] x The upper limit of the integration.
-        !! @param[in] a The first argument of the function.
-        !! @param[in] b The second argument of the function.
-        !!
-        !! @return The value of the incomplete beta function at @p a and @p b.
-        !!
-        !! @remarks The incomplete beta function is defined as \f$ 
-        !! \beta_{x}(a, b) = \int_{0}^{x} u^{a-1} (1 - u)^{b-1} du \f$.
-        pure elemental module function incomplete_beta(x, a, b) result(z)
-            real(real64), intent(in) :: x, a, b
             real(real64) :: z
         end function
 
@@ -271,7 +241,50 @@ module measurements_core
         end function
     end interface
 
+! ******************************************************************************
+! MEASUREMENTS_SPECIAL.F90
 ! ------------------------------------------------------------------------------
+    interface
+        !> @brief Computes the beta function.
+        !!
+        !! @param[in] a The first argument of the function.
+        !! @param[in] b The second argument of the function.
+        !!
+        !! @return The value of the beta function at @p a and @p b.
+        !!
+        !! @remarks The beta function is related to the gamma function
+        !! by the following relationship \f$ \beta(a,b) = 
+        !! \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)} \f$.
+        pure elemental module function beta(a, b) result(z)
+            real(real64), intent(in) :: a, b
+            real(real64) :: z
+        end function
+
+        !> @brief Computes the value of the incomplete beta function.
+        !!
+        !! @param[in] x The upper limit of the integration.
+        !! @param[in] a The first argument of the function.
+        !! @param[in] b The second argument of the function.
+        !!
+        !! @return The value of the incomplete beta function at @p a and @p b.
+        !!
+        !! @remarks The incomplete beta function is defined as \f$ 
+        !! \beta_{x}(a, b) = \int_{0}^{x} u^{a-1} (1 - u)^{b-1} du \f$.
+        pure elemental module function incomplete_beta(x, a, b) result(z)
+            real(real64), intent(in) :: x, a, b
+            real(real64) :: z
+        end function
+
+        !> @brief Evaluates the psi function.
+        !!
+        !! @param[in] x The value at which to evaluate the function.
+        !!
+        !! @return The value of the function at @p x.
+        pure elemental module function psi(x) result(ps)
+            real(real64), intent(in) :: x
+            real(real64) :: ps
+        end function
+    end interface
 
 ! ------------------------------------------------------------------------------
 

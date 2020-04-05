@@ -297,17 +297,6 @@ pure elemental module function t_distribution(dof, t, comp) result(f)
 end function
 
 ! ------------------------------------------------------------------------------
-pure elemental module function beta(a, b) result(z)
-    ! Arguments
-    real(real64), intent(in) :: a, b
-    real(real64) :: z
-
-    ! Process
-    ! REF: https://en.wikipedia.org/wiki/Beta_function
-    z = gamma(a) * gamma(b) / gamma(a + b)
-end function
-
-! ------------------------------------------------------------------------------
 pure elemental module function beta_distribution(a, b, x, comp) result(z)
     ! Arguments
     real(real64), intent(in) :: a, b, x
@@ -326,33 +315,12 @@ pure elemental module function beta_distribution(a, b, x, comp) result(z)
 
     ! Process
     if (check) then
-        z = beta_distribution(a, b, x) / beta(a, b)
+        z = (x**(a - 1.0d0) * (1.0d0 - x)**(b - 1.0d0) / beta(a, b)) / &
+            beta(a, b)
     else
         z = x**(a - 1.0d0) * (1.0d0 - x)**(b - 1.0d0) / beta(a, b)
     end if
 end function
-
-! ------------------------------------------------------------------------------
-pure elemental module function incomplete_beta(x, a, b) result(z)
-    ! Arguments
-    real(real64), intent(in) :: x, a, b
-    real(real64) :: z
-
-    ! Process
-    ! REF: https://en.wikipedia.org/wiki/Beta_function
-    z = beta_distribution(a, b, x) * beta(a, b)
-end function
-
-! ------------------------------------------------------------------------------
-! incomplete gamma function
-
-! ------------------------------------------------------------------------------
-! hypergeometric function
-! Need PSI before HYGFX
-! https://people.sc.fsu.edu/~jburkardt/f_src/special_functions/special_functions.f90
-! https://people.sc.fsu.edu/~jburkardt/f_src/special_functions/special_functions.html
-
-! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
 pure elemental module function f_distribution(d1, d2, x, comp) result(z)
