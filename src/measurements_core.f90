@@ -125,13 +125,17 @@ module measurements_core
             real(real64) :: ci
         end function
 
-        !> @brief Evaluates the probability distribution function of a normal
-        !! distribution.
+        !> @brief Evaluates the normal distribution.
         !!
         !! @param[in] mu The population mean.
         !! @param[in] sigma The population standard deviation.
         !! @param[in] x The value at which to evaluate the distrubition 
         !!  funciton.
+        !! @param[in] comp An optional input, that if set to true, allows
+        !!  evaluation of the cumulative distribution function; else, if set
+        !!  to false, the probability density function is evaluated.  The 
+        !!  default is false such that the probabidlity density function is
+        !!  evaluated.
         !!
         !! @return The value of the distribution function at @p x.
         !!
@@ -139,28 +143,42 @@ module measurements_core
         !! The normal distribution has the form 
         !! \f$ f(x) = \frac{1}{\sigma \sqrt{2 \pi}} 
         !! \exp(-\frac{1}{2}(\frac{x-\mu}{\sigma})^{2}) \f$.
-        pure elemental module function normal_distribution(mu, sigma, x) &
+        !! @par
+        !! It's cumulative distribution function has the form \f$ f(x) = 
+        !! \frac{1}{2}(1 + erf(\frac{x - \mu}{\sigma \sqrt{2}})) \f$.
+        pure elemental module function normal_distribution(mu, sigma, x, comp) &
                 result(f)
             real(real64), intent(in) :: mu, sigma, x
+            logical, intent(in), optional :: comp
             real(real64) :: f
         end function
 
-        !> @brief Evalautes the probability distribution function of Student's
-        !! t-distribution.
+        !> @brief Evalautes the Student's t-distribution.
         !!
         !! @param[in] dof The number of degrees of freedom of the data set.
         !! @param[in] t The value at which to evaluate the distribution.
+        !! @param[in] comp An optional input, that if set to true, allows
+        !!  evaluation of the cumulative distribution function; else, if set
+        !!  to false, the probability density function is evaluated.  The 
+        !!  default is false such that the probabidlity density function is
+        !!  evaluated.
         !!
         !! @return The value of the distribution function at @p t.
         !!
         !! @remarks
-        !! Student's t-distributino has the form \f$ f(t) = 
+        !! Student's t-distribution has the form \f$ f(t) = 
         !! \frac{\Gamma(\frac{\nu + 1}{2})}{\sqrt{\nu \pi} 
         !! \Gamma(\frac{\nu}{2})} (1 + \frac{t^{2}}{\nu})^{-\frac{\nu + 1}{2}} 
         !! \f$.
-        pure elemental module function t_distribution(dof, t) result(f)
+        !! @par
+        !! It's cumulative distribution function has the form \f$ f(t) = 
+        !! \frac{1}{2} + t \Gamma(\frac{\nu + 1}{2}) 
+        !! \frac{_{2}F_{1}(\frac{1}{2}, \frac{\nu + 1}{2}, \frac{3}{2}, 
+        !! -\frac{t^{2}}{\nu})}{\sqrt{\pi \nu} \Gamma(\frac{\nu}{2})} \f$.
+        pure elemental module function t_distribution(dof, t, comp) result(f)
             integer(int32), intent(in) :: dof
             real(real64), intent(in) :: t
+            logical, intent(in), optional :: comp
             real(real64) :: f
         end function
 
@@ -179,20 +197,29 @@ module measurements_core
             real(real64) :: z
         end function
 
-        !> @brief Evaluates the probability distribution function of a beta
-        !! distribution.
+        !> @brief Evaluates the beta distribution.
         !!
         !! @param[in] a The first argument of the function.
         !! @param[in] b The second argument of the function.
         !! @param[in] x The value at which to evaluate the distrubition 
         !!  funciton.
+        !! @param[in] comp An optional input, that if set to true, allows
+        !!  evaluation of the cumulative distribution function; else, if set
+        !!  to false, the probability density function is evaluated.  The 
+        !!  default is false such that the probabidlity density function is
+        !!  evaluated.
         !!
         !! @return The value of the distribution function at @p x.
         !!
         !! @remarks The beta distribution has the form \f$ f(x) = 
         !! \frac{x^{a-1} (1 - x)^{b-1}}{\beta(a,b)} \f$.
-        pure elemental module function beta_distribution(a, b, x) result(z)
+        !! @par
+        !! It's cumulative distribution function has the form \f$ 
+        !! f(x) = I_{x}(a, b) \f$.
+        pure elemental module function beta_distribution(a, b, x, comp) &
+                result(z)
             real(real64), intent(in) :: a, b, x
+            logical, intent(in), optional :: comp
             real(real64) :: z
         end function
 
@@ -211,13 +238,17 @@ module measurements_core
             real(real64) :: z
         end function
 
-        !> @brief Evaluates the probability distribution function of the
-        !! F distribution.
+        !> @brief Evaluates the F-distribution.
         !!
         !! @param[in] d1 A model parameter.
         !! @param[in] d2 A model parameter.
         !! @param[in] x The value at which to evaluate the distrubition 
         !!  funciton.
+        !! @param[in] comp An optional input, that if set to true, allows
+        !!  evaluation of the cumulative distribution function; else, if set
+        !!  to false, the probability density function is evaluated.  The 
+        !!  default is false such that the probabidlity density function is
+        !!  evaluated.
         !!
         !! @return The value of the distribution function at @p x.
         !!
@@ -230,8 +261,12 @@ module measurements_core
         !! @par
         !! \f$ \alpha = 
         !! \frac{(d_1 x)^{d_1} d_{2}^{d_2}}{(d_1 x + d_2)^{d_1 + d_2}} \f$.
-        pure elemental module function f_distribution(d1, d2, x) result(z)
+        !! @par
+        !! It's cumulative distribution function has the form \f$ f(x) = 
+        !! I_{\frac{d_1 x}{d_1 x + d_2}}(\frac{d_1}{2}, \frac{d_2}{2}) \f$.
+        pure elemental module function f_distribution(d1, d2, x, comp) result(z)
             real(real64), intent(in) :: d1, d2, x
+            logical, intent(in), optional :: comp
             real(real64) :: z
         end function
     end interface

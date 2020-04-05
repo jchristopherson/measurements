@@ -190,6 +190,9 @@ contains
     !! The normal distribution has the form 
     !! \f$ f(x) = \frac{1}{\sigma \sqrt{2 \pi}} 
     !! \exp(-\frac{1}{2}(\frac{x-\mu}{\sigma})^{2}) \f$.
+    !! @par
+    !! It's cumulative distribution function has the form \f$ f(x) = 
+    !! \frac{1}{2}(1 + erf(\frac{x - \mu}{\sigma \sqrt{2}})) \f$.
     subroutine c_normal_distribution(mu, sigma, n, x, f) &
             bind(C, name = "c_normal_distribution")
         ! Arguments
@@ -218,6 +221,11 @@ contains
     !! \frac{\Gamma(\frac{\nu + 1}{2})}{\sqrt{\nu \pi} 
     !! \Gamma(\frac{\nu}{2})} (1 + \frac{t^{2}}{\nu})^{-\frac{\nu + 1}{2}} 
     !! \f$.
+    !! @par
+    !! It's cumulative distribution function has the form \f$ f(t) = 
+    !! \frac{1}{2} + t \Gamma(\frac{\nu + 1}{2}) 
+    !! \frac{_{2}F_{1}(\frac{1}{2}, \frac{\nu + 1}{2}, \frac{3}{2}, 
+    !! -\frac{t^{2}}{\nu})}{\sqrt{\pi \nu} \Gamma(\frac{\nu}{2})} \f$.
     subroutine c_t_distribution(dof, n, t, f) bind(C, name = "c_t_distribution")
         ! Arguments
         integer(c_int), intent(in), value :: dof, n
@@ -262,6 +270,9 @@ contains
     !!
     !! @remarks The beta distribution has the form \f$ f(x) = 
     !! \frac{x^{a-1} (1 - x)^{b-1}}{\beta(a,b)} \f$.
+    !! @par
+    !! It's cumulative distribution function has the form \f$ 
+    !! f(x) = I_{x}(a, b) \f$.
     subroutine c_beta_distribution(a, b, n, x, f) &
             bind(C, name = "c_beta_distribution")
         ! Arguments
@@ -316,6 +327,9 @@ contains
     !! @par
     !! \f$ \alpha = 
     !! \frac{(d_1 x)^{d_1} d_{2}^{d_2}}{(d_1 x + d_2)^{d_1 + d_2}} \f$.
+    !! @par
+    !! It's cumulative distribution function has the form \f$ f(x) = 
+    !! I_{\frac{d_1 x}{d_1 x + d_2}}(\frac{d_1}{2}, \frac{d_2}{2}) \f$.
     subroutine c_f_distribution(d1, d2, n, x, f) &
             bind(C, name = "c_f_distribution")
         ! Arguments

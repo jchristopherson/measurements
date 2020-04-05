@@ -43,6 +43,19 @@ program main
     local = normal_distribution_test()
     if (.not.local) overall = .false.
 
+    local = t_distribution_test()
+    if (.not.local) overall = .false.
+
+    ! beta
+
+    local = beta_distribution_test()
+    if (.not.local) overall = .false.
+
+    ! incomplete beta
+
+    local = f_distribution_test()
+    if (.not.local) overall = .false.
+
     ! End
     if (overall) then
         print '(A)', "MEASUREMENT STATS TESTS COMPLETED SUCCESSFULLY."

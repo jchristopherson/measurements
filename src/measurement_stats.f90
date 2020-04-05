@@ -236,23 +236,40 @@ pure module function confidence_interval(x, zval) result(ci)
 end function
 
 ! ------------------------------------------------------------------------------
-pure elemental module function normal_distribution(mu, sigma, x) result(f)
+pure elemental module function normal_distribution(mu, sigma, x, comp) result(f)
     ! Arguments
     real(real64), intent(in) :: mu, sigma, x
+    logical, intent(in), optional :: comp
     real(real64) :: f
 
     ! Constants
     real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
 
+    ! Local Variables
+    logical :: check
+
+    ! Initialization
+    if (present(comp)) then
+        check = comp
+    else
+        check = .false.
+    end if
+
     ! Process
-    f = (1.0d0 / (sigma * sqrt(2.0d0 * pi))) * exp(-0.5 * ((x - mu) / sigma)**2)
+    if (check) then
+        f = 0.5d0 * (1.0d0 + erf((x - mu) / (sigma * sqrt(2.0d0))))
+    else
+        f = (1.0d0 / (sigma * sqrt(2.0d0 * pi))) * &
+            exp(-0.5 * ((x - mu) / sigma)**2)
+    end if
 end function
 
 ! ------------------------------------------------------------------------------
-pure elemental module function t_distribution(dof, t) result(f)
+pure elemental module function t_distribution(dof, t, comp) result(f)
     ! Arguments
     integer(int32), intent(in) :: dof
     real(real64), intent(in) :: t
+    logical, intent(in), optional :: comp
     real(real64) :: f
 
     ! Constants
@@ -260,11 +277,23 @@ pure elemental module function t_distribution(dof, t) result(f)
 
     ! Local Variables
     real(real64) :: arg1
+    logical :: check
+
+    ! Initialization
+    if (present(comp)) then
+        check = comp
+    else
+        check = .false.
+    end if
 
     ! Process
-    arg1 = 0.5d0 * (dof + 1)
-    f = (gamma(arg1) / (gamma(0.5d0 * dof) * sqrt(dof * pi))) * &
-        (1.0d0 + t**2 / dof)**(-arg1)
+    if (check) then
+        ! TO DO: Need hypergeometric function first
+    else
+        arg1 = 0.5d0 * (dof + 1)
+        f = (gamma(arg1) / (gamma(0.5d0 * dof) * sqrt(dof * pi))) * &
+            (1.0d0 + t**2 / dof)**(-arg1)
+    end if
 end function
 
 ! ------------------------------------------------------------------------------
@@ -279,13 +308,28 @@ pure elemental module function beta(a, b) result(z)
 end function
 
 ! ------------------------------------------------------------------------------
-pure elemental module function beta_distribution(a, b, x) result(z)
+pure elemental module function beta_distribution(a, b, x, comp) result(z)
     ! Arguments
     real(real64), intent(in) :: a, b, x
+    logical, intent(in), optional :: comp
     real(real64) :: z
 
+    ! Local Variables
+    logical :: check
+
+    ! Initialization
+    if (present(comp)) then
+        check = comp
+    else
+        check = .false.
+    end if
+
     ! Process
-    z = x**(a - 1.0d0) * (1.0d0 - x)**(b - 1.0d0) / beta(a, b)
+    if (check) then
+        z = beta_distribution(a, b, x) / beta(a, b)
+    else
+        z = x**(a - 1.0d0) * (1.0d0 - x)**(b - 1.0d0) / beta(a, b)
+    end if
 end function
 
 ! ------------------------------------------------------------------------------
@@ -303,21 +347,40 @@ end function
 ! incomplete gamma function
 
 ! ------------------------------------------------------------------------------
+! hypergeometric function
+! Need PSI before HYGFX
+! https://people.sc.fsu.edu/~jburkardt/f_src/special_functions/special_functions.f90
+! https://people.sc.fsu.edu/~jburkardt/f_src/special_functions/special_functions.html
 
 ! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
-pure elemental module function f_distribution(d1, d2, x) result(z)
+pure elemental module function f_distribution(d1, d2, x, comp) result(z)
     ! Arguments
     real(real64), intent(in) :: d1, d2, x
+    logical, intent(in), optional :: comp
     real(real64) :: z
 
     ! Local Variables
-    real(real64) :: arg
+    real(real64) :: arg, betaReg
+    logical :: check
+
+    ! Initialization
+    if (present(comp)) then
+        check = comp
+    else
+        check = .false.
+    end if
 
     ! Process
-    arg = ((d1 * x)**d1) * (d2**d2) / ((d1 * x + d2)**(d1 + d2))
-    z = sqrt(arg) / (x * beta(0.5d0 * d1, 0.5d0 * d2))
+    if (check) then
+        arg = d1 * x / (d1 * x + d2)
+        betaReg = beta_distribution(arg, 0.5d0 * d1, 0.5d0 * d2) / &
+            beta(0.5d0 * d1, 0.5d0 * d2)
+    else
+        arg = ((d1 * x)**d1) * (d2**d2) / ((d1 * x + d2)**(d1 + d2))
+        z = sqrt(arg) / (x * beta(0.5d0 * d1, 0.5d0 * d2))
+    end if
 end function
 
 ! ------------------------------------------------------------------------------

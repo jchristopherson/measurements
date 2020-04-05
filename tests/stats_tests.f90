@@ -304,7 +304,6 @@ function z_score_test() result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-! confidence interval test
 function confidence_interval_test() result(rst)
     ! Arguments
     logical :: rst
@@ -341,7 +340,6 @@ function confidence_interval_test() result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-! normal distribution test
 function normal_distribution_test() result(rst)
     ! Arguments
     logical :: rst
@@ -388,19 +386,142 @@ function normal_distribution_test() result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-! t distribution test
+function t_distribution_test() result(rst)
+    ! Arguments
+    logical :: rst
+
+    ! Parameters
+    integer(int32), parameter :: dof = 20
+    integer(int32), parameter :: npts = 21
+    real(real64), parameter :: tol = 1.0d-8
+
+    ! Local Variables
+    real(real64) :: delta, x(npts), ans(npts), computed(npts)
+    integer(int32) :: i
+
+    ! Initialization
+    rst = .true.
+    x = [-5.0d0, -4.5d0, -4.0d0, -3.5d0, -3.0d0, -2.5d0, -2.0d0, -1.5d0, &
+        -1.0d0, -0.5d0, 0.0d0, 0.5d0, 1.0d0, 1.5d0, 2.0d0, 2.5d0, 3.0d0, &
+        3.5d0, 4.0d0, 4.5d0, 5.0d0]
+    ans = [0.0000789891062440353d0, 0.0002548336678335860d0, &
+        0.0008224743001331390d0, 0.0026105772275963500d0, &
+        0.0079637866461806600d0, 0.0226694437191449000d0, &
+        0.0580872152473570000d0, 0.1286273829721460000d0, &
+        0.2360456491267010000d0, 0.3458086123837420000d0, &
+        0.3939885857114330000d0, 0.3458086123837420000d0, &
+        0.2360456491267010000d0, 0.1286273829721460000d0, &
+        0.0580872152473570000d0, 0.0226694437191449000d0, &
+        0.0079637866461806600d0, 0.0026105772275963500d0, &
+        0.0008224743001331390d0, 0.0002548336678335860d0, &
+        0.0000789891062440353d0]
+
+    ! Process
+    computed = t_distribution(dof, x)
+
+    ! Test
+    do i = 1, npts
+        delta = ans(i) - computed(i)
+        if (abs(delta) > tol) then
+            rst = .false.
+            print '(A)', "T_DISTRIBUTION_TEST FAILED."
+            print *, "Expected: ", ans(i)
+            print *, "Computed: ", computed(i)
+            print *, "Difference (Expected - Computed): ", delta
+            print *, "Index: ", i
+        end if
+    end do
+end function
 
 ! ------------------------------------------------------------------------------
 ! beta function test
 
 ! ------------------------------------------------------------------------------
-! beta distribution test
+function beta_distribution_test() result(rst)
+    ! Arguments
+    logical :: rst
+
+    ! Parameters
+    real(real64), parameter :: a = 1.0d0
+    real(real64), parameter :: b = 3.0d0
+    integer(int32), parameter :: npts = 18
+    real(real64), parameter :: tol = 1.0d-8
+
+    ! Local Variables
+    real(real64) :: delta, x(npts), ans(npts), computed(npts)
+    integer(int32) :: i
+
+    ! Initialization
+    rst = .true.
+    x = [0.1d0, 0.15d0, 0.2d0, 0.25d0, 0.3d0, 0.35d0, 0.4d0, 0.45d0, 0.5d0, &
+        0.55d0, 0.6d0, 0.65d0, 0.7d0, 0.75d0, 0.8d0, 0.85d0, 0.9d0, 0.95d0]
+    ans = [2.43000d0, 2.16750d0, 1.92000d0, 1.68750d0, 1.47000d0, 1.26750d0, &
+        1.08000d0, 0.90750d0, 0.75000d0, 0.60750d0, 0.48000d0, 0.36750d0, &
+        0.27000d0, 0.18750d0, 0.12000d0, 0.06750d0, 0.03000d0, 0.00750d0]
+
+    ! Process
+    computed = beta_distribution(a, b, x)
+
+    ! Test
+    do i = 1, npts
+        delta = ans(i) - computed(i)
+        if (abs(delta) > tol) then
+            rst = .false.
+            print '(A)', "BETA_DISTRIBUTION_TEST FAILED."
+            print *, "Expected: ", ans(i)
+            print *, "Computed: ", computed(i)
+            print *, "Difference (Expected - Computed): ", delta
+            print *, "Index: ", i
+        end if
+    end do
+end function
 
 ! ------------------------------------------------------------------------------
 ! incomplete beta function test
 
 ! ------------------------------------------------------------------------------
-! f distribution test
+function f_distribution_test() result(rst)
+    ! Arguments
+    logical :: rst
+
+    ! Parameters
+    real(real64), parameter :: d1 = 10.0d0
+    real(real64), parameter :: d2 = 1.0d0
+    integer(int32), parameter :: npts = 18
+    real(real64), parameter :: tol = 1.0d-8
+
+    ! Local Variables
+    real(real64) :: delta, x(npts), ans(npts), computed(npts)
+    integer(int32) :: i
+
+    ! Initialization
+    rst = .true.
+    x = [0.1d0, 0.15d0, 0.2d0, 0.25d0, 0.3d0, 0.35d0, 0.4d0, 0.45d0, 0.5d0, &
+        0.55d0, 0.6d0, 0.65d0, 0.7d0, 0.75d0, 0.8d0, 0.85d0, 0.9d0, 0.95d0]
+    ans = [0.27189774911348000d0, 0.40342757249598100d0, &
+        0.46776063476011400d0, 0.48916613056974600d0, 0.48666000366211000d0, &
+        0.47170875848615800d0, 0.45079130426395800d0, 0.42748989305298300d0, &
+        0.40375575782592800d0, 0.38062550389189700d0, 0.35862153897298900d0, &
+        0.33797693751338100d0, 0.31876293731516800d0, 0.30096192124722400d0, &
+        0.28450947518162900d0, 0.26931867071908400d0, 0.25529401072011300d0, &
+        0.24233930873721800d0]
+
+    ! Process
+    computed = f_distribution(d1, d2, x)
+
+    ! Test
+    do i = 1, npts
+        delta = ans(i) - computed(i)
+        if (abs(delta) > tol) then
+            rst = .false.
+            print '(A)', "F_DISTRIBUTION_TEST FAILED."
+            print *, "Expected: ", ans(i)
+            print *, "Computed: ", computed(i)
+            print *, "Difference (Expected - Computed): ", delta
+            print *, "Index: ", i
+        end if
+    end do
+end function
 
 ! ------------------------------------------------------------------------------
 
