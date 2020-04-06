@@ -190,9 +190,6 @@ contains
     !! The normal distribution has the form 
     !! \f$ f(x) = \frac{1}{\sigma \sqrt{2 \pi}} 
     !! \exp(-\frac{1}{2}(\frac{x-\mu}{\sigma})^{2}) \f$.
-    !! @par
-    !! It's cumulative distribution function has the form \f$ f(x) = 
-    !! \frac{1}{2}(1 + erf(\frac{x - \mu}{\sigma \sqrt{2}})) \f$.
     subroutine c_normal_distribution(mu, sigma, n, x, f) &
             bind(C, name = "c_normal_distribution")
         ! Arguments
@@ -221,14 +218,10 @@ contains
     !! \frac{\Gamma(\frac{\nu + 1}{2})}{\sqrt{\nu \pi} 
     !! \Gamma(\frac{\nu}{2})} (1 + \frac{t^{2}}{\nu})^{-\frac{\nu + 1}{2}} 
     !! \f$.
-    !! @par
-    !! It's cumulative distribution function has the form \f$ f(t) = 
-    !! \frac{1}{2} + t \Gamma(\frac{\nu + 1}{2}) 
-    !! \frac{_{2}F_{1}(\frac{1}{2}, \frac{\nu + 1}{2}, \frac{3}{2}, 
-    !! -\frac{t^{2}}{\nu})}{\sqrt{\pi \nu} \Gamma(\frac{\nu}{2})} \f$.
     subroutine c_t_distribution(dof, n, t, f) bind(C, name = "c_t_distribution")
         ! Arguments
-        integer(c_int), intent(in), value :: dof, n
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in), value :: dof
         real(c_double), intent(in) :: t(n)
         real(c_double), intent(out) :: f(n)
 
@@ -270,9 +263,6 @@ contains
     !!
     !! @remarks The beta distribution has the form \f$ f(x) = 
     !! \frac{x^{a-1} (1 - x)^{b-1}}{\beta(a,b)} \f$.
-    !! @par
-    !! It's cumulative distribution function has the form \f$ 
-    !! f(x) = I_{x}(a, b) \f$.
     subroutine c_beta_distribution(a, b, n, x, f) &
             bind(C, name = "c_beta_distribution")
         ! Arguments
@@ -286,24 +276,24 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
-    !> @brief Computes the value of the incomplete beta function.
+    !> @brief Computes the value of the regularized beta function.
     !!
     !! @param[in] x The upper limit of the integration.
     !! @param[in] a The first argument of the function.
     !! @param[in] b The second argument of the function.
     !!
-    !! @return The value of the incomplete beta function at @p a and @p b.
+    !! @return The value of the regularized beta function at @p a and @p b.
     !!
-    !! @remarks The incomplete beta function is defined as \f$ 
-    !! \beta_{x}(a, b) = \int_{0}^{x} u^{a-1} (1 - u)^{b-1} du \f$.
-    function c_incomplete_beta(x, a, b) bind(C, name = "c_incomplete_beta") &
-            result(z)
+    !! @remarks The regularized beta function is defined as \f$ 
+    !! I_{x}(a, b) = \frac{\beta(x; a, b)}{\beta(a, b)} \f$.
+    function c_regularized_beta(x, a, b) &
+            bind(C, name = "c_regularized_beta") result(z)
         ! Arguments
         real(c_double), intent(in), value :: x, a, b
         real(c_double) :: z
 
         ! Process
-        z = incomplete_beta(x, a, b)
+        z = regularized_beta(x, a, b)
     end function
 
 ! ------------------------------------------------------------------------------
@@ -327,9 +317,6 @@ contains
     !! @par
     !! \f$ \alpha = 
     !! \frac{(d_1 x)^{d_1} d_{2}^{d_2}}{(d_1 x + d_2)^{d_1 + d_2}} \f$.
-    !! @par
-    !! It's cumulative distribution function has the form \f$ f(x) = 
-    !! I_{\frac{d_1 x}{d_1 x + d_2}}(\frac{d_1}{2}, \frac{d_2}{2}) \f$.
     subroutine c_f_distribution(d1, d2, n, x, f) &
             bind(C, name = "c_f_distribution")
         ! Arguments

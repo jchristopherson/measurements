@@ -114,7 +114,7 @@ void c_normal_distribution(double mu, double sigma, int n, const double *x,
  * @param f An N-element array where the function output will be
  *  written.
  */
-void c_t_distribution(int dof, int n, const double *t, double *f);
+void c_t_distribution(double dof, int n, const double *t, double *f);
 
 /**
  * Computes the beta function.

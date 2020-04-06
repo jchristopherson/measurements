@@ -391,7 +391,7 @@ function t_distribution_test() result(rst)
     logical :: rst
 
     ! Parameters
-    integer(int32), parameter :: dof = 20
+    real(real64), parameter :: dof = 20.0d0
     integer(int32), parameter :: npts = 21
     real(real64), parameter :: tol = 1.0d-8
 
@@ -434,9 +434,6 @@ function t_distribution_test() result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-! beta function test
-
-! ------------------------------------------------------------------------------
 function beta_distribution_test() result(rst)
     ! Arguments
     logical :: rst
@@ -475,9 +472,6 @@ function beta_distribution_test() result(rst)
         end if
     end do
 end function
-
-! ------------------------------------------------------------------------------
-! incomplete beta function test
 
 ! ------------------------------------------------------------------------------
 function f_distribution_test() result(rst)

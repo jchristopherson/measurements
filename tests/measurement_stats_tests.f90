@@ -46,12 +46,8 @@ program main
     local = t_distribution_test()
     if (.not.local) overall = .false.
 
-    ! beta
-
     local = beta_distribution_test()
     if (.not.local) overall = .false.
-
-    ! incomplete beta
 
     local = f_distribution_test()
     if (.not.local) overall = .false.

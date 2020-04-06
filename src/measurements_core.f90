@@ -12,6 +12,26 @@ module measurements_core
     !> @brief A flag denoting an invalid input error state.
     integer(int32), parameter :: M_INVALID_INPUT_ERROR = 10000
 
+    !> @brief A type containing variance components describing a measurement
+    !! process.
+    type, bind(C) :: process_variance
+        !> @brief The measurement variation component.  In a gauge analysis this
+        !! is referred to as the gauge R&R.  It is the sum of the repeatability
+        !! and reproducibility variance components.
+        real(real64) :: measurement_variance
+        !> @brief The part variance component.
+        real(real64) :: part_variance
+        !> @brief The total process variance.  This is the sum of the 
+        !! measurement variance and part variance.
+        real(real64) :: total_variance
+        !> @brief The equipment variance component.  This is often referred to
+        !! as the repeatability component.
+        real(real64) :: equipment_variance
+        !> @brief The operator variance component.  This is often referred to
+        !! as the reproducibility component.
+        real(real64) :: operator_variance
+    end type
+
 ! ******************************************************************************
 ! MEASUREMENT_STATS.F90
 ! ------------------------------------------------------------------------------
@@ -125,7 +145,8 @@ module measurements_core
             real(real64) :: ci
         end function
 
-        !> @brief Evaluates the normal distribution.
+        !> @brief Evaluates the probability distribution function of the 
+        !! normal distribution.
         !!
         !! @param[in] mu The population mean.
         !! @param[in] sigma The population standard deviation.
@@ -143,17 +164,14 @@ module measurements_core
         !! The normal distribution has the form 
         !! \f$ f(x) = \frac{1}{\sigma \sqrt{2 \pi}} 
         !! \exp(-\frac{1}{2}(\frac{x-\mu}{\sigma})^{2}) \f$.
-        !! @par
-        !! It's cumulative distribution function has the form \f$ f(x) = 
-        !! \frac{1}{2}(1 + erf(\frac{x - \mu}{\sigma \sqrt{2}})) \f$.
-        pure elemental module function normal_distribution(mu, sigma, x, comp) &
+        pure elemental module function normal_distribution(mu, sigma, x) &
                 result(f)
             real(real64), intent(in) :: mu, sigma, x
-            logical, intent(in), optional :: comp
             real(real64) :: f
         end function
 
-        !> @brief Evalautes the Student's t-distribution.
+        !> @brief Evalautes the probability distribution function of 
+        !! Student's t-distribution.
         !!
         !! @param[in] dof The number of degrees of freedom of the data set.
         !! @param[in] t The value at which to evaluate the distribution.
@@ -170,19 +188,14 @@ module measurements_core
         !! \frac{\Gamma(\frac{\nu + 1}{2})}{\sqrt{\nu \pi} 
         !! \Gamma(\frac{\nu}{2})} (1 + \frac{t^{2}}{\nu})^{-\frac{\nu + 1}{2}} 
         !! \f$.
-        !! @par
-        !! It's cumulative distribution function has the form \f$ f(t) = 
-        !! \frac{1}{2} + t \Gamma(\frac{\nu + 1}{2}) 
-        !! \frac{_{2}F_{1}(\frac{1}{2}, \frac{\nu + 1}{2}, \frac{3}{2}, 
-        !! -\frac{t^{2}}{\nu})}{\sqrt{\pi \nu} \Gamma(\frac{\nu}{2})} \f$.
-        pure elemental module function t_distribution(dof, t, comp) result(f)
-            integer(int32), intent(in) :: dof
+        pure elemental module function t_distribution(dof, t) result(f)
+            real(real64), intent(in) :: dof
             real(real64), intent(in) :: t
-            logical, intent(in), optional :: comp
             real(real64) :: f
         end function
 
-        !> @brief Evaluates the beta distribution.
+        !> @brief Evaluates the probability distribution function of the 
+        !! beta distribution.
         !!
         !! @param[in] a The first argument of the function.
         !! @param[in] b The second argument of the function.
@@ -198,27 +211,19 @@ module measurements_core
         !!
         !! @remarks The beta distribution has the form \f$ f(x) = 
         !! \frac{x^{a-1} (1 - x)^{b-1}}{\beta(a,b)} \f$.
-        !! @par
-        !! It's cumulative distribution function has the form \f$ 
-        !! f(x) = I_{x}(a, b) \f$.
-        pure elemental module function beta_distribution(a, b, x, comp) &
+        pure elemental module function beta_distribution(a, b, x) &
                 result(z)
             real(real64), intent(in) :: a, b, x
-            logical, intent(in), optional :: comp
             real(real64) :: z
         end function
 
-        !> @brief Evaluates the F-distribution.
+        !> @brief Evaluates the probability distribution function of the 
+        !! F-distribution.
         !!
         !! @param[in] d1 A model parameter.
         !! @param[in] d2 A model parameter.
         !! @param[in] x The value at which to evaluate the distrubition 
         !!  funciton.
-        !! @param[in] comp An optional input, that if set to true, allows
-        !!  evaluation of the cumulative distribution function; else, if set
-        !!  to false, the probability density function is evaluated.  The 
-        !!  default is false such that the probabidlity density function is
-        !!  evaluated.
         !!
         !! @return The value of the distribution function at @p x.
         !!
@@ -231,13 +236,28 @@ module measurements_core
         !! @par
         !! \f$ \alpha = 
         !! \frac{(d_1 x)^{d_1} d_{2}^{d_2}}{(d_1 x + d_2)^{d_1 + d_2}} \f$.
-        !! @par
-        !! It's cumulative distribution function has the form \f$ f(x) = 
-        !! I_{\frac{d_1 x}{d_1 x + d_2}}(\frac{d_1}{2}, \frac{d_2}{2}) \f$.
-        pure elemental module function f_distribution(d1, d2, x, comp) result(z)
+        pure elemental module function f_distribution(d1, d2, x) result(z)
             real(real64), intent(in) :: d1, d2, x
-            logical, intent(in), optional :: comp
             real(real64) :: z
+        end function
+
+        !> @brief Utilizes a control chart type approach to evaluate the 
+        !! measurement process utilized to collect the supplied data set.
+        !!
+        !! @param[in] x An M-by-N-by-P data set from the measurement process
+        !!  to analyze where M is the number of parts tested (must be greater
+        !!  than 1), N is the number of tests performed per part (must be
+        !!  greater than 1), and P is the number of operators performing the
+        !!  tests (must be at least 1).
+        !!
+        !! @return The resulting variance components of the process.
+        !!
+        !! @remarks This approach is best suited for smaller data sets whose
+        !!  dimension doesn't exceed 25-30.  Anything over this size is better
+        !!  served by another technique.
+        pure module function control_chart_variance(x) result(rst)
+            real(real64), intent(in), dimension(:,:,:) :: x
+            type(process_variance) :: rst
         end function
     end interface
 
@@ -260,29 +280,26 @@ module measurements_core
             real(real64) :: z
         end function
 
-        !> @brief Computes the value of the incomplete beta function.
+        !> @brief Computes the value of the regularized incomplete beta 
+        !! function.
         !!
         !! @param[in] x The upper limit of the integration.
         !! @param[in] a The first argument of the function.
         !! @param[in] b The second argument of the function.
         !!
-        !! @return The value of the incomplete beta function at @p a and @p b.
+        !! @return The value of the regularized beta function at @p a and @p b.
         !!
-        !! @remarks The incomplete beta function is defined as \f$ 
-        !! \beta_{x}(a, b) = \int_{0}^{x} u^{a-1} (1 - u)^{b-1} du \f$.
-        pure elemental module function incomplete_beta(x, a, b) result(z)
+        !! @remarks The regularized beta function is defined as \f$ 
+        !! I_{x}(a, b) = \frac{\beta(x; a, b)}{\beta(a, b)} \f$.
+        pure elemental module function regularized_beta(x, a, b) &
+                result(z)
             real(real64), intent(in) :: x, a, b
             real(real64) :: z
         end function
 
-        !> @brief Evaluates the psi function.
-        !!
-        !! @param[in] x The value at which to evaluate the function.
-        !!
-        !! @return The value of the function at @p x.
-        pure elemental module function psi(x) result(ps)
-            real(real64), intent(in) :: x
-            real(real64) :: ps
+        pure elemental module function incomplete_beta(x, a, b) result(z)
+            real(real64), intent(in) :: x, a, b
+            real(real64) :: z
         end function
     end interface
 

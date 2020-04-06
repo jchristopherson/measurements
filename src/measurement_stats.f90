@@ -236,125 +236,176 @@ pure module function confidence_interval(x, zval) result(ci)
 end function
 
 ! ------------------------------------------------------------------------------
-pure elemental module function normal_distribution(mu, sigma, x, comp) result(f)
+pure elemental module function normal_distribution(mu, sigma, x) result(f)
     ! Arguments
     real(real64), intent(in) :: mu, sigma, x
-    logical, intent(in), optional :: comp
     real(real64) :: f
 
     ! Constants
     real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
 
-    ! Local Variables
-    logical :: check
-
-    ! Initialization
-    if (present(comp)) then
-        check = comp
-    else
-        check = .false.
-    end if
-
     ! Process
-    if (check) then
-        f = 0.5d0 * (1.0d0 + erf((x - mu) / (sigma * sqrt(2.0d0))))
-    else
-        f = (1.0d0 / (sigma * sqrt(2.0d0 * pi))) * &
-            exp(-0.5 * ((x - mu) / sigma)**2)
-    end if
+    f = (1.0d0 / (sigma * sqrt(2.0d0 * pi))) * &
+        exp(-0.5 * ((x - mu) / sigma)**2)
 end function
 
 ! ------------------------------------------------------------------------------
-pure elemental module function t_distribution(dof, t, comp) result(f)
+pure elemental module function t_distribution(dof, t) result(f)
     ! Arguments
-    integer(int32), intent(in) :: dof
+    real(real64), intent(in) :: dof
     real(real64), intent(in) :: t
-    logical, intent(in), optional :: comp
     real(real64) :: f
 
     ! Constants
     real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
 
     ! Local Variables
-    real(real64) :: arg1
-    logical :: check
-
-    ! Initialization
-    if (present(comp)) then
-        check = comp
-    else
-        check = .false.
-    end if
+    real(real64) :: arg
 
     ! Process
-    if (check) then
-        ! TO DO: Need hypergeometric function first
-    else
-        arg1 = 0.5d0 * (dof + 1)
-        f = (gamma(arg1) / (gamma(0.5d0 * dof) * sqrt(dof * pi))) * &
-            (1.0d0 + t**2 / dof)**(-arg1)
-    end if
+    arg = 0.5d0 * (dof + 1)
+    f = (gamma(arg) / (gamma(0.5d0 * dof) * sqrt(dof * pi))) * &
+        (1.0d0 + t**2 / dof)**(-arg)
 end function
 
 ! ------------------------------------------------------------------------------
-pure elemental module function beta_distribution(a, b, x, comp) result(z)
+pure elemental module function beta_distribution(a, b, x) result(z)
     ! Arguments
     real(real64), intent(in) :: a, b, x
-    logical, intent(in), optional :: comp
     real(real64) :: z
 
-    ! Local Variables
-    logical :: check
-
-    ! Initialization
-    if (present(comp)) then
-        check = comp
-    else
-        check = .false.
-    end if
-
     ! Process
-    if (check) then
-        z = (x**(a - 1.0d0) * (1.0d0 - x)**(b - 1.0d0) / beta(a, b)) / &
-            beta(a, b)
-    else
-        z = x**(a - 1.0d0) * (1.0d0 - x)**(b - 1.0d0) / beta(a, b)
-    end if
+    z = x**(a - 1.0d0) * (1.0d0 - x)**(b - 1.0d0) / beta(a, b)
 end function
 
 ! ------------------------------------------------------------------------------
-pure elemental module function f_distribution(d1, d2, x, comp) result(z)
+pure elemental module function f_distribution(d1, d2, x) result(z)
     ! Arguments
     real(real64), intent(in) :: d1, d2, x
-    logical, intent(in), optional :: comp
     real(real64) :: z
 
     ! Local Variables
-    real(real64) :: arg, betaReg
-    logical :: check
-
-    ! Initialization
-    if (present(comp)) then
-        check = comp
-    else
-        check = .false.
-    end if
+    real(real64) :: arg
 
     ! Process
-    if (check) then
-        arg = d1 * x / (d1 * x + d2)
-        betaReg = beta_distribution(arg, 0.5d0 * d1, 0.5d0 * d2) / &
-            beta(0.5d0 * d1, 0.5d0 * d2)
-    else
-        arg = ((d1 * x)**d1) * (d2**d2) / ((d1 * x + d2)**(d1 + d2))
-        z = sqrt(arg) / (x * beta(0.5d0 * d1, 0.5d0 * d2))
-    end if
+    arg = ((d1 * x)**d1) * (d2**d2) / ((d1 * x + d2)**(d1 + d2))
+    z = sqrt(arg) / (x * beta(0.5d0 * d1, 0.5d0 * d2))
 end function
 
 ! ------------------------------------------------------------------------------
-! f test
+! ANOVA type GR&R
 
 ! ------------------------------------------------------------------------------
+! Control Chart Type GR&R
+! - https://www.spcforexcel.com/knowledge/measurement-systems-analysis/three-methods-analyze-gage-rr-studies
+! - https://www.qualitydigest.com/inside/twitter-ed/problems-gauge-rr-studies.html
+pure module function control_chart_variance(x) result(rst)
+    ! Arguments
+    real(real64), intent(in), dimension(:,:,:) :: x
+    type(process_variance) :: rst
+
+    ! Local Variables
+    integer(int32) :: i, j, k, npart, nrepeats, nops
+    real(real64), allocatable, dimension(:) :: opsMeans, rptMeans, partMeans, &
+        repRng
+    real(real64) :: opsRange, partRange, avgRange
+
+    ! Initialization
+    npart = size(x, 1)
+    nrepeats = size(x, 2)
+    nops = size(x, 3)
+
+    ! Quick Return
+    if (npart < 2 .or. nrepeats < 2 .or. nops < 1) then
+        rst%measurement_variance = 0.0d0
+        rst%part_variance = 0.0d0
+        rst%total_variance = 0.0d0
+        rst%equipment_variance = 0.0d0
+        rst%operator_variance = 0.0d0
+        return
+    end if
+
+    ! Local Memory Allocation
+    allocate(opsMeans(nops))
+    allocate(rptMeans(nrepeats))
+    allocate(partMeans(npart))
+    allocate(repRng(npart * nops))
+
+    ! Compute the mean (average) terms
+    do i = 1, nops
+        opsMeans(i) = mean(reshape(x(:,:,i), [npart * nrepeats]))
+    end do
+    do i = 1, nrepeats
+        rptMeans(i) = mean(reshape(x(:,i,:), [npart * nops]))
+    end do
+    do i = 1, npart
+        partMeans(i) = mean(reshape(x(i,:,:), [nrepeats * nops]))
+    end do
+
+    ! Compute the range terms
+    opsRange = data_range(opsMeans)
+    partRange = data_range(partMeans)
+    j = 0
+    do k = 1, nops
+        do i = 1, npart
+            j = j + 1
+            repRng(j) = data_range(x(i,:,k))
+        end do
+    end do
+    avgRange = data_range(repRng)
+
+    ! Compute the variance terms
+    rst%equipment_variance = (avgRange / d2(nrepeats))**2
+    if (nops > 1) then
+        rst%operator_variance = (opsRange / d2(nops))**2 - &
+            (real(nops) / real(npart * nops * nrepeats)) * &
+            rst%equipment_variance
+    else
+        rst%operator_variance = 0.0d0
+    end if 
+    rst%measurement_variance = rst%equipment_variance + rst%operator_variance
+    rst%part_variance = (partRange / d2(npart)**2) - &
+        (real(npart) / real(npart * nops * nrepeats)) * &
+        rst%equipment_variance
+
+    ! TO DO: Deal with N > 25 issues - it's probably better to use traditional
+    ! variance calculations when N > 25
+contains
+    ! REF: http://www.bessegato.com.br/UFJF/resources/table_of_control_chart_constants_old.pdf
+    pure function d2(n) result(d)
+        ! Arguments
+        integer(int32), intent(in) :: n
+        real(real64) :: d
+
+        ! Define the table and associated indices
+        integer(int32), parameter, dimension(24) :: index = [ &
+            2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, &
+            17, 18, 19, 20, 21, 22, 23, 24, 25]
+        real(real64), parameter, dimension(24) :: values = [ &
+            1.128d0, 1.693d0, 2.059d0, 2.326d0, 2.534d0, 2.704d0, &
+            2.847d0, 2.970d0, 3.078d0, 3.173d0, 3.258d0, 3.336d0, &
+            3.407d0, 3.472d0, 3.532d0, 3.588d0, 3.640d0, 3.689d0, &
+            3.735d0, 3.778d0, 3.819d0, 3.858d0, 3.895d0, 3.931d0]
+
+        ! Local Variables
+        integer(int32) :: i
+
+        ! Ensure the index is within bounds
+        if (n < 2) then
+            d = 0.0d0
+            return
+        else if (n > size(index)) then
+            d = values(size(index))
+            return
+        end if
+
+        ! Find the matching array index, and return the correct value
+        do i = 1, size(index)
+            if (n == index(i)) exit
+        end do
+        d = values(i)
+    end function
+end function
 
 ! ------------------------------------------------------------------------------
 
