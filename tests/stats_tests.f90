@@ -304,6 +304,75 @@ function z_score_test() result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
+function t_score_test() result(rst)
+    ! Arguments
+    logical :: rst
+
+    ! Parameter
+    integer(int32), parameter :: npts = 21
+    real(real64), parameter :: tol = 1.0d-3
+    real(real64), parameter :: t80 = 0.860d0
+    real(real64), parameter :: t85 = 1.064d0
+    real(real64), parameter :: t90 = 1.325d0
+    real(real64), parameter :: t95 = 1.725d0
+
+    ! Local Variables 
+    real(real64) :: ans, computed, delta
+
+    ! Initialization
+    rst = .true.
+
+    ! 80 %
+    ans = t80
+    computed = t_score(0.8d0, npts)
+    delta = ans - computed
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "T_SCORE_TEST 80% FAILED."
+        print *, "Expected: ", ans
+        print *, "Computed: ", computed
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+
+    ! 85%
+    ans = t85
+    computed = t_score(0.85d0, npts)
+    delta = ans - computed
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "T_SCORE_TEST 85% FAILED."
+        print *, "Expected: ", ans
+        print *, "Computed: ", computed
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+
+    ! 90%
+
+    ans = t90
+    computed = t_score(0.9d0, npts)
+    delta = ans - computed
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "T_SCORE_TEST 90% FAILED."
+        print *, "Expected: ", ans
+        print *, "Computed: ", computed
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+
+    ! 95%
+    ans = t95
+    computed = t_score(0.95d0, npts)
+    delta = ans - computed
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "T_SCORE_TEST 95% FAILED."
+        print *, "Expected: ", ans
+        print *, "Computed: ", computed
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+end function
+
+! ------------------------------------------------------------------------------
 function confidence_interval_test() result(rst)
     ! Arguments
     logical :: rst

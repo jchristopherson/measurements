@@ -208,11 +208,72 @@ module function z_score(c, err) result(z)
     call solver%solve(obj, z, lim, err = errmgr)
     
 contains
-    ! Compute the solution to: alpha = erf(z / sqrt(2)) for z.
+    ! Compute the solution to: C = erf(z / sqrt(2)) for z.
     function zfun(x) result(f)
         real(real64), intent(in) :: x
         real(real64) :: f
         f = c - erf(x / sqrt(2.0d0))
+    end function
+end function
+
+! ------------------------------------------------------------------------------
+module function t_score(c, n, err) result(t)
+    ! Arguments
+    real(real64), intent(in) :: c
+    integer(int32), intent(in) :: n
+    class(errors), intent(inout), optional, target :: err
+    real(real64) :: t
+
+    ! Local Variables
+    type(fcn1var_helper) :: obj
+    procedure(fcn1var), pointer :: fcn
+    type(brent_solver) :: solver
+    type(value_pair) :: lim
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+
+    ! Input Check
+    if (c <= 0.0d0 .or. c >= 1.0d0) then
+        t = 0.0d0
+        call errmgr%report_error("t_score", "The confidence level must " // &
+            "be a value between 0 and 1 (nonlinclusive).", &
+            M_INVALID_INPUT_ERROR)
+        return
+    end if
+
+    ! Set solver tolerances
+    call solver%set_fcn_tolerance(1.0d-12)
+
+    ! Compute the solution
+    fcn => tfun
+    call obj%set_fcn(fcn)
+    t = 1.0d0
+    lim%x1 = 0.0d0
+    lim%x2 = 1.0d1
+    call solver%solve(obj, t, lim, err = errmgr)
+    
+contains
+    ! Compute the solution to: C = 1 - 1/2 Ix(v/2, 1/2) for t, where
+    ! x = v / (v + t**2).
+    function tfun(x) result(f)
+        ! Arguments
+        real(real64), intent(in) :: x
+        real(real64) :: f
+        
+        ! Local Variables
+        real(real64) :: v, xx
+        
+        ! Process
+        v = n - 1.0d0
+        xx = v / (v + x**2)
+        f = c - (1.0d0 - 0.5d0 * regularized_beta(xx, 0.5d0 * v, 0.5d0))
     end function
 end function
 
@@ -294,6 +355,84 @@ end function
 
 ! ------------------------------------------------------------------------------
 ! ANOVA type GR&R
+pure module function anova(x, alpha) result(rst)
+    ! Arguments
+    real(real64), intent(in), dimension(:,:,:) :: x
+    real(real64), intent(in), optional :: alpha
+    type(process_variance) :: rst
+
+    ! Local Variables
+    integer(int32) :: npart, nrepeats, nops, partDOF, opDOF, partOpDOF, &
+        rptDOF, totalDOF
+    real(real64) :: a, overallAvg, ssqPart, ssqOp, ssqWithin, ssqTotal, &
+        ssqPartOp, msqPart, msqOp, msqPartOp, msqRpt, msqTotal, opFtest, &
+        partOpProb
+
+    ! Initialization
+    npart = size(x, 1)
+    nrepeats = size(x, 2)
+    nops = size(x, 3)
+    a = 5.0d-2
+    if (present(alpha)) a = alpha
+
+    ! Quick Return
+    if (npart < 2 .or. nrepeats < 2 .or. nops < 1) then
+        rst%measurement_variance = 0.0d0
+        rst%part_variance = 0.0d0
+        rst%total_variance = 0.0d0
+        rst%equipment_variance = 0.0d0
+        rst%operator_variance = 0.0d0
+        rst%operator_by_part_variance = 0.0d0
+        return
+    end if
+
+    ! Compute the overall mean
+    overallAvg = mean(pack(x, .true.))
+
+    ! Compute the SSQ terms
+    ssqPart = ssq_part(x, overallAvg)
+    ssqOp = ssq_operator(x, overallAvg)
+    ssqWithin = ssq_repeat(x)
+    ssqTotal = ssq_total(x, overallAvg)
+    ssqPartOp = ssqTotal - ssqPart - ssqOp - ssqWithin
+
+    ! Compute the DOF terms
+    partDOF = npart - 1
+    opDOF = nops - 1
+    partOpDOF = partDOF * opDOF
+    rptDOF = npart * nops * (nrepeats - 1)
+    totalDOF = npart * nops * nrepeats - 1
+
+    ! Compute the mean of the squared differences
+    msqPart = ssqPart / partDOF
+    msqOp = ssqOp / opDOF
+    msqPartOp = ssqPartOp / partOpDOF
+    msqTotal = ssqTotal / totalDOF
+
+    ! Compute the F tests
+    opFtest = msqPartOp / msqRpt
+
+    ! Compute the probability terms
+    partOpProb = 1.0d0 - f_distribution(real(partOpDOF, real64), &
+        real(rptDOF, real64), opFtest)
+
+    ! Compute the variance terms
+    if (partOpProb > a) then
+        rst%part_variance = max(0.0d0, (msqPart - msqPartOp) / &
+            (nops * nrepeats))
+        rst%operator_variance = max(0.0d0, (msqOp - msqPartOp) / &
+            (npart * nrepeats))
+    else
+        rst%part_variance = max(0.0d0, (msqPart - msqRpt) / (nops * nrepeats))
+        rst%operator_variance = max(0.0d0, (msqOp - msqRpt) / &
+            (npart * nrepeats))
+    end if
+    rst%operator_by_part_variance = max(0.0d0, (msqPartOp - msqRpt) / nrepeats)
+    rst%equipment_variance = msqRpt
+    rst%measurement_variance = rst%equipment_variance + &
+        rst%operator_variance + rst%operator_by_part_variance
+    rst%total_variance = rst%measurement_variance + rst%part_variance
+end function
 
 ! ------------------------------------------------------------------------------
 ! Control Chart Type GR&R
@@ -314,6 +453,7 @@ pure module function control_chart_variance(x) result(rst)
     npart = size(x, 1)
     nrepeats = size(x, 2)
     nops = size(x, 3)
+    rst%operator_by_part_variance = 0.0d0   ! Always 0 for this analysis
 
     ! Quick Return
     if (npart < 2 .or. nrepeats < 2 .or. nops < 1) then
@@ -367,25 +507,25 @@ pure module function control_chart_variance(x) result(rst)
     rst%part_variance = (partRange / d2(npart)**2) - &
         (real(npart) / real(npart * nops * nrepeats)) * &
         rst%equipment_variance
-
-    ! TO DO: Deal with N > 25 issues - it's probably better to use traditional
-    ! variance calculations when N > 25
 contains
-    ! REF: http://www.bessegato.com.br/UFJF/resources/table_of_control_chart_constants_old.pdf
+    ! REF: 
+    ! - http://www.bessegato.com.br/UFJF/resources/table_of_control_chart_constants_old.pdf
+    ! - https://r-bar.net/control-chart-constants-tables-explanations/#XmR_Sec
     pure function d2(n) result(d)
         ! Arguments
         integer(int32), intent(in) :: n
         real(real64) :: d
 
         ! Define the table and associated indices
-        integer(int32), parameter, dimension(24) :: index = [ &
+        integer(int32), parameter, dimension(29) :: index = [ &
             2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, &
-            17, 18, 19, 20, 21, 22, 23, 24, 25]
-        real(real64), parameter, dimension(24) :: values = [ &
+            17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+        real(real64), parameter, dimension(29) :: values = [ &
             1.128d0, 1.693d0, 2.059d0, 2.326d0, 2.534d0, 2.704d0, &
             2.847d0, 2.970d0, 3.078d0, 3.173d0, 3.258d0, 3.336d0, &
             3.407d0, 3.472d0, 3.532d0, 3.588d0, 3.640d0, 3.689d0, &
-            3.735d0, 3.778d0, 3.819d0, 3.858d0, 3.895d0, 3.931d0]
+            3.735d0, 3.778d0, 3.819d0, 3.858d0, 3.895d0, 3.931d0, &
+            3.964d0, 3.997d0, 4.027d0, 4.057d0, 4.086d0]
 
         ! Local Variables
         integer(int32) :: i
@@ -408,6 +548,17 @@ contains
 end function
 
 ! ------------------------------------------------------------------------------
+pure module function compute_grr(k, x, usl, lsl) result(rst)
+    ! Arguments
+    real(real64), intent(in) :: k, usl, lsl
+    type(process_variance), intent(in) :: x
+    type(grr_results) :: rst
+
+    ! Process
+    rst%tolerance_range = abs(usl - lsl)
+    rst%pt_ratio = k * sqrt(x%measurement_variance) / rst%tolerance_range
+    rst%ptv_ratio = sqrt(x%measurement_variance) / sqrt(x%total_variance)
+end function
 
 ! ------------------------------------------------------------------------------
 
@@ -416,6 +567,141 @@ end function
 ! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
+
+! ******************************************************************************
+! PRIVATE ROUTINES
+! ------------------------------------------------------------------------------
+pure module function ssq_part(x, xmean) result(ssq)
+    ! Arguments
+    real(real64), intent(in), dimension(:,:,:) :: x
+    real(real64), intent(in) :: xmean
+    real(real64) :: ssq
+
+    ! Local Variables
+    integer(int32) :: i, j, k, l, nop, npart, nrep
+    real(real64) :: xi
+    real(real64), allocatable, dimension(:) :: y
+
+    ! Initialization
+    npart = size(x, 1)
+    nrep = size(x, 2)
+    nop = size(x, 3)
+    allocate(y(nrep * nop))
+
+    ! Cycle over each part, and compute the sum of the differences
+    ssq = 0.0d0
+    do i = 1, npart
+        ! Collect the data whose mean we are to evaluate, 
+        ! and then compute the mean
+        l = 0
+        do j = 1, nrep
+            do k = 1, nop
+                l = l + 1
+                y(l) = x(i,j,k)
+            end do
+        end do
+        xi = mean(y)
+
+        ! Compute and include the difference
+        ssq = ssq + (xi - xmean)**2
+    end do
+
+    ! Output
+    ssq = nop * nrep * ssq
+end function
+
+! ------------------------------------------------------------------------------
+pure module function ssq_operator(x, xmean) result(ssq)
+    ! Arguments
+    real(real64), intent(in), dimension(:,:,:) :: x
+    real(real64), intent(in) :: xmean
+    real(real64) :: ssq
+
+    ! Local Variables
+    integer(int32) :: i, j, k, l, nop, npart, nrep
+    real(real64) :: xi
+    real(real64), allocatable, dimension(:) :: y
+
+    ! Initialization
+    npart = size(x, 1)
+    nrep = size(x, 2)
+    nop = size(x, 3)
+    allocate(y(npart * nrep))
+
+    ! Cycle over each operator
+    ssq = 0.0d0
+    do k = 1, nop
+        ! Collect the data whose mean we are to evaluate, 
+        ! and then compute the mean
+        l = 0
+        do j = 1, nrep
+            do i = 1, npart
+                l = l + 1
+                y(l) = x(i,j,k)
+            end do
+        end do
+        xi = mean(y)
+
+        ! Compute and include the difference
+        ssq = ssq + (xi - xmean)**2
+    end do
+
+    ! Output
+    ssq = npart * nrep * ssq
+end function
+
+! ------------------------------------------------------------------------------
+pure module function ssq_repeat(x) result(ssq)
+    ! Arguments
+    real(real64), intent(in), dimension(:,:,:) :: x
+    real(real64) :: ssq
+
+    ! Local Variables
+    integer(int32) :: i, j, k, nop, npart, nrep
+    real(real64) :: xik
+    
+    ! Initialization
+    npart = size(x, 1)
+    nrep = size(x, 2)
+    nop = size(x, 3)
+
+    ! Cycle over each observation
+    ssq = 0.0d0
+    do k = 1, nop
+        do i = 1, npart
+            xik = mean(x(i,:,k))
+            do j = 1, nrep
+                ssq = ssq + (x(i,j,k) - xik)**2
+            end do
+        end do
+    end do
+end function
+
+! ------------------------------------------------------------------------------
+pure module function ssq_total(x, xmean) result(ssq)
+    ! Arguments
+    real(real64), intent(in), dimension(:,:,:) :: x
+    real(real64), intent(in) :: xmean
+    real(real64) :: ssq
+
+    ! Local Variables
+    integer(int32) :: i, j, k, nop, npart, nrep
+    
+    ! Initialization
+    npart = size(x, 1)
+    nrep = size(x, 2)
+    nop = size(x, 3)
+
+    ! Cycle over each part, and compute the results
+    ssq = 0.0d0
+    do k = 1, nop
+        do j = 1, nrep
+            do i = 1, npart
+                ssq = ssq + (x(i,j,k) - xmean)**2
+            end do
+        end do
+    end do
+end function
 
 ! ------------------------------------------------------------------------------
 end submodule

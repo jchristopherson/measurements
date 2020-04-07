@@ -37,6 +37,9 @@ program main
     local = z_score_test()
     if (.not.local) overall = .false.
 
+    local = t_score_test()
+    if (.not.local) overall = .false.
+
     local = confidence_interval_test()
     if (.not.local) overall = .false.
 

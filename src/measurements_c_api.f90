@@ -230,26 +230,6 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
-    !> @brief Computes the beta function.
-    !!
-    !! @param[in] a The first argument of the function.
-    !! @param[in] b The second argument of the function.
-    !!
-    !! @return The value of the beta function at @p a and @p b.
-    !!
-    !! @remarks The beta function is related to the gamma function
-    !! by the following relationship \f$ \beta(a,b) = 
-    !! \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)} \f$.
-    function c_beta(a, b) bind(C, name = "c_beta") result(z)
-        ! Arguments
-        real(c_double), intent(in), value :: a, b
-        real(c_double) :: z
-
-        ! Process
-        z = beta(a, b)
-    end function
-
-! ------------------------------------------------------------------------------
     !> @brief Evaluates the probability distribution function of a beta
     !! distribution.
     !!
@@ -274,27 +254,6 @@ contains
         ! Process
         f = beta_distribution(a, b, x)
     end subroutine
-
-! ------------------------------------------------------------------------------
-    !> @brief Computes the value of the regularized beta function.
-    !!
-    !! @param[in] x The upper limit of the integration.
-    !! @param[in] a The first argument of the function.
-    !! @param[in] b The second argument of the function.
-    !!
-    !! @return The value of the regularized beta function at @p a and @p b.
-    !!
-    !! @remarks The regularized beta function is defined as \f$ 
-    !! I_{x}(a, b) = \frac{\beta(x; a, b)}{\beta(a, b)} \f$.
-    function c_regularized_beta(x, a, b) &
-            bind(C, name = "c_regularized_beta") result(z)
-        ! Arguments
-        real(c_double), intent(in), value :: x, a, b
-        real(c_double) :: z
-
-        ! Process
-        z = regularized_beta(x, a, b)
-    end function
 
 ! ------------------------------------------------------------------------------
     !> @brief Evaluates the probability distribution function of the
@@ -328,6 +287,143 @@ contains
         ! Process
         f = f_distribution(d1, d2, x)
     end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Utilizes an analysis of variance (ANOVA) to determine the
+    !! variance components of a measurement process represented by the
+    !! supplied data set.
+    !!
+    !! @param[in] nparts The number of parts being analyzed (must be greater 
+    !!  than 1).
+    !! @param[in] ntests The number of tests performed on each part (must be
+    !!  greater than 1).
+    !! @param[in] nops The number of operators performing tests (must be at
+    !!  least 1).
+    !! @param[in] x An NPARTS-by-NTESTS-by-NOPS data set from the measurement 
+    !!  process to analyze.
+    !! @param[in] alpha A parameter used to determine the appropriate 
+    !!  calculation path.  The recommended value is 0.05 (95% confidence level).
+    !! @param[out] rst The resulting variance components.
+    !!
+    !! @remarks It is possible for this routine to return zero-valued
+    !!  variance components.  In such an event it is recommended that
+    !!  another variance estimator is utilized.
+    subroutine c_anova(nparts, ntests, nops, x, alpha, rst) &
+            bind(C, name = "c_anova")
+        ! Arguments
+        integer(c_int), intent(in), value :: nparts, ntests, nops
+        real(c_double), intent(in) :: x(nparts,ntests, nops)
+        real(c_double), intent(in), value :: alpha
+        type(process_variance), intent(out) :: rst
+
+        ! Process
+        rst = anova(x, alpha)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Utilizes a control chart type approach to evaluate the 
+    !! measurement process utilized to collect the supplied data set.
+    !!
+    !! @param[in] nparts The number of parts being analyzed (must be greater 
+    !!  than 1).
+    !! @param[in] ntests The number of tests performed on each part (must be
+    !!  greater than 1).
+    !! @param[in] nops The number of operators performing tests (must be at
+    !!  least 1).
+    !! @param[in] x An NPARTS-by-NTESTS-by-NOPS data set from the measurement 
+    !!  process to analyze.
+    !! @param[out] rst The resulting variance components.
+    !!
+    !! @remarks This approach is best suited for smaller data sets whose
+    !!  dimension doesn't exceed 25-30.  Anything over this size is better
+    !!  served by another technique.
+    subroutine c_control_chart_variance(nparts, ntests, nops, x, rst) &
+            bind(C, name = "c_control_chart_variance")
+        ! Arguments
+        integer(c_int), intent(in), value :: nparts, ntests, nops
+        real(c_double), intent(in) :: x(nparts, ntests, nops)
+        type(process_variance), intent(out) :: rst
+
+        ! Process
+        rst = control_chart_variance(x)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Computes the gauge R&R statistics given a supplied set of
+    !! process variance data.
+    !!
+    !! @param[in] k The multiplier to use when computing the P/T ratio.
+    !!  Typically, a value of 6 is used for this factor.
+    !! @param[in] x The process variance data.
+    !! @param[in] usl The upper specification limit.
+    !! @param[in] lsl The lower specification limit.
+    !! @param[out] grr The gauge R&R statistics.
+    subroutine c_compute_grr(k, x, usl, lsl, grr) &
+            bind(C, name = "c_compute_grr")
+        ! Arguments
+        real(c_double), intent(in), value :: k, usl, lsl
+        type(process_variance), intent(in) :: x
+        type(grr_results), intent(out) :: grr
+
+        ! Process
+        grr = compute_grr(k, x, usl, lsl)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ******************************************************************************
+! SPECIAL FUNCTIONS
+! ------------------------------------------------------------------------------
+    !> @brief Computes the value of the regularized beta function.
+    !!
+    !! @param[in] x The upper limit of the integration.
+    !! @param[in] a The first argument of the function.
+    !! @param[in] b The second argument of the function.
+    !!
+    !! @return The value of the regularized beta function at @p a and @p b.
+    !!
+    !! @remarks The regularized beta function is defined as \f$ 
+    !! I_{x}(a, b) = \frac{\beta(x; a, b)}{\beta(a, b)} \f$.
+    function c_regularized_beta(x, a, b) &
+            bind(C, name = "c_regularized_beta") result(z)
+        ! Arguments
+        real(c_double), intent(in), value :: x, a, b
+        real(c_double) :: z
+
+        ! Process
+        z = regularized_beta(x, a, b)
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Computes the beta function.
+    !!
+    !! @param[in] a The first argument of the function.
+    !! @param[in] b The second argument of the function.
+    !!
+    !! @return The value of the beta function at @p a and @p b.
+    !!
+    !! @remarks The beta function is related to the gamma function
+    !! by the following relationship \f$ \beta(a,b) = 
+    !! \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)} \f$.
+    function c_beta(a, b) bind(C, name = "c_beta") result(z)
+        ! Arguments
+        real(c_double), intent(in), value :: a, b
+        real(c_double) :: z
+
+        ! Process
+        z = beta(a, b)
+    end function
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
 end module

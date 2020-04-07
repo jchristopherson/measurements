@@ -27,9 +27,24 @@ module measurements_core
         !> @brief The equipment variance component.  This is often referred to
         !! as the repeatability component.
         real(real64) :: equipment_variance
-        !> @brief The operator variance component.  This is often referred to
-        !! as the reproducibility component.
+        !> @brief The operator variance component.
         real(real64) :: operator_variance
+        !> @brief The operator by part variance component.
+        real(real64) :: operator_by_part_variance
+    end type
+
+    !> @brief A type containing gauge R&R results.
+    type, bind(C) :: grr_results
+        !> @brief The precision to tolerance ratio (P/T ratio).  This ratio
+        !! is simply the ratio of the measurement standard deviation to
+        !! the tolerance range.
+        real(real64) :: pt_ratio
+        !> @brief The precision to total variation ratio (P/TV ratio).  This 
+        !! ratio is simply the ratio of the measurement standard deviation to
+        !! the total process standard deviation.
+        real(real64) :: ptv_ratio
+        !> @brief The tolerance range.
+        real(real64) :: tolerance_range
     end type
 
 ! ******************************************************************************
@@ -126,6 +141,29 @@ module measurements_core
             real(real64), intent(in) :: c
             class(errors), intent(inout), optional, target :: err
             real(real64) :: z
+        end function
+
+        !> @brief Computes the t-score typically used in confidence interval
+        !! calculations when the population size is limited.
+        !!
+        !! @param[in] c The confidence level.  This value must be between 0
+        !!  and 1 such that: 0 < c < 1.
+        !! @param[in] n The population size.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_INVALID_INPUT_ERROR: Occurs if @p c is not within its allowed
+        !!      range.
+        !!
+        !! @return The t-score corresponding to @p c.
+        module function t_score(c, n, err) result(t)
+            real(real64), intent(in) :: c
+            integer(int32), intent(in) :: n
+            class(errors), intent(inout), optional, target :: err
+            real(real64) :: t
         end function
 
         !> @brief Computes the confidence interval of a data set.
@@ -241,6 +279,29 @@ module measurements_core
             real(real64) :: z
         end function
 
+        !> @brief Utilizes an analysis of variance (ANOVA) to determine the
+        !! variance components of a measurement process represented by the
+        !! supplied data set.
+        !!
+        !! @param[in] x An M-by-N-by-P data set from the measurement process
+        !!  to analyze where M is the number of parts tested (must be greater
+        !!  than 1), N is the number of tests performed per part (must be
+        !!  greater than 1), and P is the number of operators performing the
+        !!  tests (must be at least 1).
+        !! @param[in] alpha An optional parameter used to determine the 
+        !!  appropriate calculation path.  The default value is 0.05.
+        !!
+        !! @return The resulting variance components of the process.
+        !!
+        !! @remarks It is possible for this routine to return zero-valued
+        !!  variance components.  In such an event it is recommended that
+        !!  another variance estimator is utilized.
+        pure module function anova(x, alpha) result(rst)
+            real(real64), intent(in), dimension(:,:,:) :: x
+            real(real64), intent(in), optional :: alpha
+            type(process_variance) :: rst
+        end function
+
         !> @brief Utilizes a control chart type approach to evaluate the 
         !! measurement process utilized to collect the supplied data set.
         !!
@@ -258,6 +319,22 @@ module measurements_core
         pure module function control_chart_variance(x) result(rst)
             real(real64), intent(in), dimension(:,:,:) :: x
             type(process_variance) :: rst
+        end function
+
+        !> @brief Computes the gauge R&R statistics given a supplied set of
+        !! process variance data.
+        !!
+        !! @param[in] k The multiplier to use when computing the P/T ratio.
+        !!  Typically, a value of 6 is used for this factor.
+        !! @param[in] x The process variance data.
+        !! @param[in] usl The upper specification limit.
+        !! @param[in] lsl The lower specification limit.
+        !!
+        !! @return The gauge R&R statistics.
+        pure module function compute_grr(k, x, usl, lsl) result(rst)
+            real(real64), intent(in) :: k, usl, lsl
+            type(process_variance), intent(in) :: x
+            type(grr_results) :: rst
         end function
     end interface
 
