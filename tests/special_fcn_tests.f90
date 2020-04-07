@@ -83,8 +83,8 @@ function reg_beta_test() result(rst)
     end do
 end function
 
-! ------------------------------------------------------------------------------
-! incomplete beta test
+! No need to test the incomplete beta function as the regularized beta function
+! utilizes the incomplete beta function.
 
 ! ------------------------------------------------------------------------------
 end module
