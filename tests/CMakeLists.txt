@@ -2,6 +2,7 @@
 set(measurement_stats_files
     measurement_stats_tests.f90
     stats_tests.f90
+    special_fcn_tests.f90
 )
 
 # Build the executable

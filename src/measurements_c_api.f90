@@ -416,6 +416,25 @@ contains
         z = beta(a, b)
     end function
 ! ------------------------------------------------------------------------------
+    !> @brief Computes the incomplete beta function.
+    !!
+    !! @param[in] x The upper limit of the integration.
+    !! @param[in] a The first argument of the function.
+    !! @param[in] b The second argument of the function.
+    !!
+    !! @return The value of the incomplete beta function.
+    !!
+    !! @remarks The incomplete beta function is defind as \f$ \beta(x;a,b) =
+    !! \int_{0}^{x} t^{a-1} (1 - t)^{b-1} dt \f$.
+    function c_incomplete_beta(x, a, b) bind(C, name = "incomplete_beta") &
+            result(z)
+        ! Arguments
+        real(c_double), intent(in), value :: x, a, b
+        real(c_double) :: z
+
+        ! Process
+        z = incomplete_beta(x, a, b)
+    end function
 
 ! ------------------------------------------------------------------------------
 

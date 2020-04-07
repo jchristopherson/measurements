@@ -3,6 +3,7 @@
 program main
     use iso_fortran_env
     use stats_tests
+    use special_fcn_tests
     implicit none
 
     ! Local Variables
@@ -53,6 +54,15 @@ program main
     if (.not.local) overall = .false.
 
     local = f_distribution_test()
+    if (.not.local) overall = .false.
+
+    ! --------------------------------------------------------------------------
+    ! Special Functions
+
+    local = beta_test()
+    if (.not.local) overall = .false.
+
+    local = reg_beta_test()
     if (.not.local) overall = .false.
 
     ! End

@@ -360,11 +360,12 @@ module measurements_core
         !> @brief Computes the value of the regularized incomplete beta 
         !! function.
         !!
-        !! @param[in] x The upper limit of the integration.
+        !! @param[in] x The upper limit of the integration for the incomplete
+        !!  beta function.
         !! @param[in] a The first argument of the function.
         !! @param[in] b The second argument of the function.
         !!
-        !! @return The value of the regularized beta function at @p a and @p b.
+        !! @return The value of the regularized beta function.
         !!
         !! @remarks The regularized beta function is defined as \f$ 
         !! I_{x}(a, b) = \frac{\beta(x; a, b)}{\beta(a, b)} \f$.
@@ -374,6 +375,16 @@ module measurements_core
             real(real64) :: z
         end function
 
+        !> @brief Computes the incomplete beta function.
+        !!
+        !! @param[in] x The upper limit of the integration.
+        !! @param[in] a The first argument of the function.
+        !! @param[in] b The second argument of the function.
+        !!
+        !! @return The value of the incomplete beta function.
+        !!
+        !! @remarks The incomplete beta function is defind as \f$ \beta(x;a,b) =
+        !! \int_{0}^{x} t^{a-1} (1 - t)^{b-1} dt \f$.
         pure elemental module function incomplete_beta(x, a, b) result(z)
             real(real64), intent(in) :: x, a, b
             real(real64) :: z

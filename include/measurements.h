@@ -263,6 +263,17 @@ double c_regularized_beta(double x, double a, double b);
  */
 double c_beta(double a, double b);
 
+/**
+ * Computes the incomplete beta function.
+ *
+ * @param x The upper limit of the integration.
+ * @param a The first argument of the function.
+ * @param b The second argument of the function.
+ *
+ * @return The value of the incomplete beta function.
+ */
+double c_incomplete_beta(double x, double a, double b);
+
 
 #ifdef __cplusplus
 }
