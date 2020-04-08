@@ -370,9 +370,32 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
+    !> @brief Computes the discrimination ratio.
+    !!
+    !! @param[in] tv The total variance.
+    !! @param[in] mv The measurement system variance.
+    !!
+    !! @return The results of the operation.
+    !!
+    !! @par 
+    !! The discrimination ratio is computed as follows.
+    !! @par
+    !! /f$ DR = \sqrt{\frac{2 \sigma_{total}^2}{\sigma_{meas}^2} - 1} /f$
+    !! @par
+    !! An alternate means of computing this parameter (as used in JMP)
+    !! is as follows.
+    !! @par
+    !! /f$ DR = 1.41 \frac{\sigma_{parts}}{\sigma_{meas}} /f$
+    function c_discrimination_ratio(tv, mv) &
+            bind(C, name = "c_discrimination_ratio") result(x)
+        ! Arguments
+        real(c_double), intent(in), value :: tv, mv
+        real(c_double) :: x
 
-! ------------------------------------------------------------------------------
-
+        ! Process
+        x = discrimination_ratio(tv, mv)
+    end function
+    
 ! ******************************************************************************
 ! SPECIAL FUNCTIONS
 ! ------------------------------------------------------------------------------
@@ -436,34 +459,128 @@ contains
         z = incomplete_beta(x, a, b)
     end function
 
+! ******************************************************************************
+! INTERPOLATION
 ! ------------------------------------------------------------------------------
-    !> @brief Computes the discrimination ratio.
+    !> @brief Performs a polynomial interpolation.
     !!
-    !! @param[in] tv The total variance.
-    !! @param[in] mv The measurement system variance.
+    !! @param[in] order The order of the polynomial.  This value must be at 
+    !!  least 1, but not exceed @p npts - 1.
+    !! @param[in] npts The number of data points.
+    !! @param[in] x An @p npts element array containing the independent variable
+    !!  data.  This array must be monotonic.
+    !! @param[in] y An @p npts element array containing the dependent variable
+    !!  data.
+    !! @param[in] ni The number of points to interpolate.
+    !! @param[in] xi An @p ni element array containing the independent variable
+    !!  values at which to interpolate.
+    !! @param[out] yi An @p ni element array corresponding to @p xi where the
+    !!  interpolated values will be written.
     !!
-    !! @return The results of the operation.
-    !!
-    !! @par 
-    !! The discrimination ratio is computed as follows.
-    !! @par
-    !! /f$ DR = \sqrt{\frac{2 \sigma_{total}^2}{\sigma_{meas}^2} - 1} /f$
-    !! @par
-    !! An alternate means of computing this parameter (as used in JMP)
-    !! is as follows.
-    !! @par
-    !! /f$ DR = 1.41 \frac{\sigma_{parts}}{\sigma_{meas}} /f$
-    function c_discrimination_ratio(tv, mv) &
-            bind(C, name = "c_discrimination_ratio") result(x)
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    !!  - M_INVALID_INPUT_ERROR: Occurs if @p order is less than 1.
+    !!  - M_NONMONOTONIC_ARRAY_ERROR: Occurs if @p x is not monotonically
+    !!      increasing or decreasing.
+    function c_interpolate(order, npts, x, y, ni, xi, yi) &
+            bind(C, name = "c_interpolate") result(flag)
         ! Arguments
-        real(c_double), intent(in), value :: tv, mv
-        real(c_double) :: x
+        integer(c_int), intent(in), value :: order, npts, ni
+        real(c_double), intent(in) :: x(npts), y(npts), xi(ni)
+        real(c_double), intent(out) :: yi(ni)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(polynomial_interp) :: interp
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
 
         ! Process
-        x = discrimination_ratio(tv, mv)
+        call interp%initialize(x, y, order, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+        yi = interp%interpolate(xi)
     end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Performs a spline interpolation.
+    !!
+    !! @param[in] npts The number of data points.
+    !! @param[in] x An @p npts element array containing the independent variable
+    !!  data.  This array must be monotonic.
+    !! @param[in] y An @p npts element array containing the dependent variable
+    !!  data.
+    !! @param[in] ni The number of points to interpolate.
+    !! @param[in] xi An @p ni element array containing the independent variable
+    !!  values at which to interpolate.
+    !! @param[out] yi An @p ni element array corresponding to @p xi where the
+    !!  interpolated values will be written.
+    !! @param[in] ibcbeg An input that defines the nature of the
+    !!  boundary condition at the beginning of the spline.
+    !!  - SPLINE_QUADRATIC_OVER_INTERVAL: The spline is quadratic over its
+    !!      initial interval.  No value is required for @p ybcbeg.  This is
+    !!      often considered a natural boundary condition.
+    !!  - SPLINE_KNOWN_FIRST_DERIVATIVE: The spline's first derivative at 
+    !!      its initial point is provided in @p ybcbeg.
+    !!  - SPLINE_KNOWN_SECOND_DERIVATIVE: The spline's second derivative at 
+    !!      its initial point is provided in @p ybcbeg.
+    !!  - SPLINE_CONTINUOUS_THIRD_DERIVATIVE: The third derivative is 
+    !!      continuous at x(2).  No value is required for @p ybcbeg.
+    !! @param[in] ybcbeg If needed, the value of the initial point boundary
+    !!  condition.
+    !! @param[in] ibcend An input that defines the nature of the
+    !!  boundary condition at the end of the spline.
+    !!  - SPLINE_QUADRATIC_OVER_INTERVAL: The spline is quadratic over its
+    !!      final interval.  No value is required for @p ybcend.  This is
+    !!      often considered a natural boundary condition.
+    !!  - SPLINE_KNOWN_FIRST_DERIVATIVE: The spline's first derivative at 
+    !!      its initial point is provided in @p ybcend.
+    !!  - SPLINE_KNOWN_SECOND_DERIVATIVE: The spline's second derivative at 
+    !!      its initial point is provided in @p ybcend.
+    !!  - SPLINE_CONTINUOUS_THIRD_DERIVATIVE: The third derivative is 
+    !!      continuous at x(n-1).  No value is required for @p ybcend.
+    !! @param[in] ybcend If needed, the value of the final point boundary
+    !!  condition.  If needed, but not supplied, a default value of zero 
+    !!  will be used.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    !!  - M_NONMONOTONIC_ARRAY_ERROR: Occurs if @p x is not monotonically
+    !!      increasing or decreasing.
+    function c_spline(npts, x, y, ni, xi, yi, ibcbeg, ybcbeg, ibcend, ybcend) &
+            bind(C, name = "c_spline") result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: npts, ni, ibcbeg, ibcend
+        real(c_double), intent(in), value :: ybcbeg, ybcend
+        real(c_double), intent(in) :: x(npts), y(npts), xi(ni)
+        real(c_double), intent(out) :: yi(ni)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(spline_interp) :: interp
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        call interp%initialize_spline(x, y, ibcbeg, ybcbeg, ibcend, ybcend, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+        yi = interp%interpolate(xi)
+    end function
 
 ! ------------------------------------------------------------------------------
 

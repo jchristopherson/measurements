@@ -943,7 +943,6 @@ module measurements_core
         !!  - M_ARRAY_SIZE_ERROR: Occurs if @p x and @p y are not the same size.
         !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
         !!      available.
-        !!  - M_INVALID_INPUT_ERROR: Occurs if @p order is less than 1.
         !!  - M_NONMONOTONIC_ARRAY_ERROR: Occurs if @p x is not monotonically
         !!      increasing or decreasing.
         module subroutine si_init_2(this, x, y, ibcbeg, ybcbeg, ibcend, ybcend, err)
