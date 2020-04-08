@@ -583,6 +583,59 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Smooths a data set using a robust locally weighted scatterplot 
+    !! smoothing (LOWESS) algorithm. 
+    !!
+    !! @param[in] npts The number of data points.
+    !! @param[in] x An @p npts element array containing the independent variable
+    !!  data.  This array must be monotonic.
+    !! @param[in] y An @p npts element array containing the dependent variable
+    !!  data.
+    !! @param[in] factor Specifies the amount of smoothing.  More specifically, 
+    !!  this value is the fraction of points used to compute each value.  
+    !!  As this value increases, the output becomes smoother.  Choosing a 
+    !!  value in the range of 0.2 to 0.8 usually results in a good fit.  As 
+    !!  such, a reasonable starting point, in the absence of better 
+    !!  information, is a value of 0.5.
+    !! @param[out] ys An @p npts element array where the smoothed data will
+    !!  be written.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    !!  - M_NONMONOTONIC_ARRAY_ERROR: Occurs if @p x is not monotonically
+    !!      increasing or decreasing.
+    function c_lowess_smoothing(npts, x, y, factor, ys) &
+            bind(C, name = "c_lowess_smoothing") result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: npts
+        real(c_double), intent(in), value :: factor
+        real(c_double), intent(in) :: x(npts), y(npts)
+        real(c_double), intent(out) :: ys(npts)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(lowess_smoothing) :: fit
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        call fit%initialize(x, y, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+
+        ys = fit%smooth(factor, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+    end function
 
 ! ------------------------------------------------------------------------------
 

@@ -395,6 +395,34 @@ int c_spline(int npts, const double *x, const double *y, int ni,
     const double *xi, double *yi, int ibcbeg, double ybcbeg, int ibcend,
     double ybcend);
 
+/**
+ * Smooths a data set using a robust locally weighted scatterplot 
+ * smoothing (LOWESS) algorithm. 
+ *
+ * @param npts The number of data points.
+ * @param x An @p npts element array containing the independent variable
+ *  data.  This array must be monotonic.
+ * @param y An @p npts element array containing the dependent variable
+ *  data.
+ * @param factor Specifies the amount of smoothing.  More specifically, 
+ *  this value is the fraction of points used to compute each value.  
+ *  As this value increases, the output becomes smoother.  Choosing a 
+ *  value in the range of 0.2 to 0.8 usually results in a good fit.  As 
+ *  such, a reasonable starting point, in the absence of better 
+ *  information, is a value of 0.5.
+ * @param ys An @p npts element array where the smoothed data will
+ *  be written.
+ *
+ * @return An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ *  - M_NONMONOTONIC_ARRAY_ERROR: Occurs if @p x is not monotonically
+ *      increasing or decreasing.
+ */
+int c_lowess_smoothing(int npts, const double *x, const double *y, 
+    double factor, double *ys);
+
 #ifdef __cplusplus
 }
 #endif  // __cplusplus
