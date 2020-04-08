@@ -5,6 +5,8 @@ set(measurements_sources
     measurements_c_api.f90
     measurements_special.f90
     measurements_interp.f90
+    measurements_smoothing.f90
+    measurements_regression.f90
 )
 
 # Build the library

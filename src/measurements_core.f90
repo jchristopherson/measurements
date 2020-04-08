@@ -1044,8 +1044,146 @@ module measurements_core
         end function
     end interface
 
+! ******************************************************************************
+! MEASUREMENTS_SMOOTHING.F90
 ! ------------------------------------------------------------------------------
+    !> @brief Defines a type for computing a smoothing of an X-Y data set using
+    !! a robust locally weighted scatterplot smoothing (LOWESS) algorithm.
+    type lowess_smoothing
+        private
+        !> N-element array of x data points - sorted into ascending order.
+        real(real64), allocatable, dimension(:) :: m_x
+        !> N-element array of y data points.
+        real(real64), allocatable, dimension(:) :: m_y
+        !> N-element array containing the robustness weights for each data
+        !! point.
+        real(real64), allocatable, dimension(:) :: m_weights
+        !> N-element array containing the residuals (Y - YS)
+        real(real64), allocatable, dimension(:) :: m_residuals
+        !> Scaling parameter used to define the nature of the linear
+        !! interpolations used by the algorithm.
+        real(real64) :: m_delta
+        !> Tracks whether or not ls_init has been called
+        logical :: m_init = .false.
+    contains
+        !> @brief Initializes the lowess_smoothing object.
+        procedure, public :: initialize => ls_init
+        !> @brief Performs the actual smoothing operation.
+        procedure, public :: smooth => ls_smooth
+        !> @brief Gets the number of stored data points.
+        procedure, public :: get_count => ls_get_num_pts
+        !> @brief Gets the x component of the requested data point.
+        procedure, public :: get_x => ls_get_x
+        !> @brief Gets the y component of the requested data point.
+        procedure, public :: get_y => ls_get_y
+        !> @brief Gets the residuals from each data point.
+        procedure, public :: get_residuals => ls_get_residual
+    end type
 
+! ------------------------------------------------------------------------------
+    ! LOWESS_SMOOTHING ROUTINES
+    interface
+        !> @brief Initializes the lowess_smoothing object.
+        !!
+        !! @param[in,out] this The lowess_smoothing object.
+        !! @param[in] x An N-element containing the independent variable values 
+        !!  of the data set.  This array must be in a monotonically increasing 
+        !!  order.  The routine is capable of sorting the array into ascending 
+        !!  order, dependent upon the value of @p srt.  If sorting is performed,
+        !!  this routine will also shuffle @p y to match.
+        !! @param[in] y  An N-element array of the dependent variables 
+        !!  corresponding to @p x.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_ARRAY_SIZE_ERROR: Occurs if @p x and @p y are not the same size.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!  - M_NONMONOTONIC_ARRAY_ERROR: Occurs if @p x is not monotonically
+        !!      increasing or decreasing.
+        module subroutine ls_init(this, x, y, err)
+            class(lowess_smoothing), intent(inout) :: this
+            real(real64), intent(in), dimension(:) :: x, y
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        !> @brief Performs the actual smoothing operation.
+        !!
+        !! @param[in,out] this The lowess_smoothing object.
+        !! @param[in] f Specifies the amount of smoothing.  More specifically, 
+        !!  this value is the fraction of points used to compute each value.  
+        !!  As this value increases, the output becomes smoother.  Choosing a 
+        !!  value in the range of 0.2 to 0.8 usually results in a good fit.  As 
+        !!  such, a reasonable starting point, in the absence of better 
+        !!  information, is a value of 0.5.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_NO_DATA_DEFINED_ERROR: Occurs if no data has been defined.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!
+        !! @return The smoothed data points.
+        module function ls_smooth(this, f, err) result(ys)
+            class(lowess_smoothing), intent(inout) :: this
+            real(real64), intent(in) :: f
+            class(errors), intent(inout), optional, target :: err
+            real(real64), allocatable, dimension(:) :: ys
+        end function
+
+        !> @brief Gets the number of stored data points.
+        !!
+        !! @param[in] this The lowess_smoothing object.
+        !!
+        !! @return The number of data points.
+        pure module function ls_get_num_pts(this) result(n)
+            class(lowess_smoothing), intent(in) :: this
+            integer(int32) :: n
+        end function
+
+        !> @brief Gets the x component of the requested data point.
+        !!
+        !! @param[in] this The lowess_smoothing object.
+        !! @param[in] ind The one-based index of the data point to retrieve.
+        !!
+        !! @return The x component of the requested data point.
+        pure module function ls_get_x(this, ind) result(x)
+            class(lowess_smoothing), intent(in) :: this
+            integer(int32), intent(in) :: ind
+            real(real64) :: x
+        end function
+
+        !> @brief Gets the y component of the requested data point.
+        !!
+        !! @param[in] this The lowess_smoothing object.
+        !! @param[in] ind The one-based index of the data point to retrieve.
+        !!
+        !! @return The y component of the requested data point.
+        pure module function ls_get_y(this, ind) result(y)
+            class(lowess_smoothing), intent(in) :: this
+            integer(int32), intent(in) :: ind
+            real(real64) :: y
+        end function
+
+        !> @brief Gets the residuals from each data point.
+        !!
+        !! @param[in] this The lowess_smoothing object.
+        !! @param[out] x An N-element array where the residual data should be
+        !!  written.
+        module subroutine ls_get_residual(this, x)
+            class(lowess_smoothing), intent(in) :: this
+            real(real64), intent(out), dimension(:) :: x
+        end subroutine
+    end interface
+
+! ******************************************************************************
+! MEASUREMENTS_REGRESSION.F90
 ! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
