@@ -274,6 +274,15 @@ double c_beta(double a, double b);
  */
 double c_incomplete_beta(double x, double a, double b);
 
+/**
+ * Computes the discrimination ratio.
+ *
+ * @param tv The total variance.
+ * @param mv The measurement system variance.
+ *
+ * @return The results of the operation.
+ */
+double c_discrimination_ratio(double tv, double mv);
 
 #ifdef __cplusplus
 }

@@ -11,6 +11,31 @@ module measurements_core
     integer(int32), parameter :: M_NO_ERROR = 0
     !> @brief A flag denoting an invalid input error state.
     integer(int32), parameter :: M_INVALID_INPUT_ERROR = 10000
+    !> @brief A flag denoting an array size error.
+    integer(int32), parameter :: M_ARRAY_SIZE_ERROR = 10001
+    !> @brief A flag denoting an out-of-memory condition.
+    integer(int32), parameter :: M_OUT_OF_MEMORY_ERROR = 10002
+    !> @brief A flag denoting a non-monotonic array error.
+    integer(int32), parameter :: M_NONMONOTONIC_ARRAY_ERROR = 10003
+    !> @brief A flag denoting that no data has been defined.
+    integer(int32), parameter :: M_NO_DATA_DEFINED_ERROR = 10004
+
+
+    !> Indicates that the spline is quadratic over the interval under
+    !! consideration (beginning or ending interval).  This is equivalent to
+    !! allowing a "natural" boundary condition at either the initial or final
+    !! point.
+    integer(int32), parameter :: SPLINE_QUADRATIC_OVER_INTERVAL = 1000
+    !> Indicates a known first derivative at either the beginning or ending
+    !! point.
+    integer(int32), parameter :: SPLINE_KNOWN_FIRST_DERIVATIVE = 1001
+    !> Indicates a known second derivative at either the beginning or ending
+    !! point.
+    integer(int32), parameter :: SPLINE_KNOWN_SECOND_DERIVATIVE = 1002
+    !> Indicates a continuous third derivative at either the beginning or ending
+    !! point.
+    integer(int32), parameter :: SPLINE_CONTINUOUS_THIRD_DERIVATIVE = 1003
+
 
     !> @brief A type containing variance components describing a measurement
     !! process.
@@ -336,6 +361,27 @@ module measurements_core
             type(process_variance), intent(in) :: x
             type(grr_results) :: rst
         end function
+
+        !> @brief Computes the discrimination ratio.
+        !!
+        !! @param[in] tv The total variance.
+        !! @param[in] mv The measurement system variance.
+        !!
+        !! @return The results of the operation.
+        !!
+        !! @par 
+        !! The discrimination ratio is computed as follows.
+        !! @par
+        !! /f$ DR = \sqrt{\frac{2 \sigma_{total}^2}{\sigma_{meas}^2} - 1} /f$
+        !! @par
+        !! An alternate means of computing this parameter (as used in JMP)
+        !! is as follows.
+        !! @par
+        !! /f$ DR = 1.41 \frac{\sigma_{parts}}{\sigma_{meas}} /f$
+        pure elemental module function discrimination_ratio(tv, mv) result(x)
+            real(real64), intent(in) :: tv, mv
+            real(real64) :: x
+        end function
     end interface
 
 ! ******************************************************************************
@@ -391,15 +437,613 @@ module measurements_core
         end function
     end interface
 
+! ******************************************************************************
+! MEASUREMENTS_INTERP.F90
 ! ------------------------------------------------------------------------------
+    !> @brief Describes an abstract base class allowing for interpolation of X-Y
+    !! type data sets.
+    !!
+    !! @par Notes
+    !! This interpolation object is conceptually based upon the interpolation
+    !! scheme utilized by the Numerical Recipes in C++ text.
+    type, abstract :: interp_manager
+    private
+        integer(int32) :: m_order
+        integer(int32) :: m_savedIndex
+        integer(int32) :: m_indexCheck
+        logical :: m_correlated
+        real(real64), allocatable, dimension(:) :: m_x
+        real(real64), allocatable, dimension(:) :: m_y
+    contains
+        !> @brief Initializes the interp_manager instance.
+        procedure, public :: initialize => im_init
+        !> @brief Attempts to locate the index in the array providing a lower
+        !! bounds to the specified interpolation point.
+        procedure, non_overridable, public :: locate => im_locate
+        !> @brief Attempts to locate the index in the array providing a lower
+        !! bounds to the specified interpolation point.
+        procedure, non_overridable, public :: hunt => im_hunt
+        !> @brief Interpolates to obtain the function value at the specified
+        !!  independent variable.
+        generic, public :: interpolate => im_perform, im_perform_array
+        !> @brief Performs the actual interpolation.
+        procedure(interp_xy), deferred :: raw_interp
+        !> @brief Gets the number of stored data points.
+        procedure, public :: get_count => im_get_num_pts
+        !> @brief Gets the x component of the requested data point.
+        procedure, public :: get_x => im_get_x
+        !> @brief Gets the y component of the requested data point.
+        procedure, public :: get_y => im_get_y
+
+        procedure, non_overridable :: im_perform
+        procedure, non_overridable :: im_perform_array
+    end type
+
+    !> @brief Extends the interp_manager class allowing for linear, piecewise
+    !! interpolation of a data set.
+    type, extends(interp_manager) :: linear_interp
+    contains
+        !> @brief Performs the actual interpolation.
+        procedure :: raw_interp => li_raw_interp
+    end type
+
+    !> @brief Extends the interp_manager class allowing for polynomial
+    !! interpolation of a data set.
+    type, extends(interp_manager) :: polynomial_interp
+    private
+        real(real64), allocatable, dimension(:) :: m_c
+        real(real64), allocatable, dimension(:) :: m_d
+        real(real64) :: m_dy
+    contains
+        !> @brief Initializes the polynomial_interp instance.
+        procedure, public :: initialize => pi_init
+        !> @brief Performs the actual interpolation.
+        procedure :: raw_interp => pi_raw_interp
+    end type
+
+    !> @brief Extends the interp_manager class allowing for cubic spline
+    !! interpolation of a data set.
+    type, extends(interp_manager) :: spline_interp
+    private
+        real(real64), allocatable, dimension(:) :: m_ypp
+    contains
+        !> @brief Performs the actual interpolation.
+        procedure :: raw_interp => si_raw_interp
+        !> @brief Computes the second derivative terms for the cubic-spline
+        !! model.
+        procedure :: compute_diff2 => si_second_deriv
+        !> @brief Initializes the spline_interp instance.
+        procedure, public :: initialize => si_init_1
+        !> @brief Initializes the spline_interp instance while allowing
+        !! definition of boundary conditions.
+        procedure, public :: initialize_spline => si_init_2
+        !> @brief Interpolates to obtain the first derivative value at the
+        !! specified independent variable.
+        generic, public :: first_derivative => si_diff1, si_diff1_array
+        !> @brief Interpolates to obtain the second derivative value at the
+        !! specified independent variable.
+        generic, public :: second_derivative => si_diff2, si_diff2_array
+
+        procedure :: si_diff1
+        procedure :: si_diff1_array
+        procedure :: si_diff2
+        procedure :: si_diff2_array
+    end type
 
 ! ------------------------------------------------------------------------------
+    interface
+        !> @brief Defines the signature of a method used to interpolate a single
+        !!  value in an X-Y data set.
+        !!
+        !! @param[in,out] this The interp_manager based instance.
+        !! @param[in] jlo The array index below which @p pt is found in x.
+        !! @param[in] pt The independent variable value to interpolate.
+        !!
+        !! @return The interpolated value.
+        function interp_xy(this, jlo, pt) result(yy)
+            use iso_fortran_env
+            import interp_manager
+            class(interp_manager), intent(inout) :: this
+            integer(int32), intent(in) :: jlo
+            real(real64), intent(in) :: pt
+            real(real64) :: yy
+        end function
+    end interface
 
 ! ------------------------------------------------------------------------------
+    ! INTERP_MANAGER ROUTINES
+    interface
+        !> @brief Initializes the specified interp_manager instance.
+        !!
+        !! @param[in,out] this The interp_manager instance.
+        !! @param[in] x An N-element array containing the independent variable 
+        !!  data.  The data in this array must be either monotonically 
+        !!  increasing or decreasing.
+        !! @param[in] y An N-element array containing the dependent variable 
+        !!  data.
+        !! @param[in] order The order of the interpolating polynomial.  Notice, 
+        !!  this parameter is optional; however, if not specified, a default of 
+        !!  1 is used.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_ARRAY_SIZE_ERROR: Occurs if @p x and @p y are not the same size.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!  - M_NONMONOTONIC_ARRAY_ERROR: Occurs if @p x is not monotonically
+        !!      increasing or decreasing.
+        module subroutine im_init(this, x, y, order, err)
+            class(interp_manager), intent(inout) :: this
+            real(real64), intent(in), dimension(:) :: x, y
+            integer(int32), intent(in), optional :: order
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        !> @brief Attempts to locate the index in the array providing a lower 
+        !!  bounds to the specified interpolation point.
+        !!
+        !! @param[in,out] this The interp_manager instance.
+        !! @param[in] pt The interpolation point.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_NO_DATA_DEFINED_ERROR: Occurs if no data has yet been defined.
+        !!
+        !! @return The array index below @p pt.
+        module function im_locate(this, pt, err) result(j)
+            class(interp_manager), intent(inout) :: this
+            real(real64), intent(in) :: pt
+            class(errors), intent(inout), optional, target :: err
+            integer :: j
+        end function
+
+        !> @brief Attempts to locate the index in the array providing a lower 
+        !!  bounds to the specified interpolation point.  This method is 
+        !!  typically more efficient than locate when the current index does 
+        !!  not stray too far from the previous.
+        !!
+        !! @param[in,out] this The interp_manager instance.
+        !! @param[in] pt The interpolation point.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_NO_DATA_DEFINED_ERROR: Occurs if no data has yet been defined.
+        !!
+        !! @return The array index below @p pt.
+        module function im_hunt(this, pt, err) result(j)
+            class(interp_manager), intent(inout) :: this
+            real(real64), intent(in) :: pt
+            class(errors), intent(inout), optional, target :: err
+            integer(int32) :: j
+        end function
+
+        !> @brief Interpolates to obtain the function value at the specified
+        !!  independent variable.
+        !!
+        !! @param[in,out] this The interp_manager instance.
+        !! @param[in] pt The independent variable value to interpolate.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_NO_DATA_DEFINED_ERROR: Occurs if no data has yet been defined.
+        !!
+        !! @return The interpolated value.
+        module function im_perform(this, pt, err) result(yy)
+            class(interp_manager), intent(inout) :: this
+            real(real64), intent(in) :: pt
+            class(errors), intent(inout), optional, target :: err
+            real(real64) :: yy
+        end function
+
+        !> @brief Interpolates to obtain the function value at the specified
+        !!  independent variables.
+        !!
+        !! @param[in,out] this The interp_manager instance.
+        !! @param[in] pts An M-element array containing the independent variable
+        !!  values to interpolate.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_NO_DATA_DEFINED_ERROR: Occurs if no data has yet been defined.
+        !!
+        !! @return An M-element array containing the interpolated values.
+        module function im_perform_array(this, pts, err) result(yy)
+            class(interp_manager), intent(inout) :: this
+            real(real64), intent(in), dimension(:) :: pts
+            class(errors), intent(inout), optional, target :: err
+            real(real64), dimension(size(pts)) :: yy
+        end function
+
+        !> @brief Gets the number of stored data points.
+        !!
+        !! @param[in] this The interp_manager object.
+        !!
+        !! @return The number of data points.
+        pure module function im_get_num_pts(this) result(n)
+            class(interp_manager), intent(in) :: this
+            integer(int32) :: n
+        end function
+
+        !> @brief Gets the x component of the requested data point.
+        !!
+        !! @param[in] this The interp_manager object.
+        !! @param[in] ind The one-based index of the data point to retrieve.
+        !!
+        !! @return The x component of the requested data point.
+        pure module function im_get_x(this, ind) result(x)
+            class(interp_manager), intent(in) :: this
+            integer(int32), intent(in) :: ind
+            real(real64) :: x
+        end function
+
+        !> @brief Gets the y component of the requested data point.
+        !!
+        !! @param[in] this The interp_manager object.
+        !! @param[in] ind The one-based index of the data point to retrieve.
+        !!
+        !! @return The y component of the requested data point.
+        pure module function im_get_y(this, ind) result(y)
+            class(interp_manager), intent(in) :: this
+            integer(int32), intent(in) :: ind
+            real(real64) :: y
+        end function
+    end interface
 
 ! ------------------------------------------------------------------------------
+    ! LINAER_INTERP ROUTINES
+    interface
+        !> @brief Performs the actual linear interpolation.
+        !!
+        !! @param[in,out] this The linear_interp_mgr instance.
+        !! @param[in] jlo The array index below which @p pt is found in x.
+        !! @param[in] pt The independent variable value to interpolate.
+        !!
+        !! @return The interpolated value.
+        module function li_raw_interp(this, jlo, pt) result(yy)
+            class(linear_interp), intent(inout) :: this
+            integer(int32), intent(in) :: jlo
+            real(real64), intent(in) :: pt
+            real(real64) :: yy
+        end function
+    end interface
 
 ! ------------------------------------------------------------------------------
+    ! POLYNOMIAL_INTERP ROUTINES
+    interface
+        !> @brief Initializes the specified polynomial_interp instance.
+        !!
+        !! @param[in,out] this The polynomial_interp instance.
+        !! @param[in] x An N-element array containing the independent variable 
+        !!  data.  The data in this array must be either monotonically 
+        !!  increasing or decreasing.
+        !! @param[in] y An N-element array containing the dependent variable 
+        !!  data.
+        !! @param[in] order The order of the interpolating polynomial.  Notice, 
+        !!  this parameter is optional; however, if not specified, a default 
+        !!  of 1 is used.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_ARRAY_SIZE_ERROR: Occurs if @p x and @p y are not the same size.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!  - M_INVALID_INPUT_ERROR: Occurs if @p order is less than 1.
+        !!  - M_NONMONOTONIC_ARRAY_ERROR: Occurs if @p x is not monotonically
+        !!      increasing or decreasing.
+        module subroutine pi_init(this, x, y, order, err)
+            class(polynomial_interp), intent(inout) :: this
+            real(real64), intent(in), dimension(:) :: x, y
+            integer(int32), intent(in), optional :: order
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        !> @brief Performs the actual interpolation.
+        !!
+        !! @param[in,out] this The polynomial_interp instance.
+        !! @param[in] jlo The array index below which @p pt is found in x.
+        !! @param[in] pt The independent variable value to interpolate.
+        !!
+        !! @return The interpolated value.
+        module function pi_raw_interp(this, jlo, pt) result(yy)
+            class(polynomial_interp), intent(inout) :: this
+            integer(int32), intent(in) :: jlo
+            real(real64), intent(in) :: pt
+            real(real64) :: yy
+        end function
+    end interface
+
+! ------------------------------------------------------------------------------
+    ! SPLINE_INTERP MEMBERS
+    interface
+        !> @brief Solves a pentadiagonal system of linear equations.  A
+        !!  pentadiagonal matrix is all zeros with the exception of the 
+        !!  diagonal, and the two immediate sub and super-diagonals.  The 
+        !!  entries of row I are stored as follows:
+        !!      A(I,I-2) -> A1(I)
+        !!      A(I,I-1) -> A2(I)
+        !!      A(I,I) -> A3(I)
+        !!      A(I,I+1) -> A4(I)
+        !!      A(I,I+2) -> A5(I)
+        !!
+        !! @param[in] a1 An N-element array as defined above.
+        !! @param[in,out] a2 An N-element array as defined above.  This array is
+        !!  overwritten by this routine during the solution process.
+        !! @param[in,out] a3 An N-element array as defined above.  This array is
+        !!  overwritten by this routine during the solution process.
+        !! @param[in,out] a4 An N-element array as defined above.  This array is
+        !!  overwritten by this routine during the solution process.
+        !! @param[in] a5 An N-element array as defined above.
+        !! @param[in,out] b An N-element array containing the right-hand-side.  
+        !!  This array is overwritten by this routine during the solution 
+        !!  process.
+        !! @param[out] x An N-element array that, on output, contains the 
+        !!  solution to the linear system.
+        !!
+        !! - [Spline Library](http://people.sc.fsu.edu/~jburkardt/f77_src/spline/spline.html)
+        module subroutine penta_solve(a1, a2, a3, a4, a5, b, x)
+            real(real64), intent(in), dimension(:) :: a1, a5
+            real(real64), intent(inout), dimension(:) :: a2, a3, a4, b
+            real(real64), intent(out), dimension(:) :: x
+        end subroutine
+
+        !> @brief Performs the actual interpolation.
+        !!
+        !! @param[in,out] this The spline_interp instance.
+        !! @param[in] jlo The array index below which @p pt is found in x.
+        !! @param[in] pt The independent variable value to interpolate.
+        !!
+        !! @return The interpolated value.
+        module function si_raw_interp(this, jlo, pt) result(yy)
+            class(spline_interp), intent(inout) :: this
+            integer(int32), intent(in) :: jlo
+            real(real64), intent(in) :: pt
+            real(real64) :: yy
+        end function
+
+        !> @brief Computes the second derivative terms for the cubic-spline model.
+        !!
+        !! @param[in,out] this The spline_interp_mgr instance.
+        !! @param[in] ibcbeg Defines the nature of the boundary condition at the
+        !!  beginning of the spline.
+        !!  - SPLINE_QUADRATIC_OVER_INTERVAL: The spline is quadratic over its
+        !!      initial interval.
+        !!  - SPLINE_KNOWN_FIRST_DERIVATIVE: The spline's first derivative at 
+        !!      its initial point is provided in @p ybcbeg.
+        !!  - SPLINE_KNOWN_SECOND_DERIVATIVE: The spline's second derivative at 
+        !!      its initial point is provided in @p ybcbeg.
+        !!  - SPLINE_CONTINUOUS_THIRD_DERIVATIVE: The third derivative is 
+        !!      continuous at x(2).
+        !! @param[in] ybcbeg If needed, the value of the initial point boundary
+        !!  condition.
+        !! @param[in] ibcend Defines the nature of the boundary condition at the
+        !!  end of the spline.
+        !!  - SPLINE_QUADRATIC_OVER_INTERVAL: The spline is quadratic over its
+        !!      final interval.
+        !!  - SPLINE_KNOWN_FIRST_DERIVATIVE: The spline's first derivative at 
+        !!      its initial point is provided in @p ybcend.
+        !!  - SPLINE_KNOWN_SECOND_DERIVATIVE: The spline's second derivative at 
+        !!      its initial point is provided in @p ybcend.
+        !!  - SPLINE_CONTINUOUS_THIRD_DERIVATIVE: The third derivative is 
+        !!      continuous at x(n-1).
+        !! @param[in] ybcend If needed, the value of the final point boundary
+        !!  condition.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!
+        !! @par Remarks
+        !! This code is a slight modification of the SPLINE_CUBIC_SET routine 
+        !! from the [SPLINE](http://people.sc.fsu.edu/~jburkardt/f77_src/spline/spline.html) 
+        !! library.
+        module subroutine si_second_deriv(this, ibcbeg, ybcbeg, ibcend, ybcend, err)
+            class(spline_interp), intent(inout) :: this
+            integer(int32), intent(in) :: ibcbeg, ibcend
+            real(real64), intent(in) :: ybcbeg, ybcend
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        !> @brief Initializes the specified spline_interp instance.  The end 
+        !!  points are considered free such that the interpolant is quadratic 
+        !!  over both the initial and final intervals.
+        !!
+        !! @param[in,out] this The spline_interp instance.
+        !! @param[in] x An N-element array containing the independent variable 
+        !!  data.  The data in this array must be either monotonically 
+        !!  increasing or decreasing.
+        !! @param[in] y An N-element array containing the dependent variable 
+        !!  data.
+        !! @param[in] order The order of the interpolating polynomial.  This
+        !!  parameter is ignored as the spline is a cubic approximation.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_ARRAY_SIZE_ERROR: Occurs if @p x and @p y are not the same size.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!  - M_NONMONOTONIC_ARRAY_ERROR: Occurs if @p x is not monotonically
+        !!      increasing or decreasing.
+        module subroutine si_init_1(this, x, y, order, err)
+            class(spline_interp), intent(inout) :: this
+            real(real64), intent(in), dimension(:) :: x, y
+            integer(int32), intent(in), optional :: order
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        !> @brief Initializes the specified spline_interp instance.
+        !!
+        !! @param[in,out] this The spline_interp instance.
+        !! @param[in] x An N-element array containing the independent variable 
+        !!  data.  The data in this array must be either monotonically 
+        !!  increasing or decreasing.
+        !! @param[in] y An N-element array containing the dependent variable 
+        !!  data.
+        !! @param[in] ibcbeg An optional input that defines the nature of the
+        !!  boundary condition at the beginning of the spline.  If no parameter,
+        !!  or an invalid parameter, is specified, the default natural condition
+        !!  (SPLINE_QUADRATIC_OVER_INTERVAL) is used.
+        !!  - SPLINE_QUADRATIC_OVER_INTERVAL: The spline is quadratic over its
+        !!      initial interval.  No value is required for @p ybcbeg.
+        !!  - SPLINE_KNOWN_FIRST_DERIVATIVE: The spline's first derivative at 
+        !!      its initial point is provided in @p ybcbeg.
+        !!  - SPLINE_KNOWN_SECOND_DERIVATIVE: The spline's second derivative at 
+        !!      its initial point is provided in @p ybcbeg.
+        !!  - SPLINE_CONTINUOUS_THIRD_DERIVATIVE: The third derivative is 
+        !!      continuous at x(2).  No value is required for @p ybcbeg.
+        !! @param[in] ybcbeg If needed, the value of the initial point boundary
+        !!  condition.  If needed, but not supplied, a default value of zero 
+        !!  will be used.
+        !! @param[in] ibcend An optional input that defines the nature of the
+        !!  boundary condition at the end of the spline.  If no parameter, or an
+        !!  invalid parameter, is specified, the default natural condition
+        !!  (SPLINE_QUADRATIC_OVER_INTERVAL) is used.
+        !!  - SPLINE_QUADRATIC_OVER_INTERVAL: The spline is quadratic over its
+        !!      final interval.  No value is required for @p ybcend.
+        !!  - SPLINE_KNOWN_FIRST_DERIVATIVE: The spline's first derivative at 
+        !!      its initial point is provided in @p ybcend.
+        !!  - SPLINE_KNOWN_SECOND_DERIVATIVE: The spline's second derivative at 
+        !!      its initial point is provided in @p ybcend.
+        !!  - SPLINE_CONTINUOUS_THIRD_DERIVATIVE: The third derivative is 
+        !!      continuous at x(n-1).  No value is required for @p ybcend.
+        !! @param[in] ybcend If needed, the value of the final point boundary
+        !!  condition.  If needed, but not supplied, a default value of zero 
+        !!  will be used.
+        !!
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_ARRAY_SIZE_ERROR: Occurs if @p x and @p y are not the same size.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!  - M_INVALID_INPUT_ERROR: Occurs if @p order is less than 1.
+        !!  - M_NONMONOTONIC_ARRAY_ERROR: Occurs if @p x is not monotonically
+        !!      increasing or decreasing.
+        module subroutine si_init_2(this, x, y, ibcbeg, ybcbeg, ibcend, ybcend, err)
+            class(spline_interp), intent(inout) :: this
+            real(real64), intent(in), dimension(:) :: x, y
+            integer(int32), intent(in), optional :: ibcbeg, ibcend
+            real(real64), intent(in), optional :: ybcbeg, ybcend
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        !> @brief Interpolates to obtain the first derivative value at the 
+        !! specified independent variable.
+        !!
+        !! @param[in,out] this The interp_manager instance.
+        !! @param[in] pt The independent variable value to interpolate.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_NO_DATA_DEFINED_ERROR: Occurs if no data has yet been defined.
+        !!
+        !! @return The interpolated value.
+        module function si_diff1(this, pt, err) result(yy)
+            ! Arguments
+            class(spline_interp), intent(inout) :: this
+            real(real64), intent(in) :: pt
+            class(errors), intent(inout), optional, target :: err
+            real(real64) :: yy
+        end function
+
+        !> @brief Interpolates to obtain the first derivative value at the 
+        !!  specified independent variables.
+        !!
+        !! @param[in,out] this The interp_manager instance.
+        !! @param[in] pts An M-element array containing the independent variable
+        !!  values to interpolate.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_NO_DATA_DEFINED_ERROR: Occurs if no data has yet been defined.
+        !!
+        !! @return An M-element array containing the interpolated values.
+        module function si_diff1_array(this, pts, err) result(yy)
+            ! Arguments
+            class(spline_interp), intent(inout) :: this
+            real(real64), intent(in), dimension(:) :: pts
+            class(errors), intent(inout), optional, target :: err
+            real(real64), dimension(size(pts)) :: yy
+        end function
+
+        !> @brief Interpolates to obtain the second derivative value at the
+        !! specified independent variable.
+        !!
+        !! @param[in,out] this The interp_manager instance.
+        !! @param[in] pt The independent variable value to interpolate.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_NO_DATA_DEFINED_ERROR: Occurs if no data has yet been defined.
+        !!
+        !! @return The interpolated value.
+        module function si_diff2(this, pt, err) result(yy)
+            ! Arguments
+            class(spline_interp), intent(inout) :: this
+            real(real64), intent(in) :: pt
+            class(errors), intent(inout), optional, target :: err
+            real(real64) :: yy
+        end function
+
+        !> @brief Interpolates to obtain the second derivative value at the
+        !! specified independent variables.
+        !!
+        !! @param[in,out] this The interp_manager instance.
+        !! @param[in] pts An M-element array containing the independent variable
+        !!  values to interpolate.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_NO_DATA_DEFINED_ERROR: Occurs if no data has yet been defined.
+        !!
+        !! @return An M-element array containing the interpolated values.
+        module function si_diff2_array(this, pts, err) result(yy)
+            ! Arguments
+            class(spline_interp), intent(inout) :: this
+            real(real64), intent(in), dimension(:) :: pts
+            class(errors), intent(inout), optional, target :: err
+            real(real64), dimension(size(pts)) :: yy
+        end function
+    end interface
 
 ! ------------------------------------------------------------------------------
 

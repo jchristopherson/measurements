@@ -4,6 +4,7 @@ set(measurements_sources
     measurement_stats.f90
     measurements_c_api.f90
     measurements_special.f90
+    measurements_interp.f90
 )
 
 # Build the library

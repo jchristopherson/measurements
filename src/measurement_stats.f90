@@ -408,6 +408,7 @@ pure module function anova(x, alpha) result(rst)
     msqOp = ssqOp / opDOF
     msqPartOp = ssqPartOp / partOpDOF
     msqTotal = ssqTotal / totalDOF
+    msqRpt = ssqWithin / rptDOF
 
     ! Compute the F tests
     opFtest = msqPartOp / msqRpt
@@ -558,6 +559,13 @@ pure module function compute_grr(k, x, usl, lsl) result(rst)
     rst%tolerance_range = abs(usl - lsl)
     rst%pt_ratio = k * sqrt(x%measurement_variance) / rst%tolerance_range
     rst%ptv_ratio = sqrt(x%measurement_variance) / sqrt(x%total_variance)
+end function
+
+! ------------------------------------------------------------------------------
+pure elemental module function discrimination_ratio(tv, mv) result(x)
+    real(real64), intent(in) :: tv, mv
+    real(real64) :: x
+    x = sqrt(2.0d0 * (tv / mv) - 1.0d0)
 end function
 
 ! ******************************************************************************

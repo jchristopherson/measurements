@@ -437,6 +437,31 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Computes the discrimination ratio.
+    !!
+    !! @param[in] tv The total variance.
+    !! @param[in] mv The measurement system variance.
+    !!
+    !! @return The results of the operation.
+    !!
+    !! @par 
+    !! The discrimination ratio is computed as follows.
+    !! @par
+    !! /f$ DR = \sqrt{\frac{2 \sigma_{total}^2}{\sigma_{meas}^2} - 1} /f$
+    !! @par
+    !! An alternate means of computing this parameter (as used in JMP)
+    !! is as follows.
+    !! @par
+    !! /f$ DR = 1.41 \frac{\sigma_{parts}}{\sigma_{meas}} /f$
+    function c_discrimination_ratio(tv, mv) &
+            bind(C, name = "c_discrimination_ratio") result(x)
+        ! Arguments
+        real(c_double), intent(in), value :: tv, mv
+        real(c_double) :: x
+
+        ! Process
+        x = discrimination_ratio(tv, mv)
+    end function
 
 ! ------------------------------------------------------------------------------
 
