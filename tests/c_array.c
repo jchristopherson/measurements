@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include "c_array.h"
+#include "c_test_macros.h"
 
 void create_random_array(int n, double *x) {
     // Local Variables
@@ -57,3 +58,16 @@ void array_sort(int n, double *x) {
     }
 }
 
+double array_max(int n, const double *x) {
+    int i;
+    double y = x[0];
+    for (i = 1; i < n; ++i) y = MAX(y, x[i]);
+    return y;
+}
+
+double array_min(int n, const double *x) {
+    int i;
+    double y = x[0];
+    for (i = 1; i < n; ++i) y = MIN(y, x[i]);
+    return y;
+}

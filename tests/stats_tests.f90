@@ -587,8 +587,157 @@ function f_distribution_test() result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
+function t_test_test() result(rst)
+    ! Arguments
+    logical :: rst
+
+    ! Parameters
+    integer(int32), parameter :: n1 = 15
+    integer(int32), parameter :: n2 = 12
+    real(real64), parameter :: tol = 1.0d-8
+    real(real64), parameter :: ans1 = 0.6574262172637550d0
+    real(real64), parameter :: ans2 = 0.6621143019183570d0
+    real(real64), parameter :: ans3 = 0.2286303186286610d0
+
+    ! Local Variables
+    real(real64) :: x1(n1), x2(n2), x3(n1), delta
+    type(statistic) :: t
+
+    ! Initialization
+    rst = .true.
+    x1 = [0.5875701638177520d0, &
+        0.4925038626867790d0, &
+        0.0997847738770978d0, &
+        0.5540924574002610d0, &
+        0.0833121626712929d0, &
+        0.1738451549308330d0, &
+        0.3521655274264620d0, &
+        0.2239625528107020d0, &
+        0.6871828620071030d0, &
+        0.3248518075223050d0, &
+        0.0551977898473518d0, &
+        0.8648552295498370d0, &
+        0.9239272586628300d0, &
+        0.4917627939852090d0, &
+        0.3508690262031490d0]
+    x2 = [0.7557955531972870d0, &
+        0.0482975843398515d0, &
+        0.7609889442453010d0, &
+        0.4898203045069780d0, &
+        0.4382872343657070d0, &
+        0.9676872466629530d0, &
+        0.1167483190258670d0, &
+        0.0399776180777329d0, &
+        0.2528774837460510d0, &
+        0.6824976673552180d0, &
+        0.6602062072459940d0, &
+        0.4015093296585650d0]
+    x3 = [0.3201877837239090d0, &
+        0.0980256595288177d0, &
+        0.6897988918691660d0, &
+        0.1785484851694640d0, &
+        0.0991062800273234d0, &
+        0.1195800744029930d0, &
+        0.8476199670433790d0, &
+        0.8536320559829150d0, &
+        0.6394323340044970d0, &
+        0.8848230532535040d0, &
+        0.9300526849294520d0, &
+        0.6703901525053320d0, &
+        0.7168448453351630d0, &
+        0.9870657922150660d0, &
+        0.2874068518452400d0]
+
+    ! Equal Variance Assumption
+    t = t_test(x1, x2, EQUAL_VARIANCE_ASSUMPTION)
+    delta = ans1 - t%probability
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "T_TEST_TEST - EQUAL VARIANCE ASSUMPTION FAILED."
+        print *, "Expected: ", ans1
+        print *, "Computed: ", t%probability
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+
+    ! Unequal Variance Assumption
+    t = t_test(x1, x2, UNEQUAL_VARIANCE_ASSUMPTION)
+    delta = ans2 - t%probability
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "T_TEST_TEST - UNEQUAL VARIANCE ASSUMPTION FAILED."
+        print *, "Expected: ", ans2
+        print *, "Computed: ", t%probability
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+
+    ! Paired Data Assumption
+    t = t_test(x1, x3, PAIRED_DATA_SET_ASSUMPTION)
+    delta = ans3 - t%probability
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "T_TEST_TEST - PAIRED DATA ASSUMPTION FAILED."
+        print *, "Expected: ", ans3
+        print *, "Computed: ", t%probability
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+end function
 
 ! ------------------------------------------------------------------------------
+function f_test_test() result(rst)
+    ! Arguments
+    logical :: rst
+
+    ! Parameters
+    integer(int32), parameter :: n1 = 15
+    integer(int32), parameter :: n2 = 12
+    real(real64), parameter :: tol = 1.0d-8
+    real(real64), parameter :: ans = 0.672432090576604d0
+
+    ! Local Variables
+    real(real64) :: x1(n1), x2(n2), delta
+    type(statistic) :: f
+
+    ! Initialization
+    rst = .true.
+    x1 = [0.5875701638177520d0, &
+        0.4925038626867790d0, &
+        0.0997847738770978d0, &
+        0.5540924574002610d0, &
+        0.0833121626712929d0, &
+        0.1738451549308330d0, &
+        0.3521655274264620d0, &
+        0.2239625528107020d0, &
+        0.6871828620071030d0, &
+        0.3248518075223050d0, &
+        0.0551977898473518d0, &
+        0.8648552295498370d0, &
+        0.9239272586628300d0, &
+        0.4917627939852090d0, &
+        0.3508690262031490d0]
+    x2 = [0.7557955531972870d0, &
+        0.0482975843398515d0, &
+        0.7609889442453010d0, &
+        0.4898203045069780d0, &
+        0.4382872343657070d0, &
+        0.9676872466629530d0, &
+        0.1167483190258670d0, &
+        0.0399776180777329d0, &
+        0.2528774837460510d0, &
+        0.6824976673552180d0, &
+        0.6602062072459940d0, &
+        0.4015093296585650d0]
+
+    ! Process
+    f = f_test(x1, x2)
+    delta = ans - f%probability
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "F_TEST_TEST FAILED."
+        print *, "Expected: ", ans
+        print *, "Computed: ", f%probability
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+end function
 
 ! ------------------------------------------------------------------------------
 end module

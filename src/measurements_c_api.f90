@@ -151,6 +151,38 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Computes the t-score typically used in confidence interval
+    !! calculations when the population size is limited.
+    !!
+    !! @param[in] c The confidence level.  This value must be between 0
+    !!  and 1 such that: 0 < c < 1.
+    !! @param[in] n The population size.
+    !! @param[out] t The computed t-score.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_INVALID_INPUT_ERROR: Occurs if @p c is not within its allowed
+    !!      range.
+    function c_t_score(c, n, t) bind(C, name = "c_t_score") result(flag)
+        ! Arguments
+        real(c_double), intent(in), value :: c
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(out) :: t
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        t = t_score(c, n, err)
+        if (err%has_error_occurred()) flag = err%get_error_flag()
+    end function
+
+! ------------------------------------------------------------------------------
     !> @brief Computes the confidence interval of a data set.
     !!
     !! @param[in] n The number of data points.
@@ -167,7 +199,8 @@ contains
             bind(C, name = "c_confidence_interval") result(ci)
         ! Arguments
         integer(c_int), intent(in), value :: n
-        real(c_double), intent(in) :: x(n), zval
+        real(c_double), intent(in) :: x(n)
+        real(c_double), intent(in), value :: zval
         real(c_double) :: ci
 
         ! Process
@@ -395,6 +428,65 @@ contains
         ! Process
         x = discrimination_ratio(tv, mv)
     end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Applies Student's t-test to compute the t-statistic.  A 
+    !! two-tailed distribution is assumed.
+    !!
+    !! @param[in] n1 The number of data points in the first data set.
+    !! @param[in] x1 An @p n1 element array containing the first data set.
+    !! @param[in] n2 The number of data points in the second data set.
+    !! @param[in] x2 An @p n2 element array containing the second data set.
+    !! @param[in] method An input flag defining which method to utilize.
+    !!  - EQUAL_VARIANCE_ASSUMPTION: This flag enforces an assumption that
+    !!      the variances of both populations are equivalent.
+    !!  - UNEQUAL_VARIANCE_ASSUMPTION: This flag enforces an assumption 
+    !!      that the varainces of both populations are not necessarily
+    !!      equivalent.
+    !!  - PAIRED_DATA_SET_ASSUMPTION: This flag enforces an assumption that
+    !!      the data sets are paired.  This requires that both data sets
+    !!      are the same size.  If this flag is defined, and the supplied
+    !!      data sets are different sized, the routine switches to
+    !!      EQUAL_VARIANCE_ASSUMPTION.
+    !! If no value is specified, the EQUAL_VARIANCE_ASSUMPTION is utilized.
+    !! @param[out] rst Student's t-statistic and the associated probability term
+    !! that establishes the significance of the t-statistic.
+    subroutine c_t_test(n1, x1, n2, x2, method, rst) bind(C, name = "c_t_test")
+        ! Arguments
+        integer(c_int), intent(in), value :: n1, n2, method
+        real(c_double), intent(in) :: x1(n1), x2(n2)
+        type(statistic), intent(out) :: rst
+
+        ! Process
+        rst = t_test(x1, x2, method)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Applies the F-test for different variances.
+    !!
+    !! @param[in] n1 The number of data points in the first data set.
+    !! @param[in] x1 An @p n1 element array containing the first data set.
+    !! @param[in] n2 The number of data points in the second data set.
+    !! @param[in] x2 An @p n2 element array containing the second data set.
+    !! @param[out] rst The F-test statistic and associated probability term that
+    !! establishes the signficance of the f-statistic.
+    subroutine c_f_test(n1, x1, n2, x2, rst) bind(C, name = "c_f_test")
+        ! Arguments
+        integer(c_int), intent(in), value :: n1, n2
+        real(c_double), intent(in) :: x1(n1), x2(n2)
+        type(statistic), intent(out) :: rst
+
+        ! Process
+        rst = f_test(x1, x2)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
     
 ! ******************************************************************************
 ! SPECIAL FUNCTIONS

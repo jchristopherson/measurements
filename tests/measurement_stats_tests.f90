@@ -56,6 +56,12 @@ program main
     local = f_distribution_test()
     if (.not.local) overall = .false.
 
+    local = t_test_test()
+    if (.not.local) overall = .false.
+
+    local = f_test_test()
+    if (.not.local) overall = .false.
+
     ! --------------------------------------------------------------------------
     ! Special Functions
 

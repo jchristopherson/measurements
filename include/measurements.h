@@ -16,7 +16,6 @@
 /** A flag denoting that no data has been defined. */
 #define M_NO_DATA_DEFINED_ERROR             10004
 
-
 /** 
  * Indicates that the spline is quadratic over the interval under
  * consideration (beginning or ending interval).  This is equivalent to
@@ -39,6 +38,13 @@
  * point. 
  */
 #define SPLINE_CONTINUOUS_THIRD_DERIVATIVE  1003
+
+/** Defines an equal variance assumption. */
+#define EQUAL_VARIANCE_ASSUMPTION           2000
+/** Defines an unequal variance assumption. */
+#define UNEQUAL_VARIANCE_ASSUMPTION         2001
+/** Defines a paired data set assumption. */
+#define PAIRED_DATA_SET_ASSUMPTION          2002
 
 /** A type containing variance components describing a measurement process. */
 typedef struct {
@@ -73,6 +79,18 @@ typedef struct {
     /** The tolerance range. */
     double tolerance_range;
 } grr_results;
+
+/** 
+ * A type containing information regarding a given statistic and its
+ * associated probability.
+ */
+typedef struct {
+    /** The value of the statistic. */
+    double value;
+    /** The probability defining the significance of the statistic value. */
+    double probability;
+} statistic;
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -158,6 +176,34 @@ double c_data_range(int n, const double *x);
  *      range.
  */
 int c_z_score(double c, double *z);
+
+/**
+ * Computes the t-score typically used in confidence interval
+ * calculations when the population size is limited.
+ *
+ * @param c The confidence level.  This value must be between 0
+ *  and 1 such that: 0 < c < 1.
+ * @param n The population size.
+ * @param t The computed t-score.
+ *
+ * @return An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_INVALID_INPUT_ERROR: Occurs if @p c is not within its allowed
+ *      range.
+ */
+int c_t_score(double c, int n, double *t);
+
+/**
+ * Computes the confidence interval of a data set.
+ *
+ * @param n The number of data points.
+ * @param x An N-element array containing the data set.
+ * @param zval The critical value (z or t value).
+ *
+ * @return The confidence interval as referenced from the population
+ *  mean.
+ */
+double c_confidence_interval(int n, const double *x, double zval);
 
 /**
  * Evaluates the probability distribution function of a normal
@@ -283,6 +329,45 @@ void c_compute_grr(double k, const process_variance *x, double usl, double lsl,
  * @return The results of the operation.
  */
 double c_discrimination_ratio(double tv, double mv);
+
+/**
+ * Applies Student's t-test to compute the t-statistic.  A two-tailed 
+ * distribution is assumed.
+ *
+ * @param[in] n1 The number of data points in the first data set.
+ * @param[in] x1 An @p n1 element array containing the first data set.
+ * @param[in] n2 The number of data points in the second data set.
+ * @param[in] x2 An @p n2 element array containing the second data set.
+ * @param method An input flag defining which method to utilize.
+ *  - EQUAL_VARIANCE_ASSUMPTION: This flag enforces an assumption that
+ *      the variances of both populations are equivalent.
+ *  - UNEQUAL_VARIANCE_ASSUMPTION: This flag enforces an assumption 
+ *      that the varainces of both populations are not necessarily
+ *      equivalent.
+ *  - PAIRED_DATA_SET_ASSUMPTION: This flag enforces an assumption that
+ *      the data sets are paired.  This requires that both data sets
+ *      are the same size.  If this flag is defined, and the supplied
+ *      data sets are different sized, the routine switches to
+ *      EQUAL_VARIANCE_ASSUMPTION.
+ * If no value is specified, the EQUAL_VARIANCE_ASSUMPTION is utilized.
+ * @param rst Student's t-statistic and the associated probability term
+ * that establishes the significance of the t-statistic.
+ */
+void c_t_test(int n1, const double *x1, int n2, const double *x2, int method, 
+    statistic *rst);
+
+/**
+ * Applies the F-test for different variances.
+ *
+ * @param n1 The number of data points in the first data set.
+ * @param x1 An @p n1 element array containing the first data set.
+ * @param n2 The number of data points in the second data set.
+ * @param x2 An @p n2 element array containing the second data set.
+ * @param rst The F-test statistic and associated probability term that
+ * establishes the signficance of the f-statistic.
+ */
+void c_f_test(int n1, const double *x1, int n2, const double *x2, 
+    statistic *rst);
 
 /**
  * Computes the value of the regularized beta function.

@@ -568,10 +568,74 @@ pure elemental module function discrimination_ratio(tv, mv) result(x)
     x = sqrt(2.0d0 * (tv / mv) - 1.0d0)
 end function
 
+! ------------------------------------------------------------------------------
+pure module function t_test(x1, x2, method) result(rst)
+    ! Arguments
+    real(real64), intent(in), dimension(:) :: x1, x2
+    integer(int32), intent(in), optional :: method
+    type(statistic) :: rst
+
+    ! Local Variables
+    integer(int32) :: flag
+
+    ! Initialization
+    flag = EQUAL_VARIANCE_ASSUMPTION
+    if (present(method)) flag = method
+
+    ! In the event that flag = PAIRED_DATA_SET_ASSUMPTION, and 
+    ! size(x1) /= size(x2), default to EQUAL_VARIANCE_ASSUMPTION.
+    if (flag == PAIRED_DATA_SET_ASSUMPTION .and. size(x1) /= size(x2)) then
+        flag = EQUAL_VARIANCE_ASSUMPTION
+    end if
+
+    ! Process
+    select case (flag)
+        case (UNEQUAL_VARIANCE_ASSUMPTION)
+            rst = t_test_no_same_var(x1, x2)
+        case (PAIRED_DATA_SET_ASSUMPTION)
+            rst = t_test_paired(x1, x2)
+        case default
+            rst = t_test_same_var(x1, x2)
+    end select
+end function
+
+! ------------------------------------------------------------------------------
+pure module function f_test(x1, x2) result(rst)
+    ! Arguments
+    real(real64), intent(in), dimension(:) :: x1, x2
+    type(statistic) :: rst
+
+    ! Local Variables
+    integer(int32) :: n1, n2
+    real(real64) :: avg1, avg2, var1, var2, df1, df2
+
+    ! Process
+    n1 = size(x1)
+    n2 = size(x2)
+    avg1 = mean(x1)
+    avg2 = mean(x2)
+    var1 = variance(x1)
+    var2 = variance(x2)
+    if (var1 > var2) then
+        rst%value = var1 / var2
+        df1 = n1 - 1.0d0
+        df2 = n2 - 1.0d0
+    else
+        rst%value = var2 / var1
+        df1 = n2 - 1.0d0
+        df2 = n1 - 1.0d0
+    end if
+    rst%probability = 2.0d0 * regularized_beta( &
+        df2 / (df2 + df1 * rst%value), &
+        0.5d0 * df2, &
+        0.5d0 * df1)
+    if (rst%probability > 1.0d0) rst%probability = 2.0d0 - rst%probability
+end function
+
 ! ******************************************************************************
 ! PRIVATE ROUTINES
 ! ------------------------------------------------------------------------------
-pure module function ssq_part(x, xmean) result(ssq)
+pure function ssq_part(x, xmean) result(ssq)
     ! Arguments
     real(real64), intent(in), dimension(:,:,:) :: x
     real(real64), intent(in) :: xmean
@@ -611,7 +675,7 @@ pure module function ssq_part(x, xmean) result(ssq)
 end function
 
 ! ------------------------------------------------------------------------------
-pure module function ssq_operator(x, xmean) result(ssq)
+pure function ssq_operator(x, xmean) result(ssq)
     ! Arguments
     real(real64), intent(in), dimension(:,:,:) :: x
     real(real64), intent(in) :: xmean
@@ -651,7 +715,7 @@ pure module function ssq_operator(x, xmean) result(ssq)
 end function
 
 ! ------------------------------------------------------------------------------
-pure module function ssq_repeat(x) result(ssq)
+pure function ssq_repeat(x) result(ssq)
     ! Arguments
     real(real64), intent(in), dimension(:,:,:) :: x
     real(real64) :: ssq
@@ -678,7 +742,7 @@ pure module function ssq_repeat(x) result(ssq)
 end function
 
 ! ------------------------------------------------------------------------------
-pure module function ssq_total(x, xmean) result(ssq)
+pure function ssq_total(x, xmean) result(ssq)
     ! Arguments
     real(real64), intent(in), dimension(:,:,:) :: x
     real(real64), intent(in) :: xmean
@@ -701,6 +765,88 @@ pure module function ssq_total(x, xmean) result(ssq)
             end do
         end do
     end do
+end function
+
+! ------------------------------------------------------------------------------
+pure function t_test_same_var(x1, x2) result(rst)
+    ! Arguments
+    real(real64), intent(in), dimension(:) :: x1, x2
+    type(statistic) :: rst
+
+    ! Local Variables
+    integer(int32) :: n1, n2
+    real(real64) :: var1, var2, avg1, avg2, svar, df
+
+    ! Process
+    n1 = size(x1)
+    n2 = size(x2)
+    df = n1 + n2 - 2.0d0
+    avg1 = mean(x1)
+    avg2 = mean(x2)
+    var1 = variance(x1)
+    var2 = variance(x2)
+    svar = ((n1 - 1.0d0) * var1 + (n2 - 1.0d0) * var2) / df
+    rst%value = (avg1 - avg2) / sqrt(svar * (1.0d0 / n1 + 1.0d0 / n2))
+    rst%probability = regularized_beta(&
+        df / (df + rst%value**2), &
+        0.5d0 * df, &
+        0.5d0)
+end function
+
+! ------------------------------------------------------------------------------
+pure function t_test_no_same_var(x1, x2) result(rst)
+    ! Arguments
+    real(real64), intent(in), dimension(:) :: x1, x2
+    type(statistic) :: rst
+
+    ! Local Variables
+    integer(int32) :: n1, n2
+    real(real64) :: var1, var2, avg1, avg2, df
+
+    ! Process
+    n1 = size(x1)
+    n2 = size(x2)
+    avg1 = mean(x1)
+    avg2 = mean(x2)
+    var1 = variance(x1)
+    var2 = variance(x2)
+    rst%value = (avg1 - avg2) / sqrt(var1 / n1 + var2 / n2)
+    df = (var1 / n1 + var2 / n2)**2 / &
+        ((var1 / n1)**2 / (n1 - 1.0d0) + (var2 / n2)**2 / (n2 - 1.0d0))
+    rst%probability = regularized_beta(&
+        df / (df + rst%value**2), &
+        0.5d0 * df, &
+        0.5d0)
+end function
+
+! ------------------------------------------------------------------------------
+pure function t_test_paired(x1, x2) result(rst)
+    ! Arguments
+    real(real64), intent(in), dimension(:) :: x1, x2
+    type(statistic) :: rst
+
+    ! Local Variables
+    integer(int32) :: j, n
+    real(real64) :: var1, var2, avg1, avg2, df, sd, cov
+
+    ! Process
+    n = size(x1)
+    avg1 = mean(x1)
+    avg2 = mean(x2)
+    var1 = variance(x1)
+    var2 = variance(x2)
+    df = n - 1.0d0
+    cov = 0.0d0
+    do j = 1, n
+        cov = cov + (x1(j) - avg1) * (x2(j) - avg2)
+    end do
+    cov = cov / df
+    sd = sqrt((var1 + var2 - 2.0d0 * cov) / n)
+    rst%value = (avg1 - avg2) / sd
+    rst%probability = regularized_beta(&
+        df / (df + rst%value**2), &
+        0.5d0 * df, &
+        0.5d0)
 end function
 
 ! ------------------------------------------------------------------------------

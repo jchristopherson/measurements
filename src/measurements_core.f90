@@ -20,7 +20,6 @@ module measurements_core
     !> @brief A flag denoting that no data has been defined.
     integer(int32), parameter :: M_NO_DATA_DEFINED_ERROR = 10004
 
-
     !> Indicates that the spline is quadratic over the interval under
     !! consideration (beginning or ending interval).  This is equivalent to
     !! allowing a "natural" boundary condition at either the initial or final
@@ -36,6 +35,12 @@ module measurements_core
     !! point.
     integer(int32), parameter :: SPLINE_CONTINUOUS_THIRD_DERIVATIVE = 1003
 
+    !> @brief Defines an equal variance assumption.
+    integer(int32), parameter :: EQUAL_VARIANCE_ASSUMPTION = 2000
+    !> @brief Defines an unequal variance assumption.
+    integer(int32), parameter :: UNEQUAL_VARIANCE_ASSUMPTION = 2001
+    !> @brief Defines a paired data set assumption.
+    integer(int32), parameter :: PAIRED_DATA_SET_ASSUMPTION = 2002
 
     !> @brief A type containing variance components describing a measurement
     !! process.
@@ -70,6 +75,16 @@ module measurements_core
         real(real64) :: ptv_ratio
         !> @brief The tolerance range.
         real(real64) :: tolerance_range
+    end type
+
+    !> @brief A type containing information regarding a given statistic and its
+    !! associated probability.
+    type, bind(C) :: statistic
+        !> @brief The value of the statistic.
+        real(real64) :: value
+        !> @brief The probability defining the significance of the statistic
+        !! value.
+        real(real64) :: probability
     end type
 
 ! ******************************************************************************
@@ -381,6 +396,48 @@ module measurements_core
         pure elemental module function discrimination_ratio(tv, mv) result(x)
             real(real64), intent(in) :: tv, mv
             real(real64) :: x
+        end function
+
+        !> @brief Applies Student's t-test to compute the t-statistic.  A 
+        !! two-tailed distribution is assumed.
+        !!
+        !! @param[in] x1 The first data set.
+        !! @param[in] x2 The second data set.
+        !! @param[in] method An optional input defining which method to utilize.
+        !!  - EQUAL_VARIANCE_ASSUMPTION: This flag enforces an assumption that
+        !!      the variances of both populations are equivalent.
+        !!  - UNEQUAL_VARIANCE_ASSUMPTION: This flag enforces an assumption 
+        !!      that the varainces of both populations are not necessarily
+        !!      equivalent.
+        !!  - PAIRED_DATA_SET_ASSUMPTION: This flag enforces an assumption that
+        !!      the data sets are paired.  This requires that both data sets
+        !!      are the same size.  If this flag is defined, and the supplied
+        !!      data sets are different sized, the routine switches to
+        !!      EQUAL_VARIANCE_ASSUMPTION.
+        !! If no value is specified, the EQUAL_VARIANCE_ASSUMPTION is utilized.
+        !!
+        !! @return Student's t-statistic and the associated probability term
+        !! that establishes the significance of the t-statistic.
+        !!
+        !! @remarks
+        !! Student's t-test can be used to understand the differences in means
+        !! of two populations that have equivalent variances.
+        pure module function t_test(x1, x2, method) result(rst)
+            real(real64), intent(in), dimension(:) :: x1, x2
+            integer(int32), intent(in), optional :: method
+            type(statistic) :: rst
+        end function
+
+        !> @brief Applies the F-test for different variances.
+        !!
+        !! @param[in] x1 The first data set.
+        !! @param[in] x2 The second data set.
+        !!
+        !! @return The F-test statistic and associated probability term that
+        !! establishes the signficance of the f-statistic.
+        pure module function f_test(x1, x2) result(rst)
+            real(real64), intent(in), dimension(:) :: x1, x2
+            type(statistic) :: rst
         end function
     end interface
 

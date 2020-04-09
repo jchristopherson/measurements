@@ -8,6 +8,8 @@ extern "C" {
 void create_random_array(int n, double *x);
 double array_sum(int n, const double *x);
 void array_sort(int n, double *x);
+double array_max(int n, const double *x);
+double array_min(int n, const double *x);
 
 
 #ifdef __cplusplus
