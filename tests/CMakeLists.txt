@@ -23,6 +23,29 @@ add_custom_target(
     DEPENDS measurement_stats_tests_output
 )
 
+# ------------------------------------------------------------------------------
+# MEASUREMENTS_INTERP TESTS
+set(measurement_interp_files
+    measurement_interp_tests.f90
+    interp_tests.f90
+)
+
+# Build the executable
+add_executable(MeasurementInterpTests ${measurement_interp_files})
+target_link_libraries(MeasurementInterpTests
+    measurements
+)
+
+# Run the tests
+add_custom_command(
+    OUTPUT measurement_interp_tests_output
+    DEPENDS ${measurement_interp_files}
+    COMMAND MeasurementInterpTests
+)
+add_custom_target(
+    run_measurement_interp_tests ALL 
+    DEPENDS measurement_interp_tests_output
+)
 
 # ------------------------------------------------------------------------------
 # C API MEASUREMENT STATS TESTS
