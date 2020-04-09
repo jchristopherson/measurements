@@ -423,6 +423,24 @@ int c_spline(int npts, const double *x, const double *y, int ni,
 int c_lowess_smoothing(int npts, const double *x, const double *y, 
     double factor, double *ys);
 
+/**
+ * Applies a moving average to smooth a data set.
+ *
+ * @param npts The number of data points.
+ * @param x An @p npts element array that on input contains the 
+ *  signal to smooth.  On output, the smoothed signal.
+ * @param navg The size of the averaging window.  This value must be
+ *  at least 2, but no more than the number of elements in @p x.
+ *
+ * @return  An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_INVALID_INPUT_ERROR: Occurs if @p navg is less than 2, or 
+ *      greater than @p npts.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ */
+int c_moving_average(int npts, double *x, int navg);
+
 #ifdef __cplusplus
 }
 #endif  // __cplusplus

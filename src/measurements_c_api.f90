@@ -638,6 +638,41 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Applies a moving average to smooth a data set.
+    !!
+    !! @param[in] npts The number of data points.
+    !! @param[in,out] x An @p npts element array that on input contains the 
+    !!  signal to smooth.  On output, the smoothed signal.
+    !! @param[in] navg The size of the averaging window.  This value must be
+    !!  at least 2, but no more than the number of elements in @p x.
+    !!
+    !! @return  An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_INVALID_INPUT_ERROR: Occurs if @p navg is less than 2, or 
+    !!      greater than @p npts.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    function c_moving_average(npts, x, navg) &
+            bind(C, name = "c_moving_average") result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: npts, navg
+        real(c_double), intent(inout) :: x(npts)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        call moving_average(x, navg, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+    end function
 
 ! ------------------------------------------------------------------------------
 end module

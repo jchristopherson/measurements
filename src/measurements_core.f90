@@ -1182,8 +1182,54 @@ module measurements_core
         end subroutine
     end interface
 
+! ------------------------------------------------------------------------------
+    ! ADDITIONAL SMOOTHING ROUTINES
+    interface
+        !> @brief Applies a moving average to smooth a data set.
+        !!
+        !! @param[in,out] x On input, the signal to smooth.  On output, the 
+        !!  smoothed signal.
+        !! @param[in] npts The size of the averaging window.  This value must be
+        !!  at least 2, but no more than the number of elements in @p x.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_INVALID_INPUT_ERROR: Occurs if @p npts is less than 2, or 
+        !!      greater than the length of @p x.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        module subroutine moving_average(x, npts, err)
+            real(real64), intent(inout), dimension(:) :: x
+            integer(int32), intent(in) :: npts
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+    end interface
+
 ! ******************************************************************************
 ! MEASUREMENTS_REGRESSION.F90
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
 ! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------

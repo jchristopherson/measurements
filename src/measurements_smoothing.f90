@@ -396,5 +396,61 @@ contains
         end if
     end subroutine
 
+! ******************************************************************************
+! ADDITIONAL SMOOTHING ROUTINES
+! ------------------------------------------------------------------------------
+    subroutine moving_average(x, npts, err)
+        ! Arguments
+        real(real64), intent(inout), dimension(:) :: x
+        integer(int32), intent(in) :: npts
+        class(errors), intent(inout), optional, target :: err
+
+        ! Parameters
+        real(real64), parameter :: zero = 0.0d0
+
+        ! Local Variables
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        integer(int32) :: i, n, flag
+        real(real64), allocatable, dimension(:) :: buffer
+
+        ! Initialization
+        n = size(x)
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Input Check
+        if (npts < 2 .or. npts > n) then
+            call errmgr%report_error("moving_average", &
+                "The averaging size window must be at least 2, and less " // &
+                "than the size of the data set.", M_INVALID_INPUT_ERROR)
+            return
+        end if
+
+        ! Local Memory Allocation
+        allocate(buffer(npts), stat = flag)
+        if (flag /= 0) then
+            call errmgr%report_error("moving_average", &
+                "Insufficient memory available.", M_OUT_OF_MEMORY_ERROR)
+            return
+        end if
+
+        ! Process
+        buffer = zero
+        do i = 1, n
+            ! Index the buffer
+            buffer(2:npts) = buffer(1:npts-1)
+
+            ! Add a new sample value to the buffer
+            buffer(1) = x(i)
+
+            ! Compute the mean
+            x(i) = mean(buffer)
+        end do
+    end subroutine
+
 ! ------------------------------------------------------------------------------
 end submodule
