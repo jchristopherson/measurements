@@ -7,6 +7,7 @@
 #include "c_array.h"
 #include "c_test_macros.h"
 
+bool poly_interp_test();
 bool llsq_mimo_test();
 bool llsq_miso_test();
 
@@ -21,6 +22,9 @@ int main() {
     printf("\nC API MEASUREMENT INTERPOLATION TESTS UNDERWAY...\n");
 
     // Testing
+    local = poly_interp_test();
+    if (!local) overall = false;
+
     local = llsq_mimo_test();
     if (!local) overall = false;
 
@@ -35,6 +39,54 @@ int main() {
         printf("C API MEASUREMENT INTERPOLATION TESTS FAILED.\n\n");
     }
 }
+
+
+bool poly_interp_test() {
+    // Local Variables
+    bool rst;
+    const int npts = 21;
+    const int ni = 15;
+    const double tol = 1.0e-8;
+    int i, flag;
+    double yi[15], delta;
+    double x[] = {0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 
+        0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 
+        0.9, 0.95, 1.0};
+    double y[] = {0.0, 0.30901699437494700, 0.58778525229247300, 
+        0.80901699437494700, 0.95105651629515400, 1.0, 
+        0.95105651629515400, 0.80901699437494700, 0.58778525229247300, 
+        0.30901699437494800, 0.0, -0.30901699437494700, 
+        -0.58778525229247300, -0.80901699437494700, 
+        -0.95105651629515400, -1.0, -0.95105651629515300, 
+        -0.80901699437494700, -0.58778525229247200, 
+        -0.30901699437494600, 0.0};
+    double xi[] = {0.0, 0.075, 0.15, 0.225, 0.3, 0.375, 0.45, 0.525, 
+        0.6, 0.675, 0.75, 0.825, 0.9, 0.975, 1.0};
+    double ans[] = {0.0, 0.4484011230, 0.8090169940, 0.9755282580, 
+        0.9510565160, 0.6984011230, 0.3090169940, -0.1545084970, 
+        -0.5877852520, -0.8800367550, -1.0, -0.88003675500, 
+        -0.58778525200, -0.154508496999999, 0.0};
+
+    // Process
+    flag = c_interpolate(1, npts, x, y, ni, xi, yi);
+    for (i = 0; i < ni; ++i)
+        printf("%f,%f\n", xi[i], yi[i]);
+
+    // Test
+    for (i = 0; i < ni; ++i) {
+        delta = ans[i] - yi[i];
+        if (fabs(delta) > tol) {
+            rst = false;
+            printf("POLY_INTERP_TEST FAILED\nExpected: %f\nComputed: %f\nDifference: %f\nIndex: %i\n",
+                ans[i], yi[i], delta, i);
+        }
+    }
+
+    // End
+    return rst;
+}
+
+
 
 bool llsq_mimo_test() {
     // Local Variables

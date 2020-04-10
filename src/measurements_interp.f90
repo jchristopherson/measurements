@@ -370,6 +370,62 @@ module subroutine pi_init(this, x, y, order, err)
 end subroutine
 
 ! ------------------------------------------------------------------------------
+! module function pi_raw_interp(this, jlo, pt) result(yy)
+!     ! Arguments
+!     class(polynomial_interp), intent(inout) :: this
+!     integer(int32), intent(in) :: jlo
+!     real(real64), intent(in) :: pt
+!     real(real64) :: yy
+
+!     ! Local Variables
+!     integer(int32) :: i, ind, m, ns, mm, jl
+!     real(real64) :: den, dif, dift, ho, hp, w
+
+!     ! Initialization
+!     mm = this%m_order + 1
+!     ns = 1
+!     jl = jlo - 1
+!     dif = abs(pt - this%m_x(jl))
+
+!     ! Find the index NS of the closest table entry, and then initialize
+!     ! the C and D arrays.
+!     do i = 1, mm
+!         ind = jl + i - 1
+!         dift = abs(pt - this%m_x(ind))
+!         if (dift < dif) then
+!             ns = i
+!             dif = dift
+!         end if
+!         this%m_c(i) = this%m_y(ind)
+!         this%m_d(i) = this%m_y(ind)
+!     end do
+
+!     ! Define the initial approximation to the interpolated point
+!     yy = this%m_y(jl + ns - 1)
+!     ns = ns - 1
+
+!     ! Build the tables, and define the interpolated point
+!     do m = 1, mm-1
+!         do i = 1, mm - m
+!             ind = jl + i - 1
+!             ho = this%m_x(ind) - pt
+!             hp = this%m_x(ind+m) - pt
+!             w = this%m_c(i+1) - this%m_d(i)
+!             den = ho - hp
+!             den = w / den
+!             this%m_d(i) = hp * den
+!             this%m_c(i) = ho * den
+!         end do
+!         if (2 * ns < mm - m) then
+!             this%m_dy = this%m_c(ns + 1)
+!         else
+!             this%m_dy = this%m_d(ns)
+!             ns = ns - 1
+!         end if
+!         yy = yy + this%m_dy
+!     end do
+! end function
+
 module function pi_raw_interp(this, jlo, pt) result(yy)
     ! Arguments
     class(polynomial_interp), intent(inout) :: this
@@ -378,48 +434,52 @@ module function pi_raw_interp(this, jlo, pt) result(yy)
     real(real64) :: yy
 
     ! Local Variables
-    integer(int32) :: i, ind, m, ns, mm, jl
+    integer(int32) :: i, ii, ind, m, ns, mm, jl
     real(real64) :: den, dif, dift, ho, hp, w
 
     ! Initialization
     mm = this%m_order + 1
-    ns = 1
-    jl = jlo - 1
+    ns = 0
+    jl = jlo
     dif = abs(pt - this%m_x(jl))
 
-    ! Find the index NS of the closest table entry, and then initialize
-    ! the C and D arrays.
+    ! Find the index NS of the closest table entry
     do i = 1, mm
         ind = jl + i - 1
         dift = abs(pt - this%m_x(ind))
         if (dift < dif) then
-            ns = i
+            ns = i - 1
             dif = dift
         end if
         this%m_c(i) = this%m_y(ind)
         this%m_d(i) = this%m_y(ind)
     end do
-
+    
     ! Define the initial approximation to the interpolated point
-    yy = this%m_y(jl + ns - 1)
+    ind = ns + jl
+    yy = this%m_y(ind)
     ns = ns - 1
 
     ! Build the tables, and define the interpolated point
-    do m = 1, mm-1
-        do i = 1, mm - m
-            ind = jl + i - 1
+    do m = 1, mm - 1
+        do i = 0, mm - m - 1
+            ind = jl + i
             ho = this%m_x(ind) - pt
-            hp = this%m_x(ind+m) - pt
-            w = this%m_c(i+1) - this%m_d(i)
+
+            ind = jl + i + m
+            hp = this%m_x(ind) - pt
+
+            ii = i + 1
+            w = this%m_c(ii + 1) - this%m_d(ii)
             den = ho - hp
             den = w / den
-            this%m_d(i) = hp * den
-            this%m_c(i) = ho * den
+            this%m_d(ii) = hp * den
+            this%m_c(ii) = ho * den
         end do
         if (2 * ns < mm - m) then
-            this%m_dy = this%m_c(ns + 1)
+            this%m_dy = this%m_c(ns + 2)
         else
-            this%m_dy = this%m_d(ns)
+            this%m_dy = this%m_d(ns + 2)
             ns = ns - 1
         end if
         yy = yy + this%m_dy
