@@ -19,6 +19,8 @@ module measurements_core
     integer(int32), parameter :: M_NONMONOTONIC_ARRAY_ERROR = 10003
     !> @brief A flag denoting that no data has been defined.
     integer(int32), parameter :: M_NO_DATA_DEFINED_ERROR = 10004
+    !> @brief A flag denoting an underdefined problem error.
+    integer(int32), parameter :: M_UNDERDEFINED_PROBLEM = 10005
 
     !> Indicates that the spline is quadratic over the interval under
     !! consideration (beginning or ending interval).  This is equivalent to
@@ -1268,6 +1270,99 @@ module measurements_core
 ! ******************************************************************************
 ! MEASUREMENTS_REGRESSION.F90
 ! ------------------------------------------------------------------------------
+    interface
+        !> @brief Fits the multiple input, multiple output linear model
+        !! A * X = Y by solving for matrix A in a least-squares sense.
+        !!
+        !! @param[in] x An N-by-K matrix of known independent variables.  K
+        !!  must be greater than or equal to N.
+        !! @param[in] y An M-by-K matrix of known dependent variables.  Notice,
+        !!  M must be less than or equal to N, and K must be greater than or
+        !!  equal to M.
+        !! @param[in] thrsh  An optional input that is used to determine the
+        !!  closeness of zero for the singular values of matrix @p X.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!  - M_ARRAY_SIZE_ERROR: Occurs if there is a size-mismatch in the
+        !!      matrix equation.
+        !!  - M_UNDERDEFINED_PROBLEM: Occurs if there is insufficient data 
+        !!      (e.g. k < n), or the problem is not sized appropriately 
+        !!      (e.g. m > n).
+        !!
+        !! @return The M-by-N coefficient matrix A.
+        !!
+        !! @remarks
+        !! Solving the linear system is straight-forward when M <= N by means
+        !! of singular value decomposition.  Specifically, the Moore-Penrose
+        !! pseudo-inverse utilizing singular value decomposition.  The
+        !! solution is obtained as follows.
+        !! @par
+        !! \f$ A X X^{+} = Y X^{+} \f$
+        !! @par
+        !! \f$ X X^{+} = I \f$ as X is underdetermined.  Then
+        !! @par
+        !! \f$ A = Y X^{+} \f$
+        !! @par
+        !! where \f$ X^{+} \f$ is the Moore-Penrose pseudo-inverse of X.
+        module function linear_least_squares_mimo(x, y, thrsh, err) result(a)
+            real(real64), intent(in), dimension(:,:) :: x, y
+            real(real64), intent(in), optional :: thrsh
+            class(errors), intent(inout), optional, target :: err
+            real(real64), allocatable, dimension(:,:) :: a
+        end function
+
+        !> @brief Fits the multiple input, single output linear model
+        !! A * X = Y by solving for array A in a least-squares sense.
+        !!
+        !! @param[in] x An N-by-K matrix of known independent variables.  K
+        !!  must be greater than or equal to N.
+        !! @param[in] y A K-element array containing the known dependent 
+        !!  variables.
+        !! @param[in] thrsh  An optional input that is used to determine the
+        !!  closeness of zero for the singular values of matrix @p X.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!  - M_ARRAY_SIZE_ERROR: Occurs if there is a size-mismatch in the
+        !!      matrix equation.
+        !!  - M_UNDERDEFINED_PROBLEM: Occurs if there is insufficient data 
+        !!      (e.g. k < n), or the problem is not sized appropriately 
+        !!      (e.g. size(y) /= n).
+        !!
+        !! @return The N-element coefficient array A.
+        !!
+        !! @remarks
+        !! Solving the linear system is straight-forward by means of
+        !! singular value decomposition.  Specifically, the Moore-Penrose
+        !! pseudo-inverse utilizing singular value decomposition.  The
+        !! solution is obtained as follows.
+        !! @par
+        !! \f$ A X X^{+} = Y X^{+} \f$
+        !! @par
+        !! \f$ X X^{+} = I \f$ as X is underdetermined.  Then
+        !! @par
+        !! \f$ A = Y X^{+} \f$
+        !! @par
+        !! where \f$ X^{+} \f$ is the Moore-Penrose pseudo-inverse of X.
+        module function linear_least_squares_miso(x, y, thrsh, err) result(a)
+            real(real64), intent(in), dimension(:,:) :: x
+            real(real64), intent(in), dimension(:) :: y
+            real(real64), intent(in), optional :: thrsh
+            class(errors), intent(inout), optional, target :: err
+            real(real64), allocatable, dimension(:) :: a
+        end function
+    end interface
 
 ! ------------------------------------------------------------------------------
 

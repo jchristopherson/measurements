@@ -15,6 +15,8 @@
 #define M_NONMONOTONIC_ARRAY_ERROR          10003
 /** A flag denoting that no data has been defined. */
 #define M_NO_DATA_DEFINED_ERROR             10004
+/** A flag denoting an underdefined problem error. */
+#define M_UNDERDEFINED_PROBLEM              10005
 
 /** 
  * Indicates that the spline is quadratic over the interval under
@@ -525,6 +527,37 @@ int c_lowess_smoothing(int npts, const double *x, const double *y,
  *      available.
  */
 int c_moving_average(int npts, double *x, int navg);
+
+/**
+ * Fits the multiple input, multiple output linear model
+ * A * X = Y by solving for matrix A in a least-squares sense.
+ *
+ * @param m The number of rows in matrix A.
+ * @param n The number of columns in matrix A.
+ * @param k The number of data points to fit (number of columns in
+ *  either X or Y).
+ * @param x An N-by-K matrix of known independent variables.  K
+ *  must be greater than or equal to N.
+ * @param ldx The leading dimension of matrix X.
+ * @param y An M-by-K matrix of known dependent variables.  Notice,
+ *  M must be less than or equal to N, and K must be greater than or
+ *  equal to M.
+ * @param ldy The leading dimension of matrix Y.
+ * @param The M-by-N coefficient matrix A.
+ * @param lda The leading dimension of matrix A.
+ *
+ * @return An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ *  - M_ARRAY_SIZE_ERROR: Occurs if there is a size-mismatch in the
+ *      matrix equation.
+ *  - M_UNDERDEFINED_PROBLEM: Occurs if there is insufficient data 
+ *      (e.g. k < n), or the problem is not sized appropriately 
+ *      (e.g. m > n).
+ */
+int c_linaer_least_squares_mimo(int m, int n, int k, const double *x, int ldx,
+    const double *y, int ldy, double *a, int lda);
 
 #ifdef __cplusplus
 }

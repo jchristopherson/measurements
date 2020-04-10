@@ -479,14 +479,6 @@ contains
         ! Process
         rst = f_test(x1, x2)
     end subroutine
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
     
 ! ******************************************************************************
 ! SPECIAL FUNCTIONS
@@ -738,7 +730,7 @@ contains
     !! @param[in] navg The size of the averaging window.  This value must be
     !!  at least 2, but no more than the number of elements in @p x.
     !!
-    !! @return  An error flag with the following possible values.
+    !! @return An error flag with the following possible values.
     !!  - M_NO_ERROR: No error occurred.  Normal operation.
     !!  - M_INVALID_INPUT_ERROR: Occurs if @p navg is less than 2, or 
     !!      greater than @p npts.
@@ -760,6 +752,89 @@ contains
 
         ! Process
         call moving_average(x, navg, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+    end function
+
+! ******************************************************************************
+! REGRESSION
+! ------------------------------------------------------------------------------
+    !> @brief Fits the multiple input, multiple output linear model
+    !! A * X = Y by solving for matrix A in a least-squares sense.
+    !!
+    !! @param[in] m The number of rows in matrix A.
+    !! @param[in] n The number of columns in matrix A.
+    !! @param[in] k The number of data points to fit (number of columns in
+    !!  either X or Y).
+    !! @param[in] x An N-by-K matrix of known independent variables.  K
+    !!  must be greater than or equal to N.
+    !! @param[in] ldx The leading dimension of matrix X.
+    !! @param[in] y An M-by-K matrix of known dependent variables.  Notice,
+    !!  M must be less than or equal to N, and K must be greater than or
+    !!  equal to M.
+    !! @param[in] ldy The leading dimension of matrix Y.
+    !! @param[out] The M-by-N coefficient matrix A.
+    !! @param[in] lda The leading dimension of matrix A.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    !!  - M_ARRAY_SIZE_ERROR: Occurs if there is a size-mismatch in the
+    !!      matrix equation.
+    !!  - M_UNDERDEFINED_PROBLEM: Occurs if there is insufficient data 
+    !!      (e.g. k < n), or the problem is not sized appropriately 
+    !!      (e.g. m > n).
+    !!
+    !! @remarks
+    !! Solving the linear system is straight-forward when M <= N by means
+    !! of singular value decomposition.  Specifically, the Moore-Penrose
+    !! pseudo-inverse utilizing singular value decomposition.  The
+    !! solution is obtained as follows.
+    !! @par
+    !! \f$ A X X^{+} = Y X^{+} \f$
+    !! @par
+    !! \f$ X X^{+} = I \f$ as X is underdetermined.  Then
+    !! @par
+    !! \f$ A = Y X^{+} \f$
+    !! @par
+    !! where \f$ X^{+} \f$ is the Moore-Penrose pseudo-inverse of X.
+    function c_linear_least_squares_mimo(m, n, k, x, ldx, y, ldy, a, lda) &
+            bind(C, name = "c_linear_least_squares_mimo") result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: m, n, k, ldx, ldy, lda
+        real(c_double), intent(in) :: x(ldx,*), y(ldy,*)
+        real(c_double), intent(out) :: a(lda,*)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Input Check
+        if (ldx < n) then
+            flag = M_ARRAY_SIZE_ERROR
+            return
+        end if
+
+        if (ldy < m) then
+            flag = M_ARRAY_SIZE_ERROR
+            return
+        end if
+
+        if (lda < m) then
+            flag = M_ARRAY_SIZE_ERROR
+            return
+        end if
+
+        ! Process
+        a(1:m,1:n) = linear_least_squares_mimo(x(1:n,1:k), y(1:m,1:k), &
+            err = err)
         if (err%has_error_occurred()) then
             flag = err%get_error_flag()
             return

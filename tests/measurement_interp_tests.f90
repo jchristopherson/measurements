@@ -2,6 +2,7 @@
 
 program main
     use interp_tests
+    use regression_test
     implicit none
 
     ! Local Variables
@@ -22,6 +23,12 @@ program main
     if (.not.local) overall = .false.
 
     local = spline_interp_test()
+    if (.not.local) overall = .false.
+
+    local = llsq_mimo_test()
+    if (.not.local) overall = .false.
+
+    local = llsq_miso_test()
     if (.not.local) overall = .false.
 
     ! --------------------------------------------------------------------------

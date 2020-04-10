@@ -28,6 +28,7 @@ add_custom_target(
 set(measurement_interp_files
     measurement_interp_tests.f90
     interp_tests.f90
+    regression_tests.f90
 )
 
 # Build the executable
