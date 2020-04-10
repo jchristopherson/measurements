@@ -71,3 +71,13 @@ double array_min(int n, const double *x) {
     for (i = 1; i < n; ++i) y = MIN(y, x[i]);
     return y;
 }
+
+
+void transpose(int m, int n, const double *x, double *xt) {
+    int i, j;
+    for (j = 0; j < n; ++j) {
+        for (i = 0; i < m; ++i) {
+            xt[INDEX(j,i,n)] = x[INDEX(i,j,m)];
+        }
+    }
+}

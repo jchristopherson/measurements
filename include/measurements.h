@@ -553,11 +553,35 @@ int c_moving_average(int npts, double *x, int navg);
  *  - M_ARRAY_SIZE_ERROR: Occurs if there is a size-mismatch in the
  *      matrix equation.
  *  - M_UNDERDEFINED_PROBLEM: Occurs if there is insufficient data 
- *      (e.g. k < n), or the problem is not sized appropriately 
- *      (e.g. m > n).
+ *      (e.g. k < n).
  */
-int c_linaer_least_squares_mimo(int m, int n, int k, const double *x, int ldx,
+int c_linear_least_squares_mimo(int m, int n, int k, const double *x, int ldx,
     const double *y, int ldy, double *a, int lda);
+
+/**
+ * Fits the multiple input, single output linear model
+ * A * X = Y by solving for array A in a least-squares sense.
+ *
+ * @param n The number of coefficients to find.
+ * @param k The number of data points to fit.
+ * @param x An N-by-K matrix of known independent variables.  K
+ *  must be greater than or equal to N.
+ * @param ldx The leading dimension of matrix X.
+ * @param y A K-element array containing the known dependent 
+ *  variables.
+ * @param The N element coefficient array A.
+ *
+ * @return An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ *  - M_ARRAY_SIZE_ERROR: Occurs if there is a size-mismatch in the
+ *      matrix equation.
+ *  - M_UNDERDEFINED_PROBLEM: Occurs if there is insufficient data 
+ *      (e.g. k < n).
+ */
+int c_linear_least_squares_miso(int n, int k, const double *x, int ldx,
+    const double *y, double *a);
 
 #ifdef __cplusplus
 }

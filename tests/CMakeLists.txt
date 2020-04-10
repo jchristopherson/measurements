@@ -77,3 +77,32 @@ add_custom_target(
     run_c_measurement_stats_tests ALL 
     DEPENDS c_measurement_stats_tests_output
 )
+
+# ------------------------------------------------------------------------------
+# C API INTERPOLATION TESTS
+# ------------------------------------------------------------------------------
+set(c_measurement_interp_files
+    c_interp_tests.c
+    c_array.c
+)
+
+# Locate headers
+include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/tests)
+
+# Build the executable
+add_executable(C_MeasurementInterpTests ${c_measurement_interp_files})
+target_link_libraries(C_MeasurementInterpTests
+    measurements
+)
+
+# Run the tests
+add_custom_command(
+    OUTPUT c_measurement_interp_tests_output
+    DEPENDS ${c_measurement_interp_files}
+    COMMAND C_MeasurementInterpTests
+)
+add_custom_target(
+    run_c_measurement_interp_tests ALL 
+    DEPENDS c_measurement_interp_tests_output
+)

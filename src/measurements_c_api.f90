@@ -785,8 +785,7 @@ contains
     !!  - M_ARRAY_SIZE_ERROR: Occurs if there is a size-mismatch in the
     !!      matrix equation.
     !!  - M_UNDERDEFINED_PROBLEM: Occurs if there is insufficient data 
-    !!      (e.g. k < n), or the problem is not sized appropriately 
-    !!      (e.g. m > n).
+    !!      (e.g. k < n).
     !!
     !! @remarks
     !! Solving the linear system is straight-forward when M <= N by means
@@ -835,6 +834,70 @@ contains
         ! Process
         a(1:m,1:n) = linear_least_squares_mimo(x(1:n,1:k), y(1:m,1:k), &
             err = err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Fits the multiple input, single output linear model
+    !! A * X = Y by solving for array A in a least-squares sense.
+    !!
+    !! @param[in] n The number of coefficients to find.
+    !! @param[in] k The number of data points to fit.
+    !! @param[in] x An N-by-K matrix of known independent variables.  K
+    !!  must be greater than or equal to N.
+    !! @param[in] ldx The leading dimension of matrix X.
+    !! @param[in] y A K-element array containing the known dependent 
+    !!  variables.
+    !! @param[out] The N element coefficient array A.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    !!  - M_ARRAY_SIZE_ERROR: Occurs if there is a size-mismatch in the
+    !!      matrix equation.
+    !!  - M_UNDERDEFINED_PROBLEM: Occurs if there is insufficient data 
+    !!      (e.g. k < n).
+    !!
+    !! @remarks
+    !! Solving the linear system is straight-forward by means of
+    !! singular value decomposition.  Specifically, the Moore-Penrose
+    !! pseudo-inverse utilizing singular value decomposition.  The
+    !! solution is obtained as follows.
+    !! @par
+    !! \f$ A X X^{+} = Y X^{+} \f$
+    !! @par
+    !! \f$ X X^{+} = I \f$ as X is underdetermined.  Then
+    !! @par
+    !! \f$ A = Y X^{+} \f$
+    !! @par
+    !! where \f$ X^{+} \f$ is the Moore-Penrose pseudo-inverse of X.
+    function c_linear_least_squares_miso(n, k, x, ldx, y, a) &
+            bind(C, name = "c_linear_least_squares_miso") result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: n, k, ldx
+        real(c_double), intent(in) :: x(ldx,*), y(k)
+        real(c_double), intent(out) :: a(n)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Input Check
+        if (ldx < n) then
+            flag = M_ARRAY_SIZE_ERROR
+            return
+        end if
+
+        ! Process
+        a = linear_least_squares_miso(x(1:n,1:k), y, err = err)
         if (err%has_error_occurred()) then
             flag = err%get_error_flag()
             return

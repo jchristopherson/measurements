@@ -10,7 +10,7 @@ double array_sum(int n, const double *x);
 void array_sort(int n, double *x);
 double array_max(int n, const double *x);
 double array_min(int n, const double *x);
-
+void transpose(int m, int n, const double *x, double *xt);
 
 #ifdef __cplusplus
 }
