@@ -69,8 +69,6 @@ bool poly_interp_test() {
 
     // Process
     flag = c_interpolate(1, npts, x, y, ni, xi, yi);
-    for (i = 0; i < ni; ++i)
-        printf("%f,%f\n", xi[i], yi[i]);
 
     // Test
     for (i = 0; i < ni; ++i) {
