@@ -302,6 +302,10 @@ bool z_score_test() {
     // 80%
     ans = z80;
     flag = c_z_score(0.8, &computed);
+    if (flag != M_NO_ERROR) {
+        rst = false;
+        printf("Z_SCORE_TEST 80% FAILED\nOutput Flag: %i\n", flag);
+    }
     delta = ans - computed;
     if (fabs(delta) > tol) {
         rst = false;
@@ -312,6 +316,10 @@ bool z_score_test() {
     // 90%
     ans = z90;
     flag = c_z_score(0.9, &computed);
+    if (flag != M_NO_ERROR) {
+        rst = false;
+        printf("Z_SCORE_TEST 90% FAILED\nOutput Flag: %i\n", flag);
+    }
     delta = ans - computed;
     if (fabs(delta) > tol) {
         rst = false;
@@ -322,6 +330,10 @@ bool z_score_test() {
     // 95%
     ans = z95;
     flag = c_z_score(0.95, &computed);
+    if (flag != M_NO_ERROR) {
+        rst = false;
+        printf("Z_SCORE_TEST 95% FAILED\nOutput Flag: %i\n", flag);
+    }
     delta = ans - computed;
     if (fabs(delta) > tol) {
         rst = false;
@@ -332,6 +344,10 @@ bool z_score_test() {
     // 99%
     ans = z99;
     flag = c_z_score(0.99, &computed);
+    if (flag != M_NO_ERROR) {
+        rst = false;
+        printf("Z_SCORE_TEST 99% FAILED\nOutput Flag: %i\n", flag);
+    }
     delta = ans - computed;
     if (fabs(delta) > tol) {
         rst = false;
@@ -342,6 +358,10 @@ bool z_score_test() {
     // 99.9%
     ans = z999;
     flag = c_z_score(0.999, &computed);
+    if (flag != M_NO_ERROR) {
+        rst = false;
+        printf("Z_SCORE_TEST 99.9% FAILED\nOutput Flag: %i\n", flag);
+    }
     delta = ans - computed;
     if (fabs(delta) > tol) {
         rst = false;
@@ -373,6 +393,10 @@ bool t_score_test() {
     // 80%
     ans = t80;
     flag = c_t_score(0.8, npts, &computed);
+    if (flag != M_NO_ERROR) {
+        rst = false;
+        printf("T_SCORE_TEST 80% FAILED\nOutput Flag: %i\n", flag);
+    }
     delta = ans - computed;
     if (fabs(delta) > tol) {
         rst = false;
@@ -383,6 +407,10 @@ bool t_score_test() {
     // 85%
     ans = t85;
     flag = c_t_score(0.85, npts, &computed);
+    if (flag != M_NO_ERROR) {
+        rst = false;
+        printf("T_SCORE_TEST 85% FAILED\nOutput Flag: %i\n", flag);
+    }
     delta = ans - computed;
     if (fabs(delta) > tol) {
         rst = false;
@@ -393,6 +421,10 @@ bool t_score_test() {
     // 90%
     ans = t90;
     flag = c_t_score(0.9, npts, &computed);
+    if (flag != M_NO_ERROR) {
+        rst = false;
+        printf("T_SCORE_TEST 90% FAILED\nOutput Flag: %i\n", flag);
+    }
     delta = ans - computed;
     if (fabs(delta) > tol) {
         rst = false;
@@ -403,6 +435,10 @@ bool t_score_test() {
     // 95%
     ans = t95;
     flag = c_t_score(0.95, npts, &computed);
+    if (flag != M_NO_ERROR) {
+        rst = false;
+        printf("T_SCORE_TEST 95% FAILED\nOutput Flag: %i\n", flag);
+    }
     delta = ans - computed;
     if (fabs(delta) > tol) {
         rst = false;
@@ -459,7 +495,7 @@ bool normal_distribution_test() {
     const double avg = 5.26404971932070e-1;
     const double sigma = 2.11034089338365e-1;
     double delta, f[21];
-    int i, flag;
+    int i;
     double x[] = {-5.0, -4.5, -4.0, -3.5, -3.0, -2.5, -2.0, -1.5, 
         -1.0, -0.5, 0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 
         3.5, 4.0, 4.5, 5.0};
@@ -499,7 +535,7 @@ bool t_distribution_test() {
     const int npts = 21;
     const double dof = 20.0;
     double delta, f[21];
-    int i, flag;
+    int i;
     double x[] = {-5.0, -4.5, -4.0, -3.5, -3.0, -2.5, -2.0, -1.5, 
         -1.0, -0.5, 0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 
         3.5, 4.0, 4.5, 5.0};

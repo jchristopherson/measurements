@@ -8,6 +8,7 @@
 #include "c_test_macros.h"
 
 bool poly_interp_test();
+bool spline_interp_test();
 bool llsq_mimo_test();
 bool llsq_miso_test();
 
@@ -23,6 +24,9 @@ int main() {
 
     // Testing
     local = poly_interp_test();
+    if (!local) overall = false;
+
+    local = spline_interp_test();
     if (!local) overall = false;
 
     local = llsq_mimo_test();
@@ -68,7 +72,12 @@ bool poly_interp_test() {
         -0.58778525200, -0.154508496999999, 0.0};
 
     // Process
+    rst = true;
     flag = c_interpolate(1, npts, x, y, ni, xi, yi);
+    if (flag != M_NO_ERROR) {
+        rst = false;
+        printf("POLY_INTERP_TEST FAILED\nOutput Flag: %i\n", flag);
+    }
 
     // Test
     for (i = 0; i < ni; ++i) {
@@ -76,6 +85,57 @@ bool poly_interp_test() {
         if (fabs(delta) > tol) {
             rst = false;
             printf("POLY_INTERP_TEST FAILED\nExpected: %f\nComputed: %f\nDifference: %f\nIndex: %i\n",
+                ans[i], yi[i], delta, i);
+        }
+    }
+
+    // End
+    return rst;
+}
+
+
+
+bool spline_interp_test() {
+    // Local Variables
+    bool rst;
+    const int npts = 21;
+    const int ni = 15;
+    const double tol = 2.0e-3;
+    int i, flag;
+    double yi[15], delta;
+    double x[] = {0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 
+        0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 
+        0.9, 0.95, 1.0};
+    double y[] = {0.0, 0.30901699437494700, 0.58778525229247300, 
+        0.80901699437494700, 0.95105651629515400, 1.0, 
+        0.95105651629515400, 0.80901699437494700, 0.58778525229247300, 
+        0.30901699437494800, 0.0, -0.30901699437494700, 
+        -0.58778525229247300, -0.80901699437494700, 
+        -0.95105651629515400, -1.0, -0.95105651629515300, 
+        -0.80901699437494700, -0.58778525229247200, 
+        -0.30901699437494600, 0.0};
+    double xi[] = {0.0, 0.075, 0.15, 0.225, 0.3, 0.375, 0.45, 0.525, 
+        0.6, 0.675, 0.75, 0.825, 0.9, 0.975, 1.0};
+    double ans[] = {0.0, 0.45395574322220, 0.80901699400000, 0.98766310413990,
+        0.95105651600000, 0.70708838900300, 0.30901699400000,
+        -0.15643039704573, -0.58778525200000, -0.89098339112519, -1.0,
+        -0.890981711444173, -0.587785252000000, -0.156516060777801, 0.0};
+
+    // Process
+    rst = true;
+    flag = c_spline(npts, x, y, ni, xi, yi, SPLINE_QUADRATIC_OVER_INTERVAL, 
+        0.0, SPLINE_QUADRATIC_OVER_INTERVAL, 0.0);
+    if (flag != M_NO_ERROR) {
+        rst = false;
+        printf("SPLINE_INTERP_TEST FAILED\nOutput Flag: %i\n", flag);
+    }
+
+    // Test
+    for (i = 0; i < ni; ++i) {
+        delta = ans[i] - yi[i];
+        if (fabs(delta) > tol) {
+            rst = false;
+            printf("SPLINE_INTERP_TEST FAILED\nExpected: %f\nComputed: %f\nDifference: %f\nIndex: %i\n",
                 ans[i], yi[i], delta, i);
         }
     }
@@ -123,6 +183,10 @@ bool llsq_mimo_test() {
     
     // Compute the solution
     flag = c_linear_least_squares_mimo(dof, dof, npts, x, dof, y, dof, a, dof);
+    if (flag != M_NO_ERROR) {
+        rst = false;
+        printf("LLSQ_MIMO_TEST FAILED\nOutput Flag: %i\n", flag);
+    }
 
     // Test
     rst = true;
@@ -131,7 +195,7 @@ bool llsq_mimo_test() {
             delta = ans[INDEX(i,j,dof)] - a[INDEX(i,j,dof)];
             if (fabs(delta) > tol) {
                 rst = false;
-                printf("LLSQ_MIMO TEST FAILED\nExpected: %f\nComputed: %f\nDifference: %f\nRow: %i\nColumn: %i\n",
+                printf("LLSQ_MIMO_TEST FAILED\nExpected: %f\nComputed: %f\nDifference: %f\nRow: %i\nColumn: %i\n",
                     ans[INDEX(i,j,dof)], a[INDEX(i,j,dof)], delta, i, j);
             }
         }
@@ -163,13 +227,17 @@ bool llsq_miso_test() {
 
     // Compute A
     flag = c_linear_least_squares_miso(dof, npts, x, dof, y, a);
+    if (flag != M_NO_ERROR) {
+        rst = false;
+        printf("LLSQ_MISO_TEST FAILED\nOutput Flag: %i\n", flag);
+    }
 
     // Test
     for (i = 0; i < dof; ++i) {
         delta = ans[i] - a[i];
         if (fabs(delta) > tol) {
             rst = false;
-            printf("LLSQ_MISO TEST FAILED\nExpected: %f\nComputed: %f\nDifference: %f\nRow: %i\n",
+            printf("LLSQ_MISO_TEST FAILED\nExpected: %f\nComputed: %f\nDifference: %f\nRow: %i\n",
                 ans[i], a[i], delta, i);
         }
     }
