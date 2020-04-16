@@ -1,5 +1,35 @@
+# Define the FFTPACK source files
+set(fftpack_sources
+    fftpack/src/auxiliary_routines.f90
+    fftpack/src/complex_backward_1d.f90
+    fftpack/src/complex_backward_2d.f90
+    fftpack/src/complex_forward_1d.f90
+    fftpack/src/complex_forward_2d.f90
+    fftpack/src/complex_initialization_routines.f90
+    fftpack/src/complex_transform_routines.f90
+    fftpack/src/cosine_transform_routines.f90
+    fftpack/src/error_handlers.f90
+    fftpack/src/fftpack_library.f90
+    fftpack/src/fftpack_precision.f90
+    fftpack/src/multiple_complex_backward.f90
+    fftpack/src/multiple_complex_forward.f90
+    fftpack/src/multiple_real_backward.f90
+    fftpack/src/multiple_real_forward.f90
+    fftpack/src/quarter_cosine_transform_routines.f90
+    fftpack/src/quarter_sine_transform_routines.f90
+    fftpack/src/real_backward_1d.f90
+    fftpack/src/real_backward_2d.f90
+    fftpack/src/real_forward_1d.f90
+    fftpack/src/real_forward_2d.f90
+    fftpack/src/real_initialization_routines.f90
+    fftpack/src/real_transform_routines.f90
+    fftpack/src/sine_transform_routines.f90
+    fftpack/src/type_FFTpack.f90
+)
+
 # Define the MEASUREMENTS source files
 set(measurements_sources
+    ${fftpack_sources}
     measurements_core.f90
     measurement_stats.f90
     measurements_c_api.f90
