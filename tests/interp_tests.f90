@@ -166,4 +166,82 @@ function spline_interp_test() result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
+function peak_detect_test() result(rst)
+    ! Arguments
+    logical :: rst
+
+    ! Parameters
+    real(real64), parameter :: dx = 0.01d0
+    integer(int32), parameter :: npts = 100
+    real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
+    integer(int32), parameter :: nMax = 2
+    integer(int32), parameter :: nMin = 2
+    integer(int32), parameter:: maxInd1 = 13
+    integer(int32), parameter :: maxInd2 = 63
+    integer(int32), parameter :: minInd1 = 38
+    integer(int32), parameter :: minInd2 = 88
+
+    ! Local Variables
+    integer(int32) :: i
+    real(real64) :: x(npts), y(npts)
+    type(peak_info) :: pks
+
+    ! Initialization
+    rst = .true.
+    x(1) = 0.0d0
+    do i = 2, npts
+        x(i) = x(i-1) + dx
+    end do
+    y = exp(-0.7d0 * x) * sin(4.0d0 * pi * x)
+
+    ! Locate the peaks
+    pks = peak_detect(y, 0.1d0)
+
+    ! Check for overall quantity of peaks
+    if (size(pks%max_value_indices) /= nMax) then
+        rst = .false.
+        print '(A)', "PEAK_DETECT_TEST FAILED."
+        print '(AI0AI0A)', "Expected to find ", nMax, &
+            " peak values, but found ", size(pks%max_value_indices), "."
+    end if
+    if (size(pks%min_value_indices) /= nMin) then
+        rst = .false.
+        print '(A)', "PEAK_DETECT_TEST FAILED."
+        print '(AI0AI0A)', "Expected to find ", nMin, &
+            " valley values, but found ", size(pks%min_value_indices), "."
+    end if
+
+    ! Ensure the following tests can go on without overstepping the arrays
+    if (size(pks%max_value_indices) < nMax .or. &
+        size(pks%min_value_indices) < nMin) return
+
+    ! Check the location of each peak
+    if (pks%max_value_indices(1) /= maxInd1) then
+        rst = .false.
+        print '(A)', "PEAK_DETECT_TEST FAILED."
+        print '(AI0AI0A)', "Expected a peak at ", maxInd1, &
+            ", but found a peak at ", pks%max_value_indices(1), "."
+    end if
+    if (pks%max_value_indices(2) /= maxInd2) then
+        rst = .false.
+        print '(A)', "PEAK_DETECT_TEST FAILED."
+        print '(AI0AI0A)', "Expected a peak at ", maxInd2, &
+            ", but found a peak at ", pks%max_value_indices(2), "."
+    end if
+
+    if (pks%min_value_indices(1) /= minInd1) then
+        rst = .false.
+        print '(A)', "PEAK_DETECT_TEST FAILED."
+        print '(AI0AI0A)', "Expected a valley at ", minInd1, &
+            ", but found a valley at ", pks%min_value_indices(1), "."
+    end if
+    if (pks%min_value_indices(2) /= minInd2) then
+        rst = .false.
+        print '(A)', "PEAK_DETECT_TEST FAILED."
+        print '(AI0AI0A)', "Expected a valley at ", minInd2, &
+            ", but found a valley at ", pks%min_value_indices(2), "."
+    end if
+end function
+
+! ------------------------------------------------------------------------------
 end module

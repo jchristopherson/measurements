@@ -1364,5 +1364,58 @@ module measurements_core
         end function
     end interface
 
+! ******************************************************************************
+! MEASUREMENTS_PEAK.F90
+! ------------------------------------------------------------------------------
+    !> @brief Describes peak and valley values and associated locations within 
+    !! the data set.
+    type peak_info
+        !> @brief A list of the maximum (peak) values.
+        real(real64), allocatable, dimension(:) :: max_values
+        !> @brief A list of the indices of the maximum values.
+        integer(int32), allocatable, dimension(:) :: max_value_indices
+        !> @brief A list of the minimum (valley) values.
+        real(real64), allocatable, dimension(:) :: min_values
+        !> @brief A list of the indices of the minimum values.
+        integer(int32), allocatable, dimension(:) :: min_value_indices
+    end type
+
+! ------------------------------------------------------------------------------
+    interface
+        !> @brief Attempts to locate all peaks and valleys within the given
+        !! data set bound by the constraints specified.
+        !!
+        !! @param[in] v The data set.
+        !! @param[in] delta A threshold level used to denote the minimum change
+        !!  acceptable in determining a peak or valley from neighboring points.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!
+        !! @return A peak_info type containing the results of the search.
+        !!
+        !! @par References
+        !! - http://billauer.co.il/peakdet.html
+        module function peak_detect(v, delta, err) result(rst)
+            real(real64), intent(in), dimension(:) :: v
+            real(real64), intent(in) :: delta
+            class(errors), intent(inout), optional, target :: err
+            type(peak_info) :: rst
+        end function
+    end interface
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
 ! ------------------------------------------------------------------------------
 end module

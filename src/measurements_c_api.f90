@@ -904,5 +904,66 @@ contains
         end if
     end function
 
+! ******************************************************************************
+! PEAK DETECTION
+! ------------------------------------------------------------------------------
+    !> @brief Attempts to locate all peaks and valleys within the given
+    !! data set bound by the constraints specified.
+    !!
+    !! @param[in] n The number of data points in the array to search.
+    !! @param[in] x The N-element array to search.
+    !! @param[in] delta A threshold level used to denote the minimum change
+    !!  acceptable in determining a peak or valley from neighboring points.
+    !! @param[in] szmxind The size of the @p mxind buffer.
+    !! @param[out] mxind A @p szmxind element array where the indices of the
+    !!  peak values will be written.  The indices are zero-based.
+    !! @param[out] nmxind The actual number of peak value indices written to
+    !!  @p mxind.
+    !! @param[in] szmnind The size of the @p mnind buffer.
+    !! @param[out] mnind A @p szmnind element array where the indices of the
+    !!  valley values will be written.  The indices are zero-based.
+    !! @param[out] nmnind The actual number of valley value indices written to
+    !!  @p mnind.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    function c_peak_detect(n, x, delta, szmxind, mxind, nmxind, szmnind, &
+            mnind, nmnind) bind(C, name = "c_peak_detect") result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: n, szmxind, szmnind
+        real(c_double), intent(in) :: x(n)
+        real(c_double), intent(in), value :: delta
+        integer(c_int), intent(out) :: mxind(szmxind), mnind(szmnind), nmxind, &
+            nmnind
+        integer(c_int) :: flag
+
+        ! Local Variables
+        integer(c_int) :: npts
+        type(errors) :: err
+        type(peak_info) :: pks
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        pks = peak_detect(x, delta, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+
+        ! Copy over the results - subtract 1 to zero-base the indices
+        npts = min(szmxind, size(pks%max_value_indices))
+        mxind(1:npts) = pks%max_value_indices(1:npts) - 1
+        nmxind = npts
+
+        npts = min(szmnind, size(pks%min_value_indices))
+        mnind(1:npts)  = pks%min_value_indices(1:npts) - 1
+        nmnind = npts
+    end function
+
 ! ------------------------------------------------------------------------------
 end module

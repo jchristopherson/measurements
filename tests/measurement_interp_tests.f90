@@ -31,6 +31,9 @@ program main
     local = llsq_miso_test()
     if (.not.local) overall = .false.
 
+    local = peak_detect_test()
+    if (.not.local) overall = .false.
+
     ! --------------------------------------------------------------------------
     ! End
     if (overall) then

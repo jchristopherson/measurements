@@ -7,6 +7,7 @@ set(measurements_sources
     measurements_interp.f90
     measurements_smoothing.f90
     measurements_regression.f90
+    measurements_peak.f90
 )
 
 # Build the library

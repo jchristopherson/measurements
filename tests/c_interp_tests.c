@@ -11,6 +11,7 @@ bool poly_interp_test();
 bool spline_interp_test();
 bool llsq_mimo_test();
 bool llsq_miso_test();
+bool peak_detect_test();
 
 int main() {
     // Local Variables
@@ -33,6 +34,9 @@ int main() {
     if (!local) overall = false;
 
     local = llsq_miso_test();
+    if (!local) overall = false;
+
+    local = peak_detect_test();
     if (!local) overall = false;
 
     // End
@@ -245,3 +249,80 @@ bool llsq_miso_test() {
     // End
     return rst;
 }
+
+
+
+bool peak_detect_test() {
+    // Local Variables
+    bool rst;
+    const double dx = 0.01;
+    const int npts = 100;
+    const int nMax = 2;
+    const int nMin = 2;
+    const int maxInd1 = 12;
+    const int maxInd2 = 62;
+    const int minInd1 = 37;
+    const int minInd2 = 87;
+    const int bufferSize = 100;
+    double pi, x, y[100];
+    int i, mxBuffer[100], mnBuffer[100], nmx, nmn, flag;
+
+    // Initialization
+    rst = true;
+    pi = 2.0 * acos(0.0);
+    x = y[0] = 0.0;
+    for (i = 1; i < npts; ++i) {
+        x += dx;
+        y[i] = exp(-0.7 * x) * sin(4.0 * pi * x);
+    }
+
+    // Locate the peaks
+    flag = c_peak_detect(npts, y, 0.1, bufferSize, mxBuffer, &nmx, bufferSize, 
+        mnBuffer, &nmn);
+    if (flag != M_NO_ERROR) {
+        rst = false;
+        printf("PEAK_DETECT_TEST FAILED\nOutput Flag: %i\n", flag);
+    }
+
+    // Locate the peaks
+    if (nmx != nMax) {
+        rst = false;
+        printf("PEAK_DETECT_TEST FAILED.\n");
+        printf("Expected to find %i peak values, but found %i.\n", nMax, nmx);
+    }
+    if (nmn != nMin) {
+        rst = false;
+        printf("PEAK_DETECT_TEST FAILED.\n");
+        printf("Expected to find %i valley values, but found %i.\n", nMin, nmn);
+    }
+
+    // Ensure additional testing is OK without overstepping our bounds
+    if (nmn < nMin || nmx < nMax) return rst;
+
+    // Check the location of each peak
+    if (mxBuffer[0] != maxInd1) {
+        rst = false;
+        printf("PEAK_DETECT_TEST FAILED.\n");
+        printf("Expected a peak at %i, but found %i.\n", maxInd1, mxBuffer[0]);
+    }
+    if (mxBuffer[1] != maxInd2) {
+        rst = false;
+        printf("PEAK_DETECT_TEST FAILED.\n");
+        printf("Expected a peak at %i, but found %i.\n", maxInd2, mxBuffer[1]);
+    }
+
+    if (mnBuffer[0] != minInd1) {
+        rst = false;
+        printf("PEAK_DETECT_TEST FAILED.\n");
+        printf("Expected a valley at %i, but found %i.\n", minInd1, mnBuffer[0]);
+    }
+    if (mnBuffer[1] != minInd2) {
+        rst = false;
+        printf("PEAK_DETECT_TEST FAILED.\n");
+        printf("Expected a valley at %i, but found %i.\n", minInd2, mnBuffer[1]);
+    }
+
+    // End
+    return rst;
+}
+
