@@ -3,6 +3,9 @@
 submodule (measurements_core) measurements_spectrum
     use real_transform_routines, only : rfft1i, rfft1b, rfft1f
 
+    ! Constants
+    real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
+
     !> @brief This type provides a mechanism allowing straight-forward signal
     !! overlapping and averaging for periodogram estimates.
     type spectrum_register
@@ -166,6 +169,38 @@ module function periodogram(x, winfun, nfft, err) result(p)
 end function
 
 ! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ******************************************************************************
+! WINDOW ROUTINES
+! ------------------------------------------------------------------------------
+pure module function rectangular_window(j, n) result(x)
+    integer(int32), intent(in) :: j, n
+    real(real64) :: x
+    x = 1.0d0
+end function
+
+! ------------------------------------------------------------------------------
+pure module function hann_window(j, n) result(x)
+    integer(int32), intent(in) :: j, n
+    real(real64) :: x
+    x = 0.5d0 * (1.0d0 - cos(2.0d0 * pi * j / n))
+end function
+
+! ------------------------------------------------------------------------------
+pure module function hamming_window(j, n) result(x)
+    integer(int32), intent(in) :: j, n
+    real(real64) :: x
+    x = 0.54d0 - 0.46d0 * cos(2.0d0 * pi * j / n)
+end function
+
+! ------------------------------------------------------------------------------
+pure module function welch_window(j, n) result(x)
+    integer(int32), intent(in) :: j, n
+    real(real64) :: x
+    x = 1.0d0 - ((j - 0.5d0 * n) / (0.5d0 * n))**2
+end function
 
 ! ------------------------------------------------------------------------------
 

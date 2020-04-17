@@ -1415,12 +1415,12 @@ module measurements_core
     interface
         !> @brief Defines a window function.
         !!
-        !! @param[in] bin The index or bin number (0 <= @p bin <= @p winsize)
-        !! @param[in] winsize The window size.
+        !! @param[in] bin The index or bin number (0 <= @p bin <= @p n).
+        !! @param[in] n The transform length.
         !! @return The window function value.
-        function window_function(bin, winsize) result(x)
+        function window_function(bin, n) result(x)
             use iso_fortran_env
-            integer(int32), intent(in) :: bin, winsize
+            integer(int32), intent(in) :: bin, n
             real(real64) :: x
         end function
     end interface
@@ -1477,6 +1477,73 @@ module measurements_core
             real(real64), intent(in), dimension(:) :: x
             class(errors), intent(inout), optional, target :: err
             complex(real64), allocatable, dimension(:) :: f
+        end function
+
+        !> @brief Computes the periodogram power spectral density (PSD) estimate
+        !! of a signal.                                                                                                                                                             
+        !!
+        !! @param[in] x An N-element array containing the signal.
+        !! @param[in] winfun The window function to apply.
+        !! @param[in] nfft The length Fourier transform to apply.  This must
+        !!  be an integer power of two, even if @p x is not an integer power
+        !!  of two in length.  If this parameter is less than the length of
+        !!  @p x, @p x will be overlapped, windowed, and averaged to achieve
+        !!  an estimate of the power spectrum.  If this parameter is larger
+        !!  than the length of @p x, @p x will be padded with zeros prior
+        !!  to windowing.
+        !! @param[in,out] err
+        !!
+        !! @return The periodogram (power spectrum) of @p x.
+        module function periodogram(x, winfun, nfft, err) result(p)
+            real(real64), intent(in), dimension(:) :: x
+            procedure(window_function), pointer, intent(in) :: winfun
+            integer(int32), intent(in) :: nfft
+            class(errors), intent(inout), optional, target :: err
+            real(real64), allocatable, dimension(:) :: p
+        end function
+
+        !> @brief Defines a rectangular window.
+        !!
+        !! @param[in] j The index or bin number (0 <= @p bin <= @p n).
+        !! @param[in] n The transform length.
+        !!
+        !! @return The value of the window function at index @p j.
+        pure module function rectangular_window(j, n) result(x)
+            integer(int32), intent(in) :: j, n
+            real(real64) :: x
+        end function
+
+        !> @brief Defines a Hann window.
+        !!
+        !! @param[in] j The index or bin number (0 <= @p bin <= @p n).
+        !! @param[in] n The transform length.
+        !!
+        !! @return The value of the window function at index @p j.
+        pure module function hann_window(j, n) result(x)
+            integer(int32), intent(in) :: j, n
+            real(real64) :: x
+        end function
+
+        !> @brief Defines a Hamming window.
+        !!
+        !! @param[in] j The index or bin number (0 <= @p bin <= @p n).
+        !! @param[in] n The transform length.
+        !!
+        !! @return The value of the window function at index @p j.
+        pure module function hamming_window(j, n) result(x)
+            integer(int32), intent(in) :: j, n
+            real(real64) :: x
+        end function
+
+        !> @brief Defines a Welch window.
+        !!
+        !! @param[in] j The index or bin number (0 <= @p bin <= @p n).
+        !! @param[in] n The transform length.
+        !!
+        !! @return The value of the window function at index @p j.
+        pure module function welch_window(j, n) result(x)
+            integer(int32), intent(in) :: j, n
+            real(real64) :: x
         end function
     end interface
 
