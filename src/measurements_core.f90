@@ -1413,6 +1413,52 @@ module measurements_core
 ! MEASUREMENT_SPECTRUM.F90
 ! ------------------------------------------------------------------------------
     interface
+        !> @brief Defines a window function.
+        !!
+        !! @param[in] bin The index or bin number (0 <= @p bin <= @p winsize)
+        !! @param[in] winsize The window size.
+        !! @return The window function value.
+        function window_function(bin, winsize) result(x)
+            use iso_fortran_env
+            integer(int32), intent(in) :: bin, winsize
+            real(real64) :: x
+        end function
+    end interface
+
+! ------------------------------------------------------------------------------
+    interface
+        !> @brief Tests to see if a number is an integer power of two.
+        !!
+        !! @param[in] n The integer to test.
+        !! @return Returns true if @p n is a power of two; else, false.
+        pure module function is_power_of_two(n) result(rst)
+            integer(int32), intent(in) :: n
+            logical :: rst
+        end function
+
+        !> @brief Provides the next higher integer power of two.
+        !!
+        !! @param[in] x The value to test.
+        !! @return The next power of two higher than @p x.  If @p x is already
+        !! a power of two, it's value is simply returned.  For instance, if @p
+        !! is set to 128, then a value of 7 is returned.  However, if a value
+        !! of 129 is supplied, then a value of 8 is returned.
+        pure module function next_power_of_two(x) result(n)
+            integer(int32), intent(in) :: x
+            integer(int32) :: n
+        end function
+
+        !> @brief Pads an array with zeros to arrive at an array whose length
+        !! is the next integer power of two higher.  If the array is already
+        !! an integer power of two in length no action is taken.
+        !!
+        !! @param[in] x The array to pad.
+        !! @return The padded array.
+        pure module function pad_with_zeros(x) result(xp)
+            real(real64), intent(in), dimension(:) :: x
+            real(real64), allocatable, dimension(:) :: xp
+        end function
+
         !> @brief Computes the Fourier transform of a discretely sampled signal.
         !!
         !! @param[in] x An N-element array containing the signal.
