@@ -203,8 +203,14 @@ pure module function welch_window(j, n) result(x)
 end function
 
 ! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
+pure module function blackman_harris_window(j, n) result(x)
+    integer(int32), intent(in) :: j, n
+    real(real64) :: x
+    x = 0.35875d0 - &
+        0.48829d0 * cos(2.0d0 * pi * j / n) + &
+        0.14128d0 * cos(4.0d0 * pi * j / n) - &
+        0.01168d0 * cos(6.0d0 * pi * j / n)
+end function
 
 ! ******************************************************************************
 ! SPECTRUM_REGISTER ROUTINES
@@ -285,9 +291,9 @@ subroutine add_spectrum_segment(this, x, winfun)
         j = i - 1
         w = winfun(j, n)
         this%buffer(i) = w * x(i)
-        sumw = sumw + w**2
+        sumw = sumw + w
     end do
-    fac = 2.0d0 / (sumw * n)
+    fac = 0.5d0 * n / sumw
 
     ! Compute the FFT
     call rfft1f(n, 1, this%buffer, n, this%wsave, lwsave, this%work, lwork, &

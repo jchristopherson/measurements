@@ -1545,6 +1545,17 @@ module measurements_core
             integer(int32), intent(in) :: j, n
             real(real64) :: x
         end function
+
+        !> @brief Defines a Blackman-Harris window.
+        !!
+        !! @param[in] j The index or bin number (0 <= @p bin <= @p n).
+        !! @param[in] n The transform length.
+        !!
+        !! @return The value of the window function at index @p j.
+        pure module function blackman_harris_window(j, n) result(x)
+            integer(int32), intent(in) :: j, n
+            real(real64) :: x
+        end function
     end interface
 
 ! ------------------------------------------------------------------------------

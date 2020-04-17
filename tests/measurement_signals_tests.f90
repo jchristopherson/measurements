@@ -18,6 +18,9 @@ program main
     local = fourier_transform_test()
     if (.not.local) overall = .false.
 
+    local = periodogram_test()
+    if (.not.local) overall = .false.
+
     ! --------------------------------------------------------------------------
     ! End
     if (overall) then
