@@ -49,6 +49,30 @@ add_custom_target(
 )
 
 # ------------------------------------------------------------------------------
+#  MEASUREMENTS_SIGNALS TESTS
+set(measurement_signals_files
+    measurement_signals_tests.f90
+    signals_tests.f90
+)
+
+# Build the executable
+add_executable(MeasurementSignalsTests ${measurement_signals_files})
+target_link_libraries(MeasurementSignalsTests
+    measurements
+)
+
+# Run the tests
+add_custom_command(
+    OUTPUT measurement_signals_tests_output
+    DEPENDS ${measurement_signals_files}
+    COMMAND MeasurementSignalsTests
+)
+add_custom_target(
+    run_measurement_signals_tests ALL 
+    DEPENDS measurement_signals_tests_output
+)
+
+# ------------------------------------------------------------------------------
 # C API MEASUREMENT STATS TESTS
 # ------------------------------------------------------------------------------
 set(c_measurement_stats_files
