@@ -2,6 +2,7 @@
 #define MEASUREMENTS_H_
 
 #include <stdbool.h>
+#include <complex.h>
 
 /** A flag denoting normal operation - no error. */
 #define M_NO_ERROR                          0
@@ -93,6 +94,14 @@ typedef struct {
     double probability;
 } statistic;
 
+/**
+ * Defines a window function.
+ *
+ * @param bin The index or bin number (0 <= @p bin <= @p n).
+ * @param n The transform length.
+ * @return The window function value.
+ */
+typedef double (*c_window_function)(int bin, int n);
 
 #ifdef __cplusplus
 extern "C" {
@@ -609,6 +618,118 @@ int c_linear_least_squares_miso(int n, int k, const double *x, int ldx,
  */
 int c_peak_detect(int n, const double *x, double delta, int szmxind,
     int *mxind, int *nmxind, int szmnind, int *mnind, int *nmnind);
+
+/**
+ * Tests to see if a number is an integer power of two.
+ *
+ * @param n The integer to test.
+ * @return Returns true if @p n is a power of two; else, false.
+ */
+bool c_is_power_of_two(int n);
+
+/**
+ * Provides the next higher integer power of two.
+ *
+ * @param x The value to test.
+ * @return The next power of two higher than @p x.  If @p x is already
+ * a power of two, it's value is simply returned.  For instance, if @p
+ * is set to 128, then a value of 7 is returned.  However, if a value
+ * of 129 is supplied, then a value of 8 is returned.
+ */
+int c_next_power_of_two(int x);
+
+/**
+ * Computes the Fourier transform of a discretely sampled signal.
+ *
+ * @param n The number of data points.
+ * @param x The N-element array containing the data to transform.
+ * @param nf The number of elements in @p f.  Ideally, this should be
+ *  N / 2 + 1 if N is even; else, (N + 1) / 2 if N is odd.
+ * @param f The positive half and DC component of the transformed data.
+ *
+ * @return An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ */
+int c_fourier_transform(int n, const double *x, int nf, double complex *f);
+
+/**
+ * Computes the periodogram power spectral density (PSD) estimate
+ * of a signal.
+ *
+ * @param n The number of data points.
+ * @param x The N-element array containing the data to transform.
+ * @param winfun The window function to apply.
+ * @param nfft The length Fourier transform to apply.  This must
+ *  be an integer power of two, even if @p x is not an integer power
+ *  of two in length.  If this parameter is less than the length of
+ *  @p x, @p x will be overlapped, windowed, and averaged to achieve
+ *  an estimate of the power spectrum.  If this parameter is larger
+ *  than the length of @p x, @p x will be padded with zeros prior
+ *  to windowing.
+ * @param np
+ * @param p The NP-element array containing the periodogram.
+ *
+ * @return An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ *  - M_INVALID_INPUT_ERROR: Occurs if @p nfft is not an integer power
+ *      of two.
+ */
+int c_periodogram(int n, const double *x, c_window_function winfun, int nfft,
+    int np, double *p);
+
+/**
+ * Defines a rectangular window.
+ *
+ * @param j The index or bin number (0 <= @p bin <= @p n).
+ * @param n The transform length.
+ *
+ * @return The value of the window function at index @p j.
+ */
+double c_rectangular_window(int j, int n);
+
+/**
+ * Defines a Hann window.
+ *
+ * @param j The index or bin number (0 <= @p bin <= @p n).
+ * @param n The transform length.
+ *
+ * @return The value of the window function at index @p j.
+ */
+double c_hann_window(int j, int n);
+
+/**
+ * Defines a Hamming window.
+ *
+ * @param j The index or bin number (0 <= @p bin <= @p n).
+ * @param n The transform length.
+ *
+ * @return The value of the window function at index @p j.
+ */
+double c_hamming_window(int j, int n);
+
+/**
+ * Defines a Welch window.
+ *
+ * @param j The index or bin number (0 <= @p bin <= @p n).
+ * @param n The transform length.
+ *
+ * @return The value of the window function at index @p j.
+ */
+double c_welch_window(int j, int n);
+
+/**
+ * Defines a Blackman-Harris window.
+ *
+ * @param j The index or bin number (0 <= @p bin <= @p n).
+ * @param n The transform length.
+ *
+ * @return The value of the window function at index @p j.
+ */
+double c_blackman_harris_window(int j, int n);
 
 #ifdef __cplusplus
 }

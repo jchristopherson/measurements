@@ -1431,7 +1431,7 @@ module measurements_core
         !!
         !! @param[in] n The integer to test.
         !! @return Returns true if @p n is a power of two; else, false.
-        pure module function is_power_of_two(n) result(rst)
+        pure elemental module function is_power_of_two(n) result(rst)
             integer(int32), intent(in) :: n
             logical :: rst
         end function
@@ -1443,7 +1443,7 @@ module measurements_core
         !! a power of two, it's value is simply returned.  For instance, if @p
         !! is set to 128, then a value of 7 is returned.  However, if a value
         !! of 129 is supplied, then a value of 8 is returned.
-        pure module function next_power_of_two(x) result(n)
+        pure elemental module function next_power_of_two(x) result(n)
             integer(int32), intent(in) :: x
             integer(int32) :: n
         end function
@@ -1462,7 +1462,7 @@ module measurements_core
         !> @brief Computes the Fourier transform of a discretely sampled signal.
         !!
         !! @param[in] x An N-element array containing the signal.
-        !! @param[in,out] err  An optional errors-based object that if provided 
+        !! @param[in,out] err An optional errors-based object that if provided 
         !!  can be used to retrieve information relating to any errors 
         !!  encountered during execution.  If not provided, a default 
         !!  implementation of the errors class is used internally to provide 
@@ -1491,7 +1491,16 @@ module measurements_core
         !!  an estimate of the power spectrum.  If this parameter is larger
         !!  than the length of @p x, @p x will be padded with zeros prior
         !!  to windowing.
-        !! @param[in,out] err
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!  - M_INVALID_INPUT_ERROR: Occurs if @p nfft is not an integer power
+        !!      of two.
         !!
         !! @return The periodogram (power spectrum) of @p x.
         module function periodogram(x, winfun, nfft, err) result(p)

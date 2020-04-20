@@ -23,7 +23,7 @@ submodule (measurements_core) measurements_spectrum
     end type
 contains
 ! ------------------------------------------------------------------------------
-pure module function is_power_of_two(n) result(rst)
+pure elemental module function is_power_of_two(n) result(rst)
     ! Arguments
     integer(int32), intent(in) :: n
     logical :: rst
@@ -34,7 +34,7 @@ pure module function is_power_of_two(n) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-pure module function next_power_of_two(x) result(n)
+pure elemental module function next_power_of_two(x) result(n)
     ! Arguments
     integer(int32), intent(in) :: x
     integer(int32) :: n
@@ -167,10 +167,6 @@ module function periodogram(x, winfun, nfft, err) result(p)
     ! Compute the periodogram
     p = reg%segments / reg%segment_count
 end function
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
 
 ! ******************************************************************************
 ! WINDOW ROUTINES

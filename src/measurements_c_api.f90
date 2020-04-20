@@ -7,6 +7,20 @@ module measurements_c_api
     use measurements_core
     use ferror
     implicit none
+
+    interface
+        !> @brief Defines a window function.
+        !!
+        !! @param[in] bin The index or bin number (0 <= @p bin <= @p n).
+        !! @param[in] n The transform length.
+        !! @return The window function value.
+        function c_window_function(bin, n) result(x)
+            use iso_c_binding
+            integer(c_int), intent(in), value :: bin, n
+            real(c_double) :: x
+        end function
+    end interface
+
 contains
 ! ------------------------------------------------------------------------------
     !> @brief Tests to see if an array is monotonically increasing or 
@@ -964,6 +978,219 @@ contains
         mnind(1:npts)  = pks%min_value_indices(1:npts) - 1
         nmnind = npts
     end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Tests to see if a number is an integer power of two.
+    !!
+    !! @param[in] n The integer to test.
+    !! @return Returns true if @p n is a power of two; else, false.
+    function c_is_power_of_two(n) bind(C, name = "c_is_power_of_two") &
+            result(rst)
+        integer(c_int), intent(in), value :: n
+        logical(c_bool) :: rst
+        rst = is_power_of_two(n)
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Provides the next higher integer power of two.
+    !!
+    !! @param[in] x The value to test.
+    !! @return The next power of two higher than @p x.  If @p x is already
+    !! a power of two, it's value is simply returned.  For instance, if @p
+    !! is set to 128, then a value of 7 is returned.  However, if a value
+    !! of 129 is supplied, then a value of 8 is returned.
+    function c_next_power_of_two(x) bind(C, name = "c_next_power_of_two") &
+            result(n)
+        integer(c_int), intent(in), value :: x
+        integer(c_int) :: n
+        n = next_power_of_two(x);
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Computes the Fourier transform of a discretely sampled signal.
+    !!
+    !! @param[in] n The number of data points.
+    !! @param[in] x The N-element array containing the data to transform.
+    !! @param[in] nf The number of elements in @p f.  Ideally, this should be
+    !!  N / 2 + 1 if N is even; else, (N + 1) / 2 if N is odd.
+    !! @param[out] f The positive half and DC component of the transformed data.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    function c_fourier_transform(n, x, nf, f) &
+            bind(C, name = "c_fourier_transform") result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: n, nf
+        real(c_double), intent(in) :: x(n)
+        complex(c_double), intent(out) :: f(nf)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        integer(int32) :: m
+        complex(real64), allocatable, dimension(:) :: fc
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+        if (mod(n, 2) == 0) then
+            m = min(nf, n / 2 + 1)
+        else
+            m = min(nf, (n + 1) / 2)
+        end if
+
+        ! Process
+        fc = fourier_transform(x, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+        f(1:m) = fc(1:m)
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Computes the periodogram power spectral density (PSD) estimate
+    !! of a signal.
+    !!
+    !! @param[in] n The number of data points.
+    !! @param[in] x The N-element array containing the data to transform.
+    !! @param[in] winfun The window function to apply.
+    !! @param[in] nfft The length Fourier transform to apply.  This must
+    !!  be an integer power of two, even if @p x is not an integer power
+    !!  of two in length.  If this parameter is less than the length of
+    !!  @p x, @p x will be overlapped, windowed, and averaged to achieve
+    !!  an estimate of the power spectrum.  If this parameter is larger
+    !!  than the length of @p x, @p x will be padded with zeros prior
+    !!  to windowing.
+    !! @param[in] np
+    !! @param[out] p The NP-element array containing the periodogram.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    !!  - M_INVALID_INPUT_ERROR: Occurs if @p nfft is not an integer power
+    !!      of two.
+    function c_periodogram(n, x, winfun, nfft, np, p) &
+            bind(C, name = "c_periodogram") result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: n, nfft, np
+        real(c_double), intent(in) :: x(n)
+        type(c_funptr), intent(in), value :: winfun
+        real(c_double), intent(out) :: p(np)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        procedure(c_window_function), pointer :: cfptr
+        procedure(window_function), pointer :: fptr
+        type(errors) :: err
+        real(real64), allocatable, dimension(:) :: pc
+        integer(int32) :: m
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+        call c_f_procpointer(winfun, cfptr)
+        fptr => win
+        m = min(np, nfft / 2 + 1)
+
+        ! Process
+        pc = periodogram(x, fptr, nfft, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+        p(1:m) = pc(1:m)
+    contains
+        function win(jj, nn) result(xx)
+            integer(int32), intent(in) :: jj, nn
+            real(real64) :: xx
+            call cfptr(jj, nn)
+        end function
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Defines a rectangular window.
+    !!
+    !! @param[in] j The index or bin number (0 <= @p bin <= @p n).
+    !! @param[in] n The transform length.
+    !!
+    !! @return The value of the window function at index @p j.
+    function c_rectangular_window(j, n) bind(C, name = "c_rectangular_window") &
+            result(x)
+        integer(c_int), intent(in), value :: j, n
+        real(c_double) :: x
+        x = rectangular_window(j, n)
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Defines a Hann window.
+    !!
+    !! @param[in] j The index or bin number (0 <= @p bin <= @p n).
+    !! @param[in] n The transform length.
+    !!
+    !! @return The value of the window function at index @p j.
+    function c_hann_window(j, n) bind(C, name = "c_hann_window") result(x)
+        integer(c_int), intent(in), value :: j, n
+        real(c_double) :: x
+        x = hann_window(j, n)
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Defines a Hamming window.
+    !!
+    !! @param[in] j The index or bin number (0 <= @p bin <= @p n).
+    !! @param[in] n The transform length.
+    !!
+    !! @return The value of the window function at index @p j.
+    function c_hamming_window(j, n) bind(C, name = "c_hamming_window") result(x)
+        integer(c_int), intent(in), value :: j, n
+        real(c_double) :: x
+        x = hamming_window(j, n)
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Defines a Welch window.
+    !!
+    !! @param[in] j The index or bin number (0 <= @p bin <= @p n).
+    !! @param[in] n The transform length.
+    !!
+    !! @return The value of the window function at index @p j.
+    function c_welch_window(j, n) bind(C, name = "c_welch_window") result(x)
+        integer(c_int), intent(in), value :: j, n
+        real(c_double) :: x
+        x = welch_window(j, n)
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Defines a Blackman-Harris window.
+    !!
+    !! @param[in] j The index or bin number (0 <= @p bin <= @p n).
+    !! @param[in] n The transform length.
+    !!
+    !! @return The value of the window function at index @p j.
+    function c_blackman_harris_window(j, n) &
+            bind(C, name = "c_blackman_harris_window") result(x)
+        integer(c_int), intent(in), value :: j, n
+        real(c_double) :: x
+        x = blackman_harris_window(j, n)
+    end function
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
 end module
