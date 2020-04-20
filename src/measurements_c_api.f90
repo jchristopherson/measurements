@@ -1107,7 +1107,7 @@ contains
         function win(jj, nn) result(xx)
             integer(int32), intent(in) :: jj, nn
             real(real64) :: xx
-            call cfptr(jj, nn)
+            xx = cfptr(jj, nn)
         end function
     end function
 
