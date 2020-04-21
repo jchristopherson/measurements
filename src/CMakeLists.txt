@@ -39,6 +39,7 @@ set(measurements_sources
     measurements_regression.f90
     measurements_peak.f90
     measurements_spectrum.f90
+    measurements_filter.f90
 )
 
 # Build the library
