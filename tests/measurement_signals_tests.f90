@@ -21,6 +21,12 @@ program main
     local = periodogram_test()
     if (.not.local) overall = .false.
 
+    local = fourier_frequency_test()
+    if (.not.local) overall = .false.
+
+    local = low_pass_filter_test()
+    if (.not.local) overall = .false.
+
     ! --------------------------------------------------------------------------
     ! End
     if (overall) then

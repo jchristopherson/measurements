@@ -1118,7 +1118,7 @@ contains
     !! @param[in] fs The rate at which the data was sampled.  Notice, the
     !!  returned frequency value will be expressed in the same units as this
     !!  value.
-    !! @param[in] i The frequency bin such that 0 <= i <= m where m is
+    !! @param[in] i The frequency bin such that 0 <= i < m where m is
     !!  @p nxfrm / 2 + 1 if @p nxfrm is even; else, (@p nxfrm + 1) / 2 if
     !!  @p nxfrm is odd.
     !! @param[in] nxfrm The length of the signal that was transformed.

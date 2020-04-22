@@ -687,7 +687,7 @@ int c_periodogram(int n, const double *x, c_window_function winfun, int nfft,
  * @param fs The rate at which the data was sampled.  Notice, the
  *  returned frequency value will be expressed in the same units as this
  *  value.
- * @param i The frequency bin such that 0 <= i <= m where m is
+ * @param i The frequency bin such that 0 <= i < m where m is
  *  @p nxfrm / 2 + 1 if @p nxfrm is even; else, (@p nxfrm + 1) / 2 if
  *  @p nxfrm is odd.
  * @param nxfrm The length of the signal that was transformed.

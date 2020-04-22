@@ -118,6 +118,109 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function fourier_frequency_test() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Parameters
+        integer(int32), parameter :: npts = 1024
+        integer(int32), parameter :: nodd = 1025
+        real(real64), parameter :: fs = 1024.0d0
+
+        ! Local Variables
+        integer(int32) :: m
+        real(real64) :: f
+
+        ! Initialization
+        rst = .true.
+        m = npts / 2 + 1
+
+        ! Test 1 - Check DC - Even Valued
+        f = fourier_frequency(fs, 0, npts)
+        if (f /= 0.0d0) then
+            rst = .false.
+            print '(A)', "FOURIER_FREQUENCY_TEST FAILED."
+            print *, "Expected: ", 0.0d0
+            print *, "Computed: ", f
+        end if
+
+        ! Test 2 - Check Nyquist - Even Valued
+        f = fourier_frequency(fs, m - 1, npts)
+        if (f /= 0.5d0 * fs) then
+            rst = .false.
+            print '(A)', "FOURIER_FREQUENCY_TEST - EVEN FAILED."
+            print *, "Expected: ", 0.5d0 * fs
+            print *, "Computed: ", f
+        end if
+
+        ! Test 3 - Check Nyquist - Odd Valued
+        m = (nodd + 1) / 2
+        f = fourier_frequency(fs, m - 1, nodd)
+        if (f /= 0.5d0 * fs) then
+            rst = .false.
+            print '(A)', "FOURIER_FREQUENCY_TEST - ODD FAILED."
+            print *, "Expected: ", 0.5d0 * fs
+            print *, "Computed: ", f
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function low_pass_filter_test() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Parameters
+        real(real64), parameter :: fs = 1024.0d0
+        integer(int32), parameter :: npts = 2048
+        real(real64), parameter :: cutoff = 100.0d0
+        real(real64), parameter :: tol = 1.0d-8
+
+        ! Local Variables
+        real(real64) :: x(npts), y(npts)
+        integer(int32) :: i, ind, m
+        complex(real64), allocatable, dimension(:) :: xfrm
+        real(real64), allocatable, dimension(:) :: mag
+
+        ! Initialization
+        rst = .true.
+
+        ! Construct a random noise signal, and then bias
+        call random_number(x)
+        x = x - 0.5d0
+
+        ! Filter the data
+        y = low_pass_filter(x, fs, cutoff)
+
+        ! Find the index of the cutoff frequency.  Anything above this
+        ! value should return a zero value magnitude in its Fourier
+        ! transform
+        if (mod(npts, 2) == 0) then
+            m = npts / 2 + 1
+        else
+            m = (npts + 1) / 2
+        end if
+        ind = int(2.0d0 * cutoff * m / fs, int32) + 1 ! +1 accounts for the zero offset
+
+        ! Compute the FFT of the filtered signal, and make sure any value
+        ! after the filter frequency is sufficiently close to zero in 
+        ! magnitude
+        xfrm = fourier_transform(y)
+        mag = abs(xfrm)
+
+        ! do i = 1, size(mag)
+        !     print *, mag(i), ",", fourier_frequency(fs, i, npts)
+        ! end do
+
+        ! Test
+        do i = ind + 1, size(mag)
+            if (mag(i) > tol) then
+                rst = .false.
+                print '(A)', "LOW_PASS_FILTER_TEST FAILED."
+                print *, "|X| = ", mag(i)
+                print *, "Frequency = ", fourier_frequency(fs, i - 1, npts)
+            end if
+        end do
+    end function
 
 ! ------------------------------------------------------------------------------
 

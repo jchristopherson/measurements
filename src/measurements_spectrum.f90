@@ -184,7 +184,7 @@ pure elemental module function fourier_frequency(fs, i, nxfrm) result(f)
     else
         m = (nxfrm + 1) / 2
     end if
-    f = 0.5d0 * fs * i / m
+    f = 0.5d0 * fs * i / (m - 1)
 end function
 
 ! ******************************************************************************
