@@ -1613,6 +1613,87 @@ module measurements_core
             class(errors), intent(inout), optional, target :: err
             real(real64), allocatable, dimension(:) :: y
         end function
+
+        !> @brief Applies a high-pass filter to a signal.
+        !!
+        !! @param[in] x The array containing the signal to filter.
+        !! @param[in] fs The frequency at which @p x was sampled.
+        !! @param[in] cutoff The cut-off frequency.  This value must be
+        !!  positive-valued, and must be less than the Nyquist frequency.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!  - M_INVALID_INPUT_ERROR: Occurs if @p cutoff is either not positive
+        !!      valued, or is greater than or equal to the Nyquist frequency.
+        !!
+        !! @return The filtered signal.
+        module function high_pass_filter(x, fs, cutoff, err) result(y)
+            real(real64), intent(in), dimension(:) :: x
+            real(real64), intent(in) :: fs, cutoff
+            class(errors), intent(inout), optional, target :: err
+            real(real64), allocatable, dimension(:) :: y
+        end function
+
+        !> @brief Applies a band-pass filter to a signal.
+        !!
+        !! @param[in] x The array containing the signal to filter.
+        !! @param[in] fs The frequency at which @p x was sampled.
+        !! @param[in] cutoff1 The lower cut-off frequency.  This value must be
+        !!  positive-valued, and must be less than the Nyquist frequency.
+        !! @param[in] cutoff2 The upper cut-off frequency.  This value must be
+        !!  positive-valued, and must be less than the Nyquist frequency.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!  - M_INVALID_INPUT_ERROR: Occurs if @p cutoff1 or @p cutoff2 is 
+        !!      either not positive-valued, or is greater than or equal to the 
+        !!      Nyquist frequency.
+        !!
+        !! @return The filtered signal.
+        module function band_pass_filter(x, fs, cutoff1, cutoff2, err) result(y)
+            real(real64), intent(in), dimension(:) :: x
+            real(real64), intent(in) :: fs, cutoff1, cutoff2
+            class(errors), intent(inout), optional, target :: err
+            real(real64), allocatable, dimension(:) :: y
+        end function
+
+        !> @brief Applies a band-stop filter to a signal.
+        !!
+        !! @param[in] x The array containing the signal to filter.
+        !! @param[in] fs The frequency at which @p x was sampled.
+        !! @param[in] cutoff1 The lower cut-off frequency.  This value must be
+        !!  positive-valued, and must be less than the Nyquist frequency.
+        !! @param[in] cutoff2 The upper cut-off frequency.  This value must be
+        !!  positive-valued, and must be less than the Nyquist frequency.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!  - M_INVALID_INPUT_ERROR: Occurs if @p cutoff1 or @p cutoff2 is 
+        !!      either not positive-valued, or is greater than or equal to the 
+        !!      Nyquist frequency.
+        !!
+        !! @return The filtered signal.
+        module function band_stop_filter(x, fs, cutoff1, cutoff2, err) result(y)
+            real(real64), intent(in), dimension(:) :: x
+            real(real64), intent(in) :: fs, cutoff1, cutoff2
+            class(errors), intent(inout), optional, target :: err
+            real(real64), allocatable, dimension(:) :: y
+        end function
     end interface
 
 ! ------------------------------------------------------------------------------

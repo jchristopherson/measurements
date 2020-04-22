@@ -767,6 +767,75 @@ double c_blackman_harris_window(int j, int n);
 int c_low_pass_filter(int n, const double *x, double fs, double cutoff,
     double *y);
 
+/**
+ * Applies a high-pass filter to a signal.
+ *
+ * @param n The length of the input array.
+ * @param x An N-element array containing the signal to filter.
+ * @param fs The frequency at which @p x was sampled.
+ * @param cutoff The cut-off frequency.  This value must be
+ *  positive-valued, and must be less than the Nyquist frequency.
+ * @param y An N-element array where the filtered signal will be
+ *  written.
+ *
+ * @return An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ *  - M_INVALID_INPUT_ERROR: Occurs if @p cutoff is either not positive
+ *      valued, or is greater than or equal to the Nyquist frequency.
+ */
+int c_high_pass_filter(int n, const double *x, double fs, double cutoff,
+    double *y);
+
+/**
+ * Applies a band-pass filter to a signal.
+ *
+ * @param n The length of the input array.
+ * @param x An N-element array containing the signal to filter.
+ * @param fs The frequency at which @p x was sampled.
+ * @param cutoff1 The lower cut-off frequency.  This value must be
+ *  positive-valued, and must be less than the Nyquist frequency.
+ * @param cutoff2 The upper cut-off frequency.  This value must be
+ *  positive-valued, and must be less than the Nyquist frequency.
+ * @param y An N-element array where the filtered signal will be
+ *  written.
+ *
+ * @return An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ *  - M_INVALID_INPUT_ERROR: Occurs if @p cutoff1 or @p cutoff2 is 
+ *      either not positive-valued, or is greater than or equal to the 
+ *      Nyquist frequency.
+ */
+int c_band_pass_filter(int n, const double *x, double fs, double cutoff1,
+    double cutoff2, double *y);
+
+/**
+ * Applies a band-stop filter to a signal.
+ *
+ * @param n The length of the input array.
+ * @param x An N-element array containing the signal to filter.
+ * @param fs The frequency at which @p x was sampled.
+ * @param cutoff1 The lower cut-off frequency.  This value must be
+ *  positive-valued, and must be less than the Nyquist frequency.
+ * @param cutoff2 The upper cut-off frequency.  This value must be
+ *  positive-valued, and must be less than the Nyquist frequency.
+ * @param y An N-element array where the filtered signal will be
+ *  written.
+ *
+ * @return An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ *  - M_INVALID_INPUT_ERROR: Occurs if @p cutoff1 or @p cutoff2 is 
+ *      either not positive-valued, or is greater than or equal to the 
+ *      Nyquist frequency.
+ */
+int c_band_stop_filter(int n, const double *x, double fs, double cutoff1,
+    double cutoff2, double *y);
+
 #ifdef __cplusplus
 }
 #endif  // __cplusplus

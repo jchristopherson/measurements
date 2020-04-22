@@ -1241,10 +1241,133 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Applies a high-pass filter to a signal.
+    !!
+    !! @param[in] n The length of the input array.
+    !! @param[in] x An N-element array containing the signal to filter.
+    !! @param[in] fs The frequency at which @p x was sampled.
+    !! @param[in] cutoff The cut-off frequency.  This value must be
+    !!  positive-valued, and must be less than the Nyquist frequency.
+    !! @param[out] y An N-element array where the filtered signal will be
+    !!  written.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    !!  - M_INVALID_INPUT_ERROR: Occurs if @p cutoff is either not positive
+    !!      valued, or is greater than or equal to the Nyquist frequency.
+    function c_high_pass_filter(n, x, fs, cutoff, y) &
+            bind(C, name = "c_high_pass_filter") result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n)
+        real(c_double), intent(in), value :: fs, cutoff
+        real(c_double), intent(out) :: y(n)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        y = high_pass_filter(x, fs, cutoff, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+    end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Applies a band-pass filter to a signal.
+    !!
+    !! @param[in] n The length of the input array.
+    !! @param[in] x An N-element array containing the signal to filter.
+    !! @param[in] fs The frequency at which @p x was sampled.
+    !! @param[in] cutoff1 The lower cut-off frequency.  This value must be
+    !!  positive-valued, and must be less than the Nyquist frequency.
+    !! @param[in] cutoff2 The upper cut-off frequency.  This value must be
+    !!  positive-valued, and must be less than the Nyquist frequency.
+    !! @param[out] y An N-element array where the filtered signal will be
+    !!  written.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    !!  - M_INVALID_INPUT_ERROR: Occurs if @p cutoff1 or @p cutoff2 is 
+    !!      either not positive-valued, or is greater than or equal to the 
+    !!      Nyquist frequency.
+    function c_band_pass_filter(n, x, fs, cutoff1, cutoff2, y) &
+            bind(C, name = "c_band_pass_filter") result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n)
+        real(c_double), intent(in), value :: fs, cutoff1, cutoff2
+        real(c_double), intent(out) :: y(n)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        y = band_pass_filter(x, fs, cutoff1, cutoff2, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+    end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Applies a band-stop filter to a signal.
+    !!
+    !! @param[in] n The length of the input array.
+    !! @param[in] x An N-element array containing the signal to filter.
+    !! @param[in] fs The frequency at which @p x was sampled.
+    !! @param[in] cutoff1 The lower cut-off frequency.  This value must be
+    !!  positive-valued, and must be less than the Nyquist frequency.
+    !! @param[in] cutoff2 The upper cut-off frequency.  This value must be
+    !!  positive-valued, and must be less than the Nyquist frequency.
+    !! @param[out] y An N-element array where the filtered signal will be
+    !!  written.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    !!  - M_INVALID_INPUT_ERROR: Occurs if @p cutoff1 or @p cutoff2 is 
+    !!      either not positive-valued, or is greater than or equal to the 
+    !!      Nyquist frequency.
+    function c_band_stop_filter(n, x, fs, cutoff1, cutoff2, y) &
+            bind(C, name = "c_band_stop_filter") result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n)
+        real(c_double), intent(in), value :: fs, cutoff1, cutoff2
+        real(c_double), intent(out) :: y(n)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        y = band_stop_filter(x, fs, cutoff1, cutoff2, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+    end function
 
 ! ------------------------------------------------------------------------------
 
