@@ -1112,6 +1112,27 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Computes a suitable frequency for a Fourier transformed data
+    !! set.
+    !!
+    !! @param[in] fs The rate at which the data was sampled.  Notice, the
+    !!  returned frequency value will be expressed in the same units as this
+    !!  value.
+    !! @param[in] i The frequency bin such that 0 <= i <= m where m is
+    !!  @p nxfrm / 2 + 1 if @p nxfrm is even; else, (@p nxfrm + 1) / 2 if
+    !!  @p nxfrm is odd.
+    !! @param[in] nxfrm The length of the signal that was transformed.
+    !!
+    !! @return The frequency value.
+    function c_fourier_frequency(fs, i, nxfrm) &
+            bind(C, name = "c_fourier_frequency") result(f)
+        real(c_double), intent(in), value :: fs
+        integer(c_int), intent(in), value :: i, nxfrm
+        real(c_double) :: f
+        f = fourier_frequency(fs, i, nxfrm)
+    end function
+
+! ------------------------------------------------------------------------------
     !> @brief Defines a rectangular window.
     !!
     !! @param[in] j The index or bin number (0 <= @p bin <= @p n).

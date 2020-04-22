@@ -682,6 +682,21 @@ int c_periodogram(int n, const double *x, c_window_function winfun, int nfft,
     int np, double *p);
 
 /**
+ * Computes a suitable frequency for a Fourier transformed data set.
+ *
+ * @param fs The rate at which the data was sampled.  Notice, the
+ *  returned frequency value will be expressed in the same units as this
+ *  value.
+ * @param i The frequency bin such that 0 <= i <= m where m is
+ *  @p nxfrm / 2 + 1 if @p nxfrm is even; else, (@p nxfrm + 1) / 2 if
+ *  @p nxfrm is odd.
+ * @param nxfrm The length of the signal that was transformed.
+ *
+ * @return The frequency value.
+ */
+double c_fourier_frequency(double fs, int i, int nxfrm);
+
+/**
  * Defines a rectangular window.
  *
  * @param j The index or bin number (0 <= @p bin <= @p n).

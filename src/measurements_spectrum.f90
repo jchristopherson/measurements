@@ -168,6 +168,25 @@ module function periodogram(x, winfun, nfft, err) result(p)
     p = reg%segments / reg%segment_count
 end function
 
+! ------------------------------------------------------------------------------
+pure elemental module function fourier_frequency(fs, i, nxfrm) result(f)
+    ! Arguments
+    real(real64), intent(in) :: fs
+    integer(int32), intent(in) :: i, nxfrm
+    real(real64) :: f
+
+    ! Local Variables
+    integer(int32) :: m
+
+    ! Process
+    if (mod(nxfrm, 2) == 0) then
+        m = nxfrm / 2 + 1
+    else
+        m = (nxfrm + 1) / 2
+    end if
+    f = 0.5d0 * fs * i / m
+end function
+
 ! ******************************************************************************
 ! WINDOW ROUTINES
 ! ------------------------------------------------------------------------------

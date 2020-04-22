@@ -1511,6 +1511,24 @@ module measurements_core
             real(real64), allocatable, dimension(:) :: p
         end function
 
+        !> @brief Computes a suitable frequency for a Fourier transformed data
+        !! set.
+        !!
+        !! @param[in] fs The rate at which the data was sampled.  Notice, the
+        !!  returned frequency value will be expressed in the same units as this
+        !!  value.
+        !! @param[in] i The frequency bin such that 0 <= i <= m where m is
+        !!  @p nxfrm / 2 + 1 if @p nxfrm is even; else, (@p nxfrm + 1) / 2 if
+        !!  @p nxfrm is odd.
+        !! @param[in] nxfrm The length of the signal that was transformed.
+        !!
+        !! @return The frequency value.
+        pure elemental module function fourier_frequency(fs, i, nxfrm) result(f)
+            real(real64), intent(in) :: fs
+            integer(int32), intent(in) :: i, nxfrm
+            real(real64) :: f
+        end function
+
         !> @brief Defines a rectangular window.
         !!
         !! @param[in] j The index or bin number (0 <= @p bin <= @p n).
@@ -1570,6 +1588,32 @@ module measurements_core
 ! ******************************************************************************
 ! MEASUREMENTS_FILTER.F90
 ! ------------------------------------------------------------------------------
+    interface
+        !> @brief Applies a low-pass filter to a signal.
+        !!
+        !! @param[in] x The array containing the signal to filter.
+        !! @param[in] fs The frequency at which @p x was sampled.
+        !! @param[in] cutoff The cut-off frequency.  This value must be
+        !!  positive-valued, and must be less than the Nyquist frequency.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!  - M_INVALID_INPUT_ERROR: Occurs if @p cutoff is either not positive
+        !!      valued, or is greater than or equal to the Nyquist frequency.
+        !!
+        !! @return The filtered signal.
+        module function low_pass_filter(x, fs, cutoff, err) result(y)
+            real(real64), intent(in), dimension(:) :: x
+            real(real64), intent(in) :: fs, cutoff
+            class(errors), intent(inout), optional, target :: err
+            real(real64), allocatable, dimension(:) :: y
+        end function
+    end interface
 
 ! ------------------------------------------------------------------------------
 
