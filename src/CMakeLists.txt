@@ -78,7 +78,6 @@ install(
 
 # Include the documentation
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/doc/html DESTINATION measurements/doc)
-install(FILES ${PROJECT_SOURCE_DIR}/doc/refman.pdf DESTINATION measurements/doc)
 
 # Define the version file
 include(CMakePackageConfigHelpers)
