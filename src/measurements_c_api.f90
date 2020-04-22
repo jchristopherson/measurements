@@ -1223,6 +1223,7 @@ contains
         real(c_double), intent(in) :: x(n)
         real(c_double), intent(in), value :: fs, cutoff
         real(c_double), intent(out) :: y(n)
+        integer(c_int) :: flag
 
         ! Local Variables
         type(errors) :: err
