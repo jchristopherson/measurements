@@ -1200,6 +1200,44 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Applies a low-pass filter to a signal.
+    !!
+    !! @param[in] n The length of the input array.
+    !! @param[in] x An N-element array containing the signal to filter.
+    !! @param[in] fs The frequency at which @p x was sampled.
+    !! @param[in] cutoff The cut-off frequency.  This value must be
+    !!  positive-valued, and must be less than the Nyquist frequency.
+    !! @param[out] y An N-element array where the filtered signal will be
+    !!  written.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    !!  - M_INVALID_INPUT_ERROR: Occurs if @p cutoff is either not positive
+    !!      valued, or is greater than or equal to the Nyquist frequency.
+    function c_low_pass_filter(n, x, fs, cutoff, y) &
+            bind(C, name = "c_low_pass_filter") result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n)
+        real(c_double), intent(in), value :: fs, cutoff
+        real(c_double), intent(out) :: y(n)
+
+        ! Local Variables
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        y = low_pass_filter(x, fs, cutoff, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+    end function
 
 ! ------------------------------------------------------------------------------
 
