@@ -222,7 +222,7 @@ double c_confidence_interval(int n, const double *x, double zval);
  *
  * @param mu The population mean.
  * @param sigma The population standard deviation.
- * @param n The number of values at which to evaluat the function.
+ * @param n The number of values at which to evaluate the function.
  * @param x An N-element array containing the values at which to 
  *  evaluate the distrubition funciton.
  * @param f An N-element array where the function output will be
@@ -578,7 +578,7 @@ int c_linear_least_squares_mimo(int m, int n, int k, const double *x, int ldx,
  * @param ldx The leading dimension of matrix X.
  * @param y A K-element array containing the known dependent 
  *  variables.
- * @param The N element coefficient array A.
+ * @param a The N-element coefficient array A.
  *
  * @return An error flag with the following possible values.
  *  - M_NO_ERROR: No error occurred.  Normal operation.
