@@ -1370,8 +1370,74 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Computes an FFT of a data set.  The results of the transform
+    !! are normalized such that an inverse transform will result in the 
+    !! original signal.
+    !!
+    !! @param[in] n The length of the array.
+    !! @param[in] x An N-element array containing the data to transform.
+    !! @param[out] f An N-element array where the transformed data will be 
+    !!  written.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    function c_fft(n, x, f) bind(C, name = "c_fft") result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n)
+        complex(c_double), intent(out) :: f(n)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        f = fft(x, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+    end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Computes the inverse FFT of a data set.
+    !!
+    !! @param[in] n The length of the array.
+    !! @param[in] x An N-element array containing the data to transform.
+    !! @param[out] f An N-element array where the transformed data will be 
+    !!  written.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    function c_ifft(n, x, f) bind(C, name = "c_ifft") result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: n
+        complex(c_double), intent(in) :: x(n)
+        complex(c_double), intent(out) :: f(n)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        f = ifft(x, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+    end function
 
 ! ------------------------------------------------------------------------------
 

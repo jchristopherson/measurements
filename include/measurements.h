@@ -836,6 +836,38 @@ int c_band_pass_filter(int n, const double *x, double fs, double cutoff1,
 int c_band_stop_filter(int n, const double *x, double fs, double cutoff1,
     double cutoff2, double *y);
 
+/**
+ * Computes an FFT of a data set.  The results of the transform
+ * are normalized such that an inverse transform will result in the 
+ * original signal.
+ *
+ * @param n The length of the array.
+ * @param x An N-element array containing the data to transform.
+ * @param f An N-element array where the transformed data will be 
+ *  written.
+ *
+ * @return An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ */
+int c_fft(int n, const double *x, double complex *f);
+
+/**
+ * Computes the inverse FFT of a data set.
+ *
+ * @param n The length of the array.
+ * @param x An N-element array containing the data to transform.
+ * @param f An N-element array where the transformed data will be 
+ *  written.
+ *
+ * @return An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ */
+int c_ifft(int n, const double complex *x, double complex *f);
+
 #ifdef __cplusplus
 }
 #endif  // __cplusplus

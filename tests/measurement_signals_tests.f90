@@ -27,6 +27,9 @@ program main
     local = low_pass_filter_test()
     if (.not.local) overall = .false.
 
+    local = fft_test()
+    if (.not.local) overall = .false.
+
     ! --------------------------------------------------------------------------
     ! End
     if (overall) then

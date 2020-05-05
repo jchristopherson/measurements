@@ -1583,6 +1583,46 @@ module measurements_core
             integer(int32), intent(in) :: j, n
             real(real64) :: x
         end function
+
+        !> @brief Computes an FFT of a data set.  The results of the transform
+        !! are normalized such that an inverse transform will result in the 
+        !! original signal.
+        !!
+        !! @param[in] x An N-element array containing the data to transform.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!
+        !! @return The complex-valued Fourier transform of @p x.
+        module function fft(x, err) result(f)
+            real(real64), intent(in), dimension(:) :: x
+            class(errors), intent(inout), optional, target :: err
+            complex(real64), allocatable, dimension(:) :: f
+        end function
+
+        !> @brief Computes the inverse FFT of a data set.
+        !!
+        !! @param[in] x An N-element array containing the data to transform.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!
+        !! @return The resulting inverse Fourier transform of @p x.
+        module function ifft(x, err) result(f)
+            complex(real64), intent(in), dimension(:) :: x
+            class(errors), intent(inout), optional, target :: err
+            complex(real64), allocatable, dimension(:) :: f
+        end function
     end interface
 
 ! ******************************************************************************

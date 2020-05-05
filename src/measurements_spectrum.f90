@@ -2,6 +2,7 @@
 
 submodule (measurements_core) measurements_spectrum
     use real_transform_routines, only : rfft1i, rfft1b, rfft1f
+    use complex_transform_routines, only : cfft1i, cfft1b, cfft1f
 
     ! Constants
     real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
@@ -225,6 +226,94 @@ pure module function blackman_harris_window(j, n) result(x)
         0.48829d0 * cos(2.0d0 * pi * j / n) + &
         0.14128d0 * cos(4.0d0 * pi * j / n) - &
         0.01168d0 * cos(6.0d0 * pi * j / n)
+end function
+
+! ******************************************************************************
+! FFT ROUTINES
+! ------------------------------------------------------------------------------
+module function fft(x, err) result(f)
+    ! Arguments
+    real(real64), intent(in), dimension(:) :: x
+    class(errors), intent(inout), optional, target :: err
+    complex(real64), allocatable, dimension(:) :: f
+
+    ! Local Variables
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    integer(int32) :: n, lensav, lenwrk, flag
+    real(real64), allocatable, dimension(:) :: wsave, work
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+    n = size(x)
+    lensav = 2 * n + int(log(real(n, real64)) / log(2.0d0), int32) + 4
+    lenwrk = 2 * n
+
+    ! Local Memory Allocation
+    allocate(f(n), stat = flag)
+    if (flag == 0) allocate(wsave(lensav), stat = flag)
+    if (flag == 0) allocate(work(lenwrk), stat = flag)
+    if (flag /= 0) then
+        call errmgr%report_error("fft", "Insufficient memory available.", &
+            M_OUT_OF_MEMORY_ERROR)
+        return
+    end if
+
+    ! Copy the input over to f
+    f = cmplx(x, kind = real64)
+
+    ! Initialize the transform
+    call cfft1i(n, wsave, lensav, flag)
+
+    ! Compute the transform
+    call cfft1f(n, 1, f, n, wsave, lensav, work, lenwrk, flag)
+end function
+
+! ------------------------------------------------------------------------------
+module function ifft(x, err) result(f)
+    ! Arguments
+    complex(real64), intent(in), dimension(:) :: x
+    class(errors), intent(inout), optional, target :: err
+    complex(real64), allocatable, dimension(:) :: f
+
+    ! Local Variables
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    integer(int32) :: n, lensav, lenwrk, flag
+    real(real64), allocatable, dimension(:) :: wsave, work
+    
+    ! Initialization
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+    n = size(x)
+    lensav = 2 * n + int(log(real(n, real64)) / log(2.0d0), int32) + 4
+    lenwrk = 2 * n
+
+    ! Local Memory Allocation
+    allocate(f(n), stat = flag)
+    if (flag == 0) allocate(wsave(lensav), stat = flag)
+    if (flag == 0) allocate(work(lenwrk), stat = flag)
+    if (flag /= 0) then
+        call errmgr%report_error("fft", "Insufficient memory available.", &
+            M_OUT_OF_MEMORY_ERROR)
+        return
+    end if
+
+    ! Copy the input over to f
+    f = x
+
+    ! Initialize the transform
+    call cfft1i(n, wsave, lensav, flag)
+
+    ! Compute the transform
+    call cfft1b(n, 1, f, n, wsave, lensav, work, lenwrk, flag)
 end function
 
 ! ******************************************************************************
