@@ -294,8 +294,122 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function finite_diff_test() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Parameters
+        integer(int32), parameter:: npts = 1024
+        real(real64), parameter :: fs = 1024.0d0
+        real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
+        real(real64), parameter :: f1 = 5.0d0
+        real(real64), parameter :: f2 = 50.0d0
+        real(real64), parameter :: x1 = 3.0d0
+        real(real64), parameter :: x2 = 0.5d0
+        real(real64), parameter :: tol = 1.0d-1
+
+        ! Local Variables
+        integer(int32) :: i
+        real(real64) :: w1, w2, dt, delta, maxX, scaledTol, &
+            t(npts), x(npts), dxdt(npts), ans(npts), xi(npts)
+
+        ! Initialization
+        rst = .true.
+        dt = 1.0d0 / fs
+        t(1) = 0.0d0
+        do i = 2, npts
+            t(i) = t(i-1) + dt
+        end do
+        w1 = 2.0d0 * pi * f1
+        w2 = 2.0d0 * pi * f2
+        x = x1 * sin(w1 * t) + x2 * sin(w2 * t)
+        ans = w1 * x1 * cos(w1 * t) + w2 * x2 * cos(w2 * t)
+        
+        ! Utilize finite_difference
+        dxdt = finite_difference(t, x)
+
+        ! Test
+        maxX = maxval(ans)
+        scaledTol = tol * maxX
+        do i = 1, npts
+            delta = ans(i) - dxdt(i)
+            if (abs(delta) > scaledTol) then
+                rst = .false.
+                print '(A)', "FINITE_DIFF_TEST FAILED."
+                print *, "Expected: ", ans(i)
+                print *, "Computed: ", dxdt(i)
+                print *, "Difference (Expected - Computed): ", delta
+                print *, "Index: ", i
+            end if
+        end do
+
+        ! Integrate the computed dydx to see if we arrive back at x(t)
+        xi = integrate(t, ans, 0.0d0) ! initial value at t = 0 is 0.
+
+        ! Test
+        maxX = maxval(x)
+        scaledTol = tol * maxX
+        do i = 1, npts
+            delta = x(i) - xi(i)
+            if (abs(delta) > scaledTol) then
+                rst = .false.
+                print '(A)', "FINITE_DIFF_TEST FAILED - INTEGRATION CHECK."
+                print *, "Expected: ", x(i)
+                print *, "Computed: ", xi(i)
+                print *, "Difference (Expected - Computed): ", delta
+                print *, "Index: ", i
+            end if
+        end do
+    end function
 
 ! ------------------------------------------------------------------------------
+    function remove_offset_test() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Parameters
+        integer(int32), parameter:: npts = 1024
+        real(real64), parameter :: fs = 1024.0d0
+        real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
+        real(real64), parameter :: f1 = 5.0d0
+        real(real64), parameter :: f2 = 50.0d0
+        real(real64), parameter :: x1 = 3.0d0
+        real(real64), parameter :: x2 = 0.5d0
+        real(real64), parameter :: tol = 1.0d-8
+
+        ! Local Variables
+        integer(int32) :: i
+        real(real64) :: w1, w2, dt, delta, &
+            t(npts), x(npts), ans(npts), xi(npts)
+
+        ! Initialization
+        rst = .true.
+        dt = 1.0d0 / fs
+        t(1) = 0.0d0
+        do i = 2, npts
+            t(i) = t(i-1) + dt
+        end do
+        w1 = 2.0d0 * pi * f1
+        w2 = 2.0d0 * pi * f2
+        ans = x1 * sin(w1 * t) + x2 * sin(w2 * t)
+        x = ans + 0.5d0 ! add in a DC offset
+
+        ! Remove the offset
+        xi = remove_dc_offset(x)
+
+        ! Test
+        do i = 1, npts
+            delta = ans(i) - xi(i)
+            if (abs(delta) > tol) then
+                rst = .false.
+                print '(A)', "REMOVE_OFFSET_TEST FAILED."
+                print *, "Expected: ", ans(i)
+                print *, "Computed: ", xi(i)
+                print *, "Difference (Expected - Computed): ", delta
+                print *, "Index: ", i
+            end if
+        end do
+    end function
 
 ! ------------------------------------------------------------------------------
 

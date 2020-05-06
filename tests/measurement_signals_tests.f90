@@ -30,6 +30,12 @@ program main
     local = fft_test()
     if (.not.local) overall = .false.
 
+    local = finite_diff_test()
+    if (.not.local) overall = .false.
+
+    local = remove_offset_test()
+    if (.not.local) overall = .false.
+
     ! --------------------------------------------------------------------------
     ! End
     if (overall) then
