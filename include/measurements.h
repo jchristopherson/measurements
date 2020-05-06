@@ -868,6 +868,114 @@ int c_fft(int n, const double *x, double complex *f);
  */
 int c_ifft(int n, const double complex *x, double complex *f);
 
+/**
+ * Computes the cumulative sum of an array.
+ *
+ * @param n The length of the array.
+ * @param x The N-element array on which to operate.
+ * @param y The N-element array where the solution will be written.
+ *
+ * @return An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ */
+int c_cumulative_sum(int n, const double *x, double *y);
+
+/**
+ * Computes the differences between each element in the array.
+ *
+ * @param n The length of the array.
+ * @param x The N-element array on which to operate.
+ * @param dx An N-1 element array where the solution will be written.
+ *
+ * @return An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ */
+int c_difference(int n, const double *x, double *dx);
+
+/**
+ * Unwraps an array of phase angles.
+ *
+ * @param n The array length.
+ * @param x The N-element array to unwrap.
+ * @param cutoff An input that specifies the threshold value to use 
+ *  when unwrapping steps in @p x.
+ * @param y The N-element array where the results will be written.
+ *
+ * @return An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ */
+int c_unwrap(int n, const double *x, double cutoff, double *y);
+
+/**
+ * Estimates the derivative of a discretely sampled signal by means
+ * of finite differences.
+ *
+ * @param n The length of the arrays.
+ * @param x The N-element array containing the independent variable 
+ *  data.
+ * @parma y The N-element array containing the dependent variable
+ *  data.
+ * @param dydx An N-element array where the results will be written.
+ *
+ * @return An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ */
+int c_finite_difference(int n, const double *x, const double *y, double *dydx);
+
+/**
+ * Estimates the indefinite integral of a discretely sampled signal.
+ *
+ * @param n The length of the arrays.
+ * @param x The N-element array containing the independent variable 
+ *  data.
+ * @parma y The N-element array containing the dependent variable
+ *  data.
+ * @param c The initial condition.
+ * @param f An N-element array where the results will be written.
+ *
+ * @return An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ */
+int c_integrate(int n, const double *x, const double *y, double c, double *f);
+
+/**
+ * Estimates the definite integral of a discretely sampled signal
+ * using a trapezoidal approach.
+ *
+ * @param n The length of the arrays.
+ * @param x The N-element array containing the independent variable 
+ *  data.
+ * @parma y The N-element array containing the dependent variable
+ *  data.
+ *
+ * @return The result of the integration.
+ */
+double c_trapz_integrate(int n, const double *x, const double *y);
+
+/**
+ * Removes the DC offset from a signal.
+ *
+ * @param n The array length.
+ * @param x The N-element array on which to operate.
+ * @param y An N-element array where the results will be written.
+ *
+ * @return An error flag with the following possible values.
+ *  - M_NO_ERROR: No error occurred.  Normal operation.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ */
+int c_remove_dc_offset(int n, const double *x, double *y);
+
 #ifdef __cplusplus
 }
 #endif  // __cplusplus

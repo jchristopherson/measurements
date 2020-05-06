@@ -1440,6 +1440,240 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Computes the cumulative sum of an array.
+    !!
+    !! @param[in] n The length of the array.
+    !! @param[in] x The N-element array on which to operate.
+    !! @param[out] y The N-element array where the solution will be written.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    function c_cumulative_sum(n, x, y) bind(C, name = "c_cumulative_sum") &
+            result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n)
+        real(c_double), intent(out) :: y(n)
+        integer(c_int) :: flag
+
+        ! Local Variabes
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        y = cumulative_sum(x, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Computes the differences between each element in the array.
+    !!
+    !! @param[in] n The length of the array.
+    !! @param[in] x The N-element array on which to operate.
+    !! @param[out] dx An N-1 element array where the solution will be written.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    function c_difference(n, x, dx) bind(C, name = "c_difference") result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n)
+        real(c_double), intent(out) :: dx(n-1)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        dx = difference(x, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Unwraps an array of phase angles.
+    !!
+    !! @param[in] n The array length.
+    !! @param[in] x The N-element array to unwrap.
+    !! @param[in] cutoff An input that specifies the threshold value to use 
+    !!  when unwrapping steps in @p x.
+    !! @param[out] y The N-element array where the results will be written.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    function c_unwrap(n, x, cutoff, y) bind(C, name = "c_unwrap") result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n)
+        real(c_double), intent(in), value :: cutoff
+        real(c_double), intent(out) :: y(n)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        y = unwrap(x, cutoff, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Estimates the derivative of a discretely sampled signal by means
+    !! of finite differences.
+    !!
+    !! @param[in] n The length of the arrays.
+    !! @param[in] x The N-element array containing the independent variable 
+    !!  data.
+    !! @parma[in] y The N-element array containing the dependent variable
+    !!  data.
+    !! @param[out] dydx An N-element array where the results will be written.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    function c_finite_difference(n, x, y, dydx) &
+            bind(C, name = "c_finite_difference") result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n), y(n)
+        real(c_double), intent(out) :: dydx(n)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        dydx = finite_difference(x, y, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Estimates the indefinite integral of a discretely sampled signal.
+    !!
+    !! @param[in] n The length of the arrays.
+    !! @param[in] x The N-element array containing the independent variable 
+    !!  data.
+    !! @parma[in] y The N-element array containing the dependent variable
+    !!  data.
+    !! @param[in] c The initial condition.
+    !! @param[out] f An N-element array where the results will be written.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    function c_integrate(n, x, y, c, f) bind(C, name = "c_integrate") &
+            result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n), y(n)
+        real(c_double), intent(in), value :: c
+        real(c_double), intent(out) :: f(n)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        f = integrate(x, y, c, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Estimates the definite integral of a discretely sampled signal
+    !! using a trapezoidal approach.
+    !!
+    !! @param[in] n The length of the arrays.
+    !! @param[in] x The N-element array containing the independent variable 
+    !!  data.
+    !! @parma[in] y The N-element array containing the dependent variable
+    !!  data.
+    !!
+    !! @return The result of the integration.
+    function c_trapz_integrate(n, x, y) bind(C, name = "c_trapz_integrate") &
+            result(f)
+        ! Arguments
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n), y(n)
+        real(c_double) :: f
+
+        ! Process
+        f = trapz_integrate(x, y)
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Removes the DC offset from a signal.
+    !!
+    !! @param[in] n The array length.
+    !! @param[in] x The N-element array on which to operate.
+    !! @param[out] y An N-element array where the results will be written.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_NO_ERROR: No error occurred.  Normal operation.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    function c_remove_dc_offset(n, x, y) bind(C, name = "c_remove_dc_offset") &
+            result(flag)
+        ! Arguments
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n)
+        real(c_double), intent(out) :: y(n)
+        integer(c_int) :: flag
+
+        ! Local Variables
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Process
+        y = remove_dc_offset(x, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+    end function
 
 ! ------------------------------------------------------------------------------
 end module

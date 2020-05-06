@@ -1736,9 +1736,163 @@ module measurements_core
         end function
     end interface
 
+! ******************************************************************************
+! MEASUREMENTS_ARRAY.F90
 ! ------------------------------------------------------------------------------
+    interface
+        !> @brief Computes the cumulative sum of an array.
+        !!
+        !! @param[in] x The N-element array on which to operate.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!
+        !! @return The resulting N-element array.
+        module function cumulative_sum(x, err) result(y)
+            real(real64), intent(in), dimension(:) :: x
+            class(errors), intent(inout), optional, target :: err
+            real(real64), allocatable, dimension(:) :: y
+        end function
 
-! ------------------------------------------------------------------------------
+        !> @brief Computes the differences between each element in the array.
+        !!
+        !! @param[in] x The N-element array on which to operate.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!
+        !! @return The N-1 element array containing the differences between 
+        !!  each element in @p x.
+        module function difference(x, err) result(dx)
+            real(real64), intent(in), dimension(:) :: x
+            class(errors), intent(inout), optional, target :: err
+            real(real64), allocatable, dimension(:) :: dx
+        end function
 
+        !> @brief Unwraps an array of phase angles.
+        !!
+        !! @param[in] x The array to unwrap.
+        !! @param[in] cutoff  An optional input that specifies the threshold
+        !!  value to use when unwrapping steps in @p x.  The default is pi.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!
+        !! @return The unwraped phase array.
+        module function unwrap(x, cutoff, err) result(p)
+            real(real64), intent(in), dimension(:) :: x
+            real(real64), intent(in), optional :: cutoff
+            class(errors), intent(inout), optional, target :: err
+            real(real64), allocatable, dimension(:) :: p
+        end function
+
+        !> @brief Estimates the derivative of a discretely sampled signal by
+        !! means of finite differences.
+        !!
+        !! @param[in] x The N-element array containing the independent variable
+        !!  data.
+        !! @parma[in] y The N-element array containing the dependent variable
+        !!  data.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!  - M_ARRAY_SIZE_ERROR: Occurs if @p x and @p y are not the same size.
+        !!
+        !! @return The N-element derivative estimate.
+        module function finite_difference(x, y, err) result(dydx)
+            real(real64), intent(in), dimension(:) :: x, y
+            class(errors), intent(inout), optional, target :: err
+            real(real64), allocatable, dimension(:) :: dydx
+        end function
+
+        !> @brief Estimates the indefinite integral of a discretely sampled
+        !! signal.
+        !!
+        !! @param[in] x The N-element array containing the independent variable
+        !!  data.
+        !! @parma[in] y The N-element array containing the dependent variable
+        !!  data.
+        !! @param[in] c An optional input defining the initial condition.  The
+        !!  default is 0.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!  - M_ARRAY_SIZE_ERROR: Occurs if @p x and @p y are not the same size.
+        !!
+        !! @return The N-element integral estimate.
+        module function integrate(x, y, c, err) result(f)
+            real(real64), intent(in), dimension(:) :: x, y
+            real(real64), intent(in), optional :: c
+            class(errors), intent(inout), optional, target :: err
+            real(real64), allocatable, dimension(:) :: f
+        end function
+
+        !> @brief Estimates the definite integral of a discretely sampled signal
+        !! using a trapezoidal approach.
+        !!
+        !! @param[in] The N-element array containing the independent variable
+        !!  data.
+        !! @parma[in] y The N-element array containing the dependent variable
+        !!  data.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_ARRAY_SIZE_ERROR: Occurs if @p x and @p y are not the same size.
+        !!
+        !! @return The result of the integration.
+        module function trapz_integrate(x, y, err) result(f)
+            real(real64), intent(in), dimension(:) :: x, y
+            class(errors), intent(inout), optional, target :: err
+            real(real64) :: f
+        end function
+
+        !> @brief Removes the DC offset from a signal.
+        !!
+        !! @param[in] x The signal on which to operate.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!
+        !! @return The signal with the DC offset removed.
+        module function remove_dc_offset(x, err) result(y)
+            real(real64), intent(in), dimension(:) :: x
+            class(errors), intent(inout), optional, target :: err
+            real(real64), allocatable, dimension(:) :: y
+        end function
+    end interface
+    
 ! ------------------------------------------------------------------------------
 end module
