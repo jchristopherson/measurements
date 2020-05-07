@@ -1,5 +1,16 @@
 # measurements
-A library that provides routines supporting calculations related to measurement activities.
+A library that provides routines supporting calculations related to measurement activities.  The library contains routines in the following areas:
+- Statistics
+- Linear Regression
+- Data Smoothing
+- Filtering
+- Fourier Transforms
+- Peak Detection
+- Interpolation
+- Differentiation
+- Integration
+
+The library not only exposes a modern Fortran API, but also exposes a C API with equal functionallity.  The entire C API is contained within a single header file.
 
 ## Dependencies
 The measurements library depends upon the following libraries.
