@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['tolerance_5frange_64',['tolerance_range',['../structmeasurements__core_1_1grr__results.html#afcf3352dc03c52c03c2b487306972fe9',1,'measurements_core::grr_results::tolerance_range()'],['../structgrr__results.html#a2776c2f1afcc3af7b2298a40398b0a73',1,'grr_results::tolerance_range()']]],
-  ['total_5fvariance_65',['total_variance',['../structmeasurements__core_1_1process__variance.html#aec5ea59273c586f9b22c6220b9d12b54',1,'measurements_core::process_variance::total_variance()'],['../structprocess__variance.html#a7b154927ce05084d5f39a13f927f8cf6',1,'process_variance::total_variance()']]]
+  ['spline_5fcontinuous_5fthird_5fderivative_222',['spline_continuous_third_derivative',['../namespacemeasurements__core.html#a79c81ed5c26d065208ba962edb9de3b1',1,'measurements_core']]],
+  ['spline_5fknown_5ffirst_5fderivative_223',['spline_known_first_derivative',['../namespacemeasurements__core.html#a439d328b5d349dd6fcc107dedab267d1',1,'measurements_core']]],
+  ['spline_5fknown_5fsecond_5fderivative_224',['spline_known_second_derivative',['../namespacemeasurements__core.html#a2fad66858f9b2d09f5ebf7896c0a2526',1,'measurements_core']]],
+  ['spline_5fquadratic_5fover_5finterval_225',['spline_quadratic_over_interval',['../namespacemeasurements__core.html#afabf4017c336c5af60615a96dcb7f16d',1,'measurements_core']]]
 ];

@@ -7,6 +7,8 @@ The measurements library depends upon the following libraries.
 - [LINALG](https://github.com/jchristopherson/linalg)
 - [NONLIN](https://github.com/jchristopherson/nonlin)
 
+This library also makes use of the [modern_fftpack](https://github.com/jlokimlin/modern_fftpack) library, but embeds it as a submodule.
+
 ## Peak Detection Example
 The following example highlights basic usage of the peak-detection functionallity.
 

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['grr_5fresults_19',['grr_results',['../structmeasurements__core_1_1grr__results.html',1,'measurements_core::grr_results'],['../structgrr__results.html',1,'grr_results']]]
+  ['first_5fderivative_56',['first_derivative',['../structmeasurements__core_1_1spline__interp.html#a52aa3d82305d7723b06365b39872e19b',1,'measurements_core::spline_interp']]]
 ];

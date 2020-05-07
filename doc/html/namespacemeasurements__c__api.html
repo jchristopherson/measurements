@@ -94,6 +94,7 @@ $(document).ready(function(){initNavTree('namespacemeasurements__c__api.html',''
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Data Types</a> &#124;
 <a href="#func-members">Functions/Subroutines</a>  </div>
   <div class="headertitle">
 <div class="title">measurements_c_api Module Reference</div>  </div>
@@ -103,6 +104,12 @@ $(document).ready(function(){initNavTree('namespacemeasurements__c__api.html',''
 <p>A module providing C bindings to the MEASUREMENTS library.  
 <a href="namespacemeasurements__c__api.html#details">More...</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Data Types</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacemeasurements__c__api_1_1c__window__function.html">c_window_function</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a window function.  <a href="interfacemeasurements__c__api_1_1c__window__function.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
 <tr class="memitem:a49929887cc288f3954a2c4f9a014ab25"><td class="memItemLeft" align="right" valign="top">logical(c_bool) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a49929887cc288f3954a2c4f9a014ab25">c_is_monotonic</a> (n, x)</td></tr>
@@ -126,6 +133,9 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memitem:a4b72ba0fc5149b4891de946ef11d0002"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a4b72ba0fc5149b4891de946ef11d0002">c_z_score</a> (c, z)</td></tr>
 <tr class="memdesc:a4b72ba0fc5149b4891de946ef11d0002"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the z-score typically used in confidence interval calculations.  <a href="namespacemeasurements__c__api.html#a4b72ba0fc5149b4891de946ef11d0002">More...</a><br /></td></tr>
 <tr class="separator:a4b72ba0fc5149b4891de946ef11d0002"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57534e5e463b3f5a6a2e5f13d7f5f45f"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a57534e5e463b3f5a6a2e5f13d7f5f45f">c_t_score</a> (c, n, t)</td></tr>
+<tr class="memdesc:a57534e5e463b3f5a6a2e5f13d7f5f45f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the t-score typically used in confidence interval calculations when the population size is limited.  <a href="namespacemeasurements__c__api.html#a57534e5e463b3f5a6a2e5f13d7f5f45f">More...</a><br /></td></tr>
+<tr class="separator:a57534e5e463b3f5a6a2e5f13d7f5f45f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8926790a5fa5878b8b3a889017644428"><td class="memItemLeft" align="right" valign="top">real(c_double) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a8926790a5fa5878b8b3a889017644428">c_confidence_interval</a> (n, x, zval)</td></tr>
 <tr class="memdesc:a8926790a5fa5878b8b3a889017644428"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the confidence interval of a data set.  <a href="namespacemeasurements__c__api.html#a8926790a5fa5878b8b3a889017644428">More...</a><br /></td></tr>
 <tr class="separator:a8926790a5fa5878b8b3a889017644428"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,6 +160,15 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memitem:a6a6e9cf023b90f48dc35d94b259c040e"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a6a6e9cf023b90f48dc35d94b259c040e">c_compute_grr</a> (k, x, usl, lsl, grr)</td></tr>
 <tr class="memdesc:a6a6e9cf023b90f48dc35d94b259c040e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the gauge R&amp;R statistics given a supplied set of process variance data.  <a href="namespacemeasurements__c__api.html#a6a6e9cf023b90f48dc35d94b259c040e">More...</a><br /></td></tr>
 <tr class="separator:a6a6e9cf023b90f48dc35d94b259c040e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a606a9233befe51c5c7daa7b67c4e36af"><td class="memItemLeft" align="right" valign="top">real(c_double) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a606a9233befe51c5c7daa7b67c4e36af">c_discrimination_ratio</a> (tv, mv)</td></tr>
+<tr class="memdesc:a606a9233befe51c5c7daa7b67c4e36af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the discrimination ratio.  <a href="namespacemeasurements__c__api.html#a606a9233befe51c5c7daa7b67c4e36af">More...</a><br /></td></tr>
+<tr class="separator:a606a9233befe51c5c7daa7b67c4e36af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60945c9c943ac27a95b897ce48669a94"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a60945c9c943ac27a95b897ce48669a94">c_t_test</a> (n1, x1, n2, x2, method, rst)</td></tr>
+<tr class="memdesc:a60945c9c943ac27a95b897ce48669a94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies Student's t-test to compute the t-statistic. A two-tailed distribution is assumed.  <a href="namespacemeasurements__c__api.html#a60945c9c943ac27a95b897ce48669a94">More...</a><br /></td></tr>
+<tr class="separator:a60945c9c943ac27a95b897ce48669a94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaafaadcfe5bf571ce65aded0743ce97d"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#aaafaadcfe5bf571ce65aded0743ce97d">c_f_test</a> (n1, x1, n2, x2, rst)</td></tr>
+<tr class="memdesc:aaafaadcfe5bf571ce65aded0743ce97d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies the F-test for different variances.  <a href="namespacemeasurements__c__api.html#aaafaadcfe5bf571ce65aded0743ce97d">More...</a><br /></td></tr>
+<tr class="separator:aaafaadcfe5bf571ce65aded0743ce97d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a60dc5d1fb0634a8095e20e2a81d063"><td class="memItemLeft" align="right" valign="top">real(c_double) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a8a60dc5d1fb0634a8095e20e2a81d063">c_regularized_beta</a> (x, a, b)</td></tr>
 <tr class="memdesc:a8a60dc5d1fb0634a8095e20e2a81d063"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the value of the regularized beta function.  <a href="namespacemeasurements__c__api.html#a8a60dc5d1fb0634a8095e20e2a81d063">More...</a><br /></td></tr>
 <tr class="separator:a8a60dc5d1fb0634a8095e20e2a81d063"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,6 +178,96 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memitem:abaa301987185ab3150c889098dee9542"><td class="memItemLeft" align="right" valign="top">real(c_double) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#abaa301987185ab3150c889098dee9542">c_incomplete_beta</a> (x, a, b)</td></tr>
 <tr class="memdesc:abaa301987185ab3150c889098dee9542"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the incomplete beta function.  <a href="namespacemeasurements__c__api.html#abaa301987185ab3150c889098dee9542">More...</a><br /></td></tr>
 <tr class="separator:abaa301987185ab3150c889098dee9542"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85f452e6cbbf9e74b6f5f58031894052"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a85f452e6cbbf9e74b6f5f58031894052">c_interpolate</a> (order, npts, x, y, ni, xi, yi)</td></tr>
+<tr class="memdesc:a85f452e6cbbf9e74b6f5f58031894052"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a polynomial interpolation.  <a href="namespacemeasurements__c__api.html#a85f452e6cbbf9e74b6f5f58031894052">More...</a><br /></td></tr>
+<tr class="separator:a85f452e6cbbf9e74b6f5f58031894052"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2291df45efba28ff274d87e0cdde664c"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a2291df45efba28ff274d87e0cdde664c">c_spline</a> (npts, x, y, ni, xi, yi, ibcbeg, ybcbeg, ibcend, ybcend)</td></tr>
+<tr class="memdesc:a2291df45efba28ff274d87e0cdde664c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a spline interpolation.  <a href="namespacemeasurements__c__api.html#a2291df45efba28ff274d87e0cdde664c">More...</a><br /></td></tr>
+<tr class="separator:a2291df45efba28ff274d87e0cdde664c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4a970eb8a947a368f7b5b82bc51ee77"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#ad4a970eb8a947a368f7b5b82bc51ee77">c_lowess_smoothing</a> (npts, x, y, factor, ys)</td></tr>
+<tr class="memdesc:ad4a970eb8a947a368f7b5b82bc51ee77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Smooths a data set using a robust locally weighted scatterplot smoothing (LOWESS) algorithm.  <a href="namespacemeasurements__c__api.html#ad4a970eb8a947a368f7b5b82bc51ee77">More...</a><br /></td></tr>
+<tr class="separator:ad4a970eb8a947a368f7b5b82bc51ee77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c4fa6a6ff8f281f7af34a8a2102d25b"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a5c4fa6a6ff8f281f7af34a8a2102d25b">c_moving_average</a> (npts, x, navg)</td></tr>
+<tr class="memdesc:a5c4fa6a6ff8f281f7af34a8a2102d25b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a moving average to smooth a data set.  <a href="namespacemeasurements__c__api.html#a5c4fa6a6ff8f281f7af34a8a2102d25b">More...</a><br /></td></tr>
+<tr class="separator:a5c4fa6a6ff8f281f7af34a8a2102d25b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a064ec2cfc8746839a6087533ef6a2581"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a064ec2cfc8746839a6087533ef6a2581">c_linear_least_squares_mimo</a> (m, n, k, x, ldx, y, ldy, a, lda)</td></tr>
+<tr class="memdesc:a064ec2cfc8746839a6087533ef6a2581"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fits the multiple input, multiple output linear model A * X = Y by solving for matrix A in a least-squares sense.  <a href="namespacemeasurements__c__api.html#a064ec2cfc8746839a6087533ef6a2581">More...</a><br /></td></tr>
+<tr class="separator:a064ec2cfc8746839a6087533ef6a2581"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98c3a56138bf43c948f98f401b8adc3d"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a98c3a56138bf43c948f98f401b8adc3d">c_linear_least_squares_miso</a> (n, k, x, ldx, y, a)</td></tr>
+<tr class="memdesc:a98c3a56138bf43c948f98f401b8adc3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fits the multiple input, single output linear model A * X = Y by solving for array A in a least-squares sense.  <a href="namespacemeasurements__c__api.html#a98c3a56138bf43c948f98f401b8adc3d">More...</a><br /></td></tr>
+<tr class="separator:a98c3a56138bf43c948f98f401b8adc3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9495b3765dd93a094b8662c351c3fa1"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#af9495b3765dd93a094b8662c351c3fa1">c_peak_detect</a> (n, x, delta, szmxind, mxind, nmxind, szmnind, mnind, nmnind)</td></tr>
+<tr class="memdesc:af9495b3765dd93a094b8662c351c3fa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to locate all peaks and valleys within the given data set bound by the constraints specified.  <a href="namespacemeasurements__c__api.html#af9495b3765dd93a094b8662c351c3fa1">More...</a><br /></td></tr>
+<tr class="separator:af9495b3765dd93a094b8662c351c3fa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01b89bc637dcb57172cf7486facacfda"><td class="memItemLeft" align="right" valign="top">logical(c_bool) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a01b89bc637dcb57172cf7486facacfda">c_is_power_of_two</a> (n)</td></tr>
+<tr class="memdesc:a01b89bc637dcb57172cf7486facacfda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests to see if a number is an integer power of two.  <a href="namespacemeasurements__c__api.html#a01b89bc637dcb57172cf7486facacfda">More...</a><br /></td></tr>
+<tr class="separator:a01b89bc637dcb57172cf7486facacfda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54b4edfaf99a0292fec158cc515b08b8"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a54b4edfaf99a0292fec158cc515b08b8">c_next_power_of_two</a> (x)</td></tr>
+<tr class="memdesc:a54b4edfaf99a0292fec158cc515b08b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides the next higher integer power of two.  <a href="namespacemeasurements__c__api.html#a54b4edfaf99a0292fec158cc515b08b8">More...</a><br /></td></tr>
+<tr class="separator:a54b4edfaf99a0292fec158cc515b08b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d66737d08965cdebf8d5dd4f846653f"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a4d66737d08965cdebf8d5dd4f846653f">c_fourier_transform</a> (n, x, nf, f)</td></tr>
+<tr class="memdesc:a4d66737d08965cdebf8d5dd4f846653f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the Fourier transform of a discretely sampled signal.  <a href="namespacemeasurements__c__api.html#a4d66737d08965cdebf8d5dd4f846653f">More...</a><br /></td></tr>
+<tr class="separator:a4d66737d08965cdebf8d5dd4f846653f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45fad10762366d35dd3800e2dedb3ee2"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a45fad10762366d35dd3800e2dedb3ee2">c_periodogram</a> (n, x, winfun, nfft, np, p)</td></tr>
+<tr class="memdesc:a45fad10762366d35dd3800e2dedb3ee2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the periodogram power spectral density (PSD) estimate of a signal.  <a href="namespacemeasurements__c__api.html#a45fad10762366d35dd3800e2dedb3ee2">More...</a><br /></td></tr>
+<tr class="separator:a45fad10762366d35dd3800e2dedb3ee2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0bdb886c78d52c5d79028234be8517b"><td class="memItemLeft" align="right" valign="top">real(c_double) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#ae0bdb886c78d52c5d79028234be8517b">c_fourier_frequency</a> (fs, i, nxfrm)</td></tr>
+<tr class="memdesc:ae0bdb886c78d52c5d79028234be8517b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a suitable frequency for a Fourier transformed data set.  <a href="namespacemeasurements__c__api.html#ae0bdb886c78d52c5d79028234be8517b">More...</a><br /></td></tr>
+<tr class="separator:ae0bdb886c78d52c5d79028234be8517b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c12de3e95afe47fd0d1ee405172fe46"><td class="memItemLeft" align="right" valign="top">real(c_double) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a3c12de3e95afe47fd0d1ee405172fe46">c_rectangular_window</a> (j, n)</td></tr>
+<tr class="memdesc:a3c12de3e95afe47fd0d1ee405172fe46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a rectangular window.  <a href="namespacemeasurements__c__api.html#a3c12de3e95afe47fd0d1ee405172fe46">More...</a><br /></td></tr>
+<tr class="separator:a3c12de3e95afe47fd0d1ee405172fe46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdc52b180e62750f8a16d41cf18894f8"><td class="memItemLeft" align="right" valign="top">real(c_double) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#abdc52b180e62750f8a16d41cf18894f8">c_hann_window</a> (j, n)</td></tr>
+<tr class="memdesc:abdc52b180e62750f8a16d41cf18894f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a Hann window.  <a href="namespacemeasurements__c__api.html#abdc52b180e62750f8a16d41cf18894f8">More...</a><br /></td></tr>
+<tr class="separator:abdc52b180e62750f8a16d41cf18894f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10acccf026ba823747d6125eccc26f1a"><td class="memItemLeft" align="right" valign="top">real(c_double) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a10acccf026ba823747d6125eccc26f1a">c_hamming_window</a> (j, n)</td></tr>
+<tr class="memdesc:a10acccf026ba823747d6125eccc26f1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a Hamming window.  <a href="namespacemeasurements__c__api.html#a10acccf026ba823747d6125eccc26f1a">More...</a><br /></td></tr>
+<tr class="separator:a10acccf026ba823747d6125eccc26f1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4667088f89eabf66fbda4d05680598a"><td class="memItemLeft" align="right" valign="top">real(c_double) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#ad4667088f89eabf66fbda4d05680598a">c_welch_window</a> (j, n)</td></tr>
+<tr class="memdesc:ad4667088f89eabf66fbda4d05680598a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a Welch window.  <a href="namespacemeasurements__c__api.html#ad4667088f89eabf66fbda4d05680598a">More...</a><br /></td></tr>
+<tr class="separator:ad4667088f89eabf66fbda4d05680598a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf350c2d0ac3dc4c3bcf269993f8f5e4"><td class="memItemLeft" align="right" valign="top">real(c_double) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#adf350c2d0ac3dc4c3bcf269993f8f5e4">c_blackman_harris_window</a> (j, n)</td></tr>
+<tr class="memdesc:adf350c2d0ac3dc4c3bcf269993f8f5e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a Blackman-Harris window.  <a href="namespacemeasurements__c__api.html#adf350c2d0ac3dc4c3bcf269993f8f5e4">More...</a><br /></td></tr>
+<tr class="separator:adf350c2d0ac3dc4c3bcf269993f8f5e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca9cb883b5a623262fc16c2d65f21f4a"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#aca9cb883b5a623262fc16c2d65f21f4a">c_low_pass_filter</a> (n, x, fs, cutoff, y)</td></tr>
+<tr class="memdesc:aca9cb883b5a623262fc16c2d65f21f4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a low-pass filter to a signal.  <a href="namespacemeasurements__c__api.html#aca9cb883b5a623262fc16c2d65f21f4a">More...</a><br /></td></tr>
+<tr class="separator:aca9cb883b5a623262fc16c2d65f21f4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b95d275949c3928cf7ecaf7196d76cc"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a9b95d275949c3928cf7ecaf7196d76cc">c_high_pass_filter</a> (n, x, fs, cutoff, y)</td></tr>
+<tr class="memdesc:a9b95d275949c3928cf7ecaf7196d76cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a high-pass filter to a signal.  <a href="namespacemeasurements__c__api.html#a9b95d275949c3928cf7ecaf7196d76cc">More...</a><br /></td></tr>
+<tr class="separator:a9b95d275949c3928cf7ecaf7196d76cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a2b1213a23b7a54af5e463f41ffee81"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a9a2b1213a23b7a54af5e463f41ffee81">c_band_pass_filter</a> (n, x, fs, cutoff1, cutoff2, y)</td></tr>
+<tr class="memdesc:a9a2b1213a23b7a54af5e463f41ffee81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a band-pass filter to a signal.  <a href="namespacemeasurements__c__api.html#a9a2b1213a23b7a54af5e463f41ffee81">More...</a><br /></td></tr>
+<tr class="separator:a9a2b1213a23b7a54af5e463f41ffee81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66e30320d29da303bdaf5eda12a0ca52"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a66e30320d29da303bdaf5eda12a0ca52">c_band_stop_filter</a> (n, x, fs, cutoff1, cutoff2, y)</td></tr>
+<tr class="memdesc:a66e30320d29da303bdaf5eda12a0ca52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a band-stop filter to a signal.  <a href="namespacemeasurements__c__api.html#a66e30320d29da303bdaf5eda12a0ca52">More...</a><br /></td></tr>
+<tr class="separator:a66e30320d29da303bdaf5eda12a0ca52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2ecfc9575722e158aa1f28953761871"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#ab2ecfc9575722e158aa1f28953761871">c_fft</a> (n, x, f)</td></tr>
+<tr class="memdesc:ab2ecfc9575722e158aa1f28953761871"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes an FFT of a data set. The results of the transform are normalized such that an inverse transform will result in the original signal.  <a href="namespacemeasurements__c__api.html#ab2ecfc9575722e158aa1f28953761871">More...</a><br /></td></tr>
+<tr class="separator:ab2ecfc9575722e158aa1f28953761871"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a786e617215e9b2d37bacdb3bec4504d5"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a786e617215e9b2d37bacdb3bec4504d5">c_ifft</a> (n, x, f)</td></tr>
+<tr class="memdesc:a786e617215e9b2d37bacdb3bec4504d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the inverse FFT of a data set.  <a href="namespacemeasurements__c__api.html#a786e617215e9b2d37bacdb3bec4504d5">More...</a><br /></td></tr>
+<tr class="separator:a786e617215e9b2d37bacdb3bec4504d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab676d31e113aba8aef34328c3750b75e"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#ab676d31e113aba8aef34328c3750b75e">c_cumulative_sum</a> (n, x, y)</td></tr>
+<tr class="memdesc:ab676d31e113aba8aef34328c3750b75e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the cumulative sum of an array.  <a href="namespacemeasurements__c__api.html#ab676d31e113aba8aef34328c3750b75e">More...</a><br /></td></tr>
+<tr class="separator:ab676d31e113aba8aef34328c3750b75e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7154189af0f87f74449ee93997f66cd3"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a7154189af0f87f74449ee93997f66cd3">c_difference</a> (n, x, dx)</td></tr>
+<tr class="memdesc:a7154189af0f87f74449ee93997f66cd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the differences between each element in the array.  <a href="namespacemeasurements__c__api.html#a7154189af0f87f74449ee93997f66cd3">More...</a><br /></td></tr>
+<tr class="separator:a7154189af0f87f74449ee93997f66cd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac778f3118b3187d5e1f28a0b00f5be06"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#ac778f3118b3187d5e1f28a0b00f5be06">c_unwrap</a> (n, x, cutoff, y)</td></tr>
+<tr class="memdesc:ac778f3118b3187d5e1f28a0b00f5be06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unwraps an array of phase angles.  <a href="namespacemeasurements__c__api.html#ac778f3118b3187d5e1f28a0b00f5be06">More...</a><br /></td></tr>
+<tr class="separator:ac778f3118b3187d5e1f28a0b00f5be06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e83d49bfe29d5df6acaf951abbfb0e4"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a6e83d49bfe29d5df6acaf951abbfb0e4">c_finite_difference</a> (n, x, y, dydx)</td></tr>
+<tr class="memdesc:a6e83d49bfe29d5df6acaf951abbfb0e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estimates the derivative of a discretely sampled signal by means of finite differences.  <a href="namespacemeasurements__c__api.html#a6e83d49bfe29d5df6acaf951abbfb0e4">More...</a><br /></td></tr>
+<tr class="separator:a6e83d49bfe29d5df6acaf951abbfb0e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c7bf9b068c2e827c4214a2056d9d62a"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#a0c7bf9b068c2e827c4214a2056d9d62a">c_integrate</a> (n, x, y, c, f)</td></tr>
+<tr class="memdesc:a0c7bf9b068c2e827c4214a2056d9d62a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estimates the indefinite integral of a discretely sampled signal.  <a href="namespacemeasurements__c__api.html#a0c7bf9b068c2e827c4214a2056d9d62a">More...</a><br /></td></tr>
+<tr class="separator:a0c7bf9b068c2e827c4214a2056d9d62a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcec0bee6517b46196d18a24ee03a921"><td class="memItemLeft" align="right" valign="top">real(c_double) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#adcec0bee6517b46196d18a24ee03a921">c_trapz_integrate</a> (n, x, y)</td></tr>
+<tr class="memdesc:adcec0bee6517b46196d18a24ee03a921"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estimates the definite integral of a discretely sampled signal using a trapezoidal approach.  <a href="namespacemeasurements__c__api.html#adcec0bee6517b46196d18a24ee03a921">More...</a><br /></td></tr>
+<tr class="separator:adcec0bee6517b46196d18a24ee03a921"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afafbc79f01438df50e6a15a50b654a2c"><td class="memItemLeft" align="right" valign="top">integer(c_int) function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemeasurements__c__api.html#afafbc79f01438df50e6a15a50b654a2c">c_remove_dc_offset</a> (n, x, y)</td></tr>
+<tr class="memdesc:afafbc79f01438df50e6a15a50b654a2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the DC offset from a signal.  <a href="namespacemeasurements__c__api.html#afafbc79f01438df50e6a15a50b654a2c">More...</a><br /></td></tr>
+<tr class="separator:afafbc79f01438df50e6a15a50b654a2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A module providing C bindings to the MEASUREMENTS library. </p>
@@ -227,7 +336,153 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section remark"><dt>Remarks</dt><dd>It is possible for this routine to return zero-valued variance components. In such an event it is recommended that another variance estimator is utilized. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00313">313</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00360">360</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a9a2b1213a23b7a54af5e463f41ffee81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a2b1213a23b7a54af5e463f41ffee81">&#9670;&nbsp;</a></span>c_band_pass_filter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_band_pass_filter </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>fs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>cutoff1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>cutoff2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(out)&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Applies a band-pass filter to a signal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The length of the input array. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>An N-element array containing the signal to filter. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">fs</td><td>The frequency at which <code>x</code> was sampled. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">cutoff1</td><td>The lower cut-off frequency. This value must be positive-valued, and must be less than the Nyquist frequency. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">cutoff2</td><td>The upper cut-off frequency. This value must be positive-valued, and must be less than the Nyquist frequency. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">y</td><td>An N-element array where the filtered signal will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available.</li>
+<li>M_INVALID_INPUT_ERROR: Occurs if <code>cutoff1</code> or <code>cutoff2</code> is either not positive-valued, or is greater than or equal to the Nyquist frequency. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01306">1306</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a66e30320d29da303bdaf5eda12a0ca52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66e30320d29da303bdaf5eda12a0ca52">&#9670;&nbsp;</a></span>c_band_stop_filter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_band_stop_filter </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>fs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>cutoff1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>cutoff2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(out)&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Applies a band-stop filter to a signal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The length of the input array. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>An N-element array containing the signal to filter. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">fs</td><td>The frequency at which <code>x</code> was sampled. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">cutoff1</td><td>The lower cut-off frequency. This value must be positive-valued, and must be less than the Nyquist frequency. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">cutoff2</td><td>The upper cut-off frequency. This value must be positive-valued, and must be less than the Nyquist frequency. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">y</td><td>An N-element array where the filtered signal will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available.</li>
+<li>M_INVALID_INPUT_ERROR: Occurs if <code>cutoff1</code> or <code>cutoff2</code> is either not positive-valued, or is greater than or equal to the Nyquist frequency. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01350">1350</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>
@@ -268,7 +523,7 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The value of the beta function at <code>a</code> and <code>b</code>.</dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>The beta function is related to the gamma function by the following relationship \( \beta(a,b) = \frac{\Gamma(a) \Gamma(b)}{\Gamma(a + b)} \). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00411">411</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00532">532</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>
@@ -329,7 +584,47 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section remark"><dt>Remarks</dt><dd>The beta distribution has the form \( f(x) = \frac{x^{a-1} (1 - x)^{b-1}}{\beta(a,b)} \). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00248">248</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00295">295</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="adf350c2d0ac3dc4c3bcf269993f8f5e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf350c2d0ac3dc4c3bcf269993f8f5e4">&#9670;&nbsp;</a></span>c_blackman_harris_window()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(c_double) function measurements_c_api::c_blackman_harris_window </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>j</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Defines a Blackman-Harris window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">j</td><td>The index or bin number (0 &lt;= <code>bin</code> &lt;= <code>n</code>). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The transform length.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The value of the window function at index <code>j</code>. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01197">1197</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>
@@ -389,7 +684,7 @@ Functions/Subroutines</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00363">363</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00410">410</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>
@@ -414,7 +709,7 @@ Functions/Subroutines</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real(c_double), intent(in)&#160;</td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
           <td class="paramname"><em>zval</em>&#160;</td>
         </tr>
         <tr>
@@ -437,7 +732,7 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The confidence interval as referenced from the population mean.</dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>This value is computed as follows. \( CI = z^{*} \frac{\sigma}{\sqrt{n}} \) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00168">168</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00214">214</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>
@@ -498,7 +793,58 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section remark"><dt>Remarks</dt><dd>This approach is best suited for smaller data sets whose dimension doesn't exceed 25-30. Anything over this size is better served by another technique. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00342">342</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00389">389</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="ab676d31e113aba8aef34328c3750b75e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab676d31e113aba8aef34328c3750b75e">&#9670;&nbsp;</a></span>c_cumulative_sum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_cumulative_sum </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(out)&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the cumulative sum of an array. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The length of the array. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The N-element array on which to operate. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">y</td><td>The N-element array where the solution will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01455">1455</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>
@@ -538,7 +884,102 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The range of the data set. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00114">114</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00128">128</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a7154189af0f87f74449ee93997f66cd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7154189af0f87f74449ee93997f66cd3">&#9670;&nbsp;</a></span>c_difference()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_difference </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n-1), intent(out)&#160;</td>
+          <td class="paramname"><em>dx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the differences between each element in the array. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The length of the array. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The N-element array on which to operate. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dx</td><td>An N-1 element array where the solution will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01488">1488</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a606a9233befe51c5c7daa7b67c4e36af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a606a9233befe51c5c7daa7b67c4e36af">&#9670;&nbsp;</a></span>c_discrimination_ratio()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(c_double) function measurements_c_api::c_discrimination_ratio </td>
+          <td>(</td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>tv</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>mv</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the discrimination ratio. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">tv</td><td>The total variance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mv</td><td>The measurement system variance.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The results of the operation.</dd></dl>
+<dl class="section user"><dt></dt><dd>The discrimination ratio is computed as follows. </dd></dl>
+<dl class="section user"><dt></dt><dd>/f$ DR = \sqrt{\frac{2 \sigma_{total}^2}{\sigma_{meas}^2} - 1} /f$ </dd></dl>
+<dl class="section user"><dt></dt><dd>An alternate means of computing this parameter (as used in JMP) is as follows. </dd></dl>
+<dl class="section user"><dt></dt><dd>/f$ DR = 1.41 \frac{\sigma_{parts}}{\sigma_{meas}} /f$ </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00438">438</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>
@@ -602,7 +1043,477 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section user"><dt></dt><dd>where </dd></dl>
 <dl class="section user"><dt></dt><dd>\( \alpha = \frac{(d_1 x)^{d_1} d_{2}^{d_2}}{(d_1 x + d_2)^{d_1 + d_2}} \). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00281">281</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00328">328</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="aaafaadcfe5bf571ce65aded0743ce97d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaafaadcfe5bf571ce65aded0743ce97d">&#9670;&nbsp;</a></span>c_f_test()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine measurements_c_api::c_f_test </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n1), intent(in)&#160;</td>
+          <td class="paramname"><em>x1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n2), intent(in)&#160;</td>
+          <td class="paramname"><em>x2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">type(<a class="el" href="structmeasurements__core_1_1statistic.html">statistic</a>), intent(out)&#160;</td>
+          <td class="paramname"><em>rst</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Applies the F-test for different variances. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n1</td><td>The number of data points in the first data set. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x1</td><td>An <code>n1</code> element array containing the first data set. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n2</td><td>The number of data points in the second data set. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x2</td><td>An <code>n2</code> element array containing the second data set. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">rst</td><td>The F-test statistic and associated probability term that establishes the signficance of the f-statistic. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00488">488</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="ab2ecfc9575722e158aa1f28953761871"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2ecfc9575722e158aa1f28953761871">&#9670;&nbsp;</a></span>c_fft()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_fft </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">complex(c_double), dimension(n), intent(out)&#160;</td>
+          <td class="paramname"><em>f</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes an FFT of a data set. The results of the transform are normalized such that an inverse transform will result in the original signal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The length of the array. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>An N-element array containing the data to transform. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">f</td><td>An N-element array where the transformed data will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01387">1387</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a6e83d49bfe29d5df6acaf951abbfb0e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e83d49bfe29d5df6acaf951abbfb0e4">&#9670;&nbsp;</a></span>c_finite_difference()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_finite_difference </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(out)&#160;</td>
+          <td class="paramname"><em>dydx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Estimates the derivative of a discretely sampled signal by means of finite differences. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The length of the arrays. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The N-element array containing the independent variable data. @parma[in] y The N-element array containing the dependent variable data. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dydx</td><td>An N-element array where the results will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01562">1562</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="ae0bdb886c78d52c5d79028234be8517b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0bdb886c78d52c5d79028234be8517b">&#9670;&nbsp;</a></span>c_fourier_frequency()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(c_double) function measurements_c_api::c_fourier_frequency </td>
+          <td>(</td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>fs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>i</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>nxfrm</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes a suitable frequency for a Fourier transformed data set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">fs</td><td>The rate at which the data was sampled. Notice, the returned frequency value will be expressed in the same units as this value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">i</td><td>The frequency bin such that 0 &lt;= i &lt; m where m is <code>nxfrm</code> / 2 + 1 if <code>nxfrm</code> is even; else, (<code>nxfrm</code> + 1) / 2 if <code>nxfrm</code> is odd. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nxfrm</td><td>The length of the signal that was transformed.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The frequency value. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01129">1129</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a4d66737d08965cdebf8d5dd4f846653f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d66737d08965cdebf8d5dd4f846653f">&#9670;&nbsp;</a></span>c_fourier_transform()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_fourier_transform </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>nf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">complex(c_double), dimension(nf), intent(out)&#160;</td>
+          <td class="paramname"><em>f</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the Fourier transform of a discretely sampled signal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The number of data points. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The N-element array containing the data to transform. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nf</td><td>The number of elements in <code>f</code>. Ideally, this should be N / 2 + 1 if N is even; else, (N + 1) / 2 if N is odd. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">f</td><td>The positive half and DC component of the transformed data.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01024">1024</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a10acccf026ba823747d6125eccc26f1a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10acccf026ba823747d6125eccc26f1a">&#9670;&nbsp;</a></span>c_hamming_window()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(c_double) function measurements_c_api::c_hamming_window </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>j</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Defines a Hamming window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">j</td><td>The index or bin number (0 &lt;= <code>bin</code> &lt;= <code>n</code>). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The transform length.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The value of the window function at index <code>j</code>. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01170">1170</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="abdc52b180e62750f8a16d41cf18894f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdc52b180e62750f8a16d41cf18894f8">&#9670;&nbsp;</a></span>c_hann_window()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(c_double) function measurements_c_api::c_hann_window </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>j</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Defines a Hann window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">j</td><td>The index or bin number (0 &lt;= <code>bin</code> &lt;= <code>n</code>). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The transform length.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The value of the window function at index <code>j</code>. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01157">1157</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a9b95d275949c3928cf7ecaf7196d76cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b95d275949c3928cf7ecaf7196d76cc">&#9670;&nbsp;</a></span>c_high_pass_filter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_high_pass_filter </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>fs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>cutoff</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(out)&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Applies a high-pass filter to a signal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The length of the input array. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>An N-element array containing the signal to filter. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">fs</td><td>The frequency at which <code>x</code> was sampled. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">cutoff</td><td>The cut-off frequency. This value must be positive-valued, and must be less than the Nyquist frequency. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">y</td><td>An N-element array where the filtered signal will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available.</li>
+<li>M_INVALID_INPUT_ERROR: Occurs if <code>cutoff</code> is either not positive valued, or is greater than or equal to the Nyquist frequency. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01262">1262</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a786e617215e9b2d37bacdb3bec4504d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a786e617215e9b2d37bacdb3bec4504d5">&#9670;&nbsp;</a></span>c_ifft()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_ifft </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">complex(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">complex(c_double), dimension(n), intent(out)&#160;</td>
+          <td class="paramname"><em>f</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the inverse FFT of a data set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The length of the array. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>An N-element array containing the data to transform. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">f</td><td>An N-element array where the transformed data will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01421">1421</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>
@@ -650,7 +1561,152 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The value of the incomplete beta function.</dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>The incomplete beta function is defind as \( \beta(x;a,b) = \int_{0}^{x} t^{a-1} (1 - t)^{b-1} dt \). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00431">431</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00552">552</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a0c7bf9b068c2e827c4214a2056d9d62a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c7bf9b068c2e827c4214a2056d9d62a">&#9670;&nbsp;</a></span>c_integrate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_integrate </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(out)&#160;</td>
+          <td class="paramname"><em>f</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Estimates the indefinite integral of a discretely sampled signal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The length of the arrays. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The N-element array containing the independent variable data. @parma[in] y The N-element array containing the dependent variable data. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">c</td><td>The initial condition. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">f</td><td>An N-element array where the results will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01600">1600</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a85f452e6cbbf9e74b6f5f58031894052"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85f452e6cbbf9e74b6f5f58031894052">&#9670;&nbsp;</a></span>c_interpolate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_interpolate </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>order</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>npts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(npts), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(npts), intent(in)&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>ni</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(ni), intent(in)&#160;</td>
+          <td class="paramname"><em>xi</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(ni), intent(out)&#160;</td>
+          <td class="paramname"><em>yi</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Performs a polynomial interpolation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">order</td><td>The order of the polynomial. This value must be at least 1, but not exceed <code>npts</code> - 1. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">npts</td><td>The number of data points. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>An <code>npts</code> element array containing the independent variable data. This array must be monotonic. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>An <code>npts</code> element array containing the dependent variable data. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ni</td><td>The number of points to interpolate. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xi</td><td>An <code>ni</code> element array containing the independent variable values at which to interpolate. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">yi</td><td>An <code>ni</code> element array corresponding to <code>xi</code> where the interpolated values will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available.</li>
+<li>M_INVALID_INPUT_ERROR: Occurs if <code>order</code> is less than 1.</li>
+<li>M_NONMONOTONIC_ARRAY_ERROR: Occurs if <code>x</code> is not monotonically increasing or decreasing. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00587">587</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>
@@ -690,7 +1746,348 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns true if the array is monotonically increasing or monotonically decreasing; else, returns false. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00021">21</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00035">35</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a01b89bc637dcb57172cf7486facacfda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01b89bc637dcb57172cf7486facacfda">&#9670;&nbsp;</a></span>c_is_power_of_two()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">logical(c_bool) function measurements_c_api::c_is_power_of_two </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tests to see if a number is an integer power of two. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The integer to test. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns true if <code>n</code> is a power of two; else, false. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00989">989</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a064ec2cfc8746839a6087533ef6a2581"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a064ec2cfc8746839a6087533ef6a2581">&#9670;&nbsp;</a></span>c_linear_least_squares_mimo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_linear_least_squares_mimo </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(ldx,*), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>ldx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(ldy,*), intent(in)&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>ldy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(lda,*), intent(out)&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>lda</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Fits the multiple input, multiple output linear model A * X = Y by solving for matrix A in a least-squares sense. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>The number of rows in matrix A. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The number of columns in matrix A. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>The number of data points to fit (number of columns in either X or Y). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>An N-by-K matrix of known independent variables. K must be greater than or equal to N. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ldx</td><td>The leading dimension of matrix X. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>An M-by-K matrix of known dependent variables. Notice, M must be less than or equal to N, and K must be greater than or equal to M. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ldy</td><td>The leading dimension of matrix Y. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">The</td><td>M-by-N coefficient matrix A. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lda</td><td>The leading dimension of matrix A.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available.</li>
+<li>M_ARRAY_SIZE_ERROR: Occurs if there is a size-mismatch in the matrix equation.</li>
+<li>M_UNDERDEFINED_PROBLEM: Occurs if there is insufficient data (e.g. k &lt; n).</li>
+</ul>
+</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Solving the linear system is straight-forward when M &lt;= N by means of singular value decomposition. Specifically, the Moore-Penrose pseudo-inverse utilizing singular value decomposition. The solution is obtained as follows. </dd></dl>
+<dl class="section user"><dt></dt><dd>\( A X X^{+} = Y X^{+} \) </dd></dl>
+<dl class="section user"><dt></dt><dd>\( X X^{+} = I \) as X is underdetermined. Then </dd></dl>
+<dl class="section user"><dt></dt><dd>\( A = Y X^{+} \) </dd></dl>
+<dl class="section user"><dt></dt><dd>where \( X^{+} \) is the Moore-Penrose pseudo-inverse of X. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00819">819</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a98c3a56138bf43c948f98f401b8adc3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98c3a56138bf43c948f98f401b8adc3d">&#9670;&nbsp;</a></span>c_linear_least_squares_miso()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_linear_least_squares_miso </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(ldx,*), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>ldx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(k), intent(in)&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(out)&#160;</td>
+          <td class="paramname"><em>a</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Fits the multiple input, single output linear model A * X = Y by solving for array A in a least-squares sense. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The number of coefficients to find. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>The number of data points to fit. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>An N-by-K matrix of known independent variables. K must be greater than or equal to N. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ldx</td><td>The leading dimension of matrix X. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>A K-element array containing the known dependent variables. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">The</td><td>N element coefficient array A.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available.</li>
+<li>M_ARRAY_SIZE_ERROR: Occurs if there is a size-mismatch in the matrix equation.</li>
+<li>M_UNDERDEFINED_PROBLEM: Occurs if there is insufficient data (e.g. k &lt; n).</li>
+</ul>
+</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Solving the linear system is straight-forward by means of singular value decomposition. Specifically, the Moore-Penrose pseudo-inverse utilizing singular value decomposition. The solution is obtained as follows. </dd></dl>
+<dl class="section user"><dt></dt><dd>\( A X X^{+} = Y X^{+} \) </dd></dl>
+<dl class="section user"><dt></dt><dd>\( X X^{+} = I \) as X is underdetermined. Then </dd></dl>
+<dl class="section user"><dt></dt><dd>\( A = Y X^{+} \) </dd></dl>
+<dl class="section user"><dt></dt><dd>where \( X^{+} \) is the Moore-Penrose pseudo-inverse of X. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00894">894</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="aca9cb883b5a623262fc16c2d65f21f4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca9cb883b5a623262fc16c2d65f21f4a">&#9670;&nbsp;</a></span>c_low_pass_filter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_low_pass_filter </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>fs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>cutoff</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(out)&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Applies a low-pass filter to a signal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The length of the input array. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>An N-element array containing the signal to filter. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">fs</td><td>The frequency at which <code>x</code> was sampled. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">cutoff</td><td>The cut-off frequency. This value must be positive-valued, and must be less than the Nyquist frequency. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">y</td><td>An N-element array where the filtered signal will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available.</li>
+<li>M_INVALID_INPUT_ERROR: Occurs if <code>cutoff</code> is either not positive valued, or is greater than or equal to the Nyquist frequency. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01221">1221</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="ad4a970eb8a947a368f7b5b82bc51ee77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4a970eb8a947a368f7b5b82bc51ee77">&#9670;&nbsp;</a></span>c_lowess_smoothing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_lowess_smoothing </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>npts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(npts), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(npts), intent(in)&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>factor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(npts), intent(out)&#160;</td>
+          <td class="paramname"><em>ys</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Smooths a data set using a robust locally weighted scatterplot smoothing (LOWESS) algorithm. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">npts</td><td>The number of data points. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>An <code>npts</code> element array containing the independent variable data. This array must be monotonic. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>An <code>npts</code> element array containing the dependent variable data. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">factor</td><td>Specifies the amount of smoothing. More specifically, this value is the fraction of points used to compute each value. <br  />
+ As this value increases, the output becomes smoother. Choosing a value in the range of 0.2 to 0.8 usually results in a good fit. As such, a reasonable starting point, in the absence of better information, is a value of 0.5. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ys</td><td>An <code>npts</code> element array where the smoothed data will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available.</li>
+<li>M_NONMONOTONIC_ARRAY_ERROR: Occurs if <code>x</code> is not monotonically increasing or decreasing. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00709">709</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>
@@ -730,7 +2127,7 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The mean of <code>x</code>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00038">38</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00052">52</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>
@@ -770,7 +2167,88 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The median of <code>x</code>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00055">55</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00069">69</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a5c4fa6a6ff8f281f7af34a8a2102d25b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c4fa6a6ff8f281f7af34a8a2102d25b">&#9670;&nbsp;</a></span>c_moving_average()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_moving_average </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>npts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(npts), intent(inout)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>navg</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Applies a moving average to smooth a data set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">npts</td><td>The number of data points. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">x</td><td>An <code>npts</code> element array that on input contains the signal to smooth. On output, the smoothed signal. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">navg</td><td>The size of the averaging window. This value must be at least 2, but no more than the number of elements in <code>x</code>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_INVALID_INPUT_ERROR: Occurs if <code>navg</code> is less than 2, or greater than <code>npts</code>.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00755">755</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a54b4edfaf99a0292fec158cc515b08b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54b4edfaf99a0292fec158cc515b08b8">&#9670;&nbsp;</a></span>c_next_power_of_two()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_next_power_of_two </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Provides the next higher integer power of two. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The value to test. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The next power of two higher than <code>x</code>. If <code>x</code> is already a power of two, it's value is simply returned. For instance, if <code>is</code> set to 128, then a value of 7 is returned. However, if a value of 129 is supplied, then a value of 8 is returned. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01004">1004</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>
@@ -831,7 +2309,213 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section remark"><dt>Remarks</dt><dd>The normal distribution has the form \( f(x) = \frac{1}{\sigma \sqrt{2 \pi}} \exp(-\frac{1}{2}(\frac{x-\mu}{\sigma})^{2}) \). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00195">195</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00242">242</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="af9495b3765dd93a094b8662c351c3fa1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9495b3765dd93a094b8662c351c3fa1">&#9670;&nbsp;</a></span>c_peak_detect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_peak_detect </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>delta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>szmxind</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), dimension(szmxind), intent(out)&#160;</td>
+          <td class="paramname"><em>mxind</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(out)&#160;</td>
+          <td class="paramname"><em>nmxind</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>szmnind</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), dimension(szmnind), intent(out)&#160;</td>
+          <td class="paramname"><em>mnind</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(out)&#160;</td>
+          <td class="paramname"><em>nmnind</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Attempts to locate all peaks and valleys within the given data set bound by the constraints specified. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The number of data points in the array to search. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The N-element array to search. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delta</td><td>A threshold level used to denote the minimum change acceptable in determining a peak or valley from neighboring points. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">szmxind</td><td>The size of the <code>mxind</code> buffer. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">mxind</td><td>A <code>szmxind</code> element array where the indices of the peak values will be written. The indices are zero-based. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">nmxind</td><td>The actual number of peak value indices written to <code>mxind</code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">szmnind</td><td>The size of the <code>mnind</code> buffer. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">mnind</td><td>A <code>szmnind</code> element array where the indices of the valley values will be written. The indices are zero-based. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">nmnind</td><td>The actual number of valley value indices written to <code>mnind</code>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00948">948</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a45fad10762366d35dd3800e2dedb3ee2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45fad10762366d35dd3800e2dedb3ee2">&#9670;&nbsp;</a></span>c_periodogram()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_periodogram </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">type(c_funptr), intent(in), value&#160;</td>
+          <td class="paramname"><em>winfun</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>nfft</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>np</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(np), intent(out)&#160;</td>
+          <td class="paramname"><em>p</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the periodogram power spectral density (PSD) estimate of a signal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The number of data points. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The N-element array containing the data to transform. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">winfun</td><td>The window function to apply. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nfft</td><td>The length Fourier transform to apply. This must be an integer power of two, even if <code>x</code> is not an integer power of two in length. If this parameter is less than the length of <code>x</code>, <code>x</code> will be overlapped, windowed, and averaged to achieve an estimate of the power spectrum. If this parameter is larger than the length of <code>x</code>, <code>x</code> will be padded with zeros prior to windowing. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">np</td><td></td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">p</td><td>The NP-element array containing the periodogram.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available.</li>
+<li>M_INVALID_INPUT_ERROR: Occurs if <code>nfft</code> is not an integer power of two. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01078">1078</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a3c12de3e95afe47fd0d1ee405172fe46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c12de3e95afe47fd0d1ee405172fe46">&#9670;&nbsp;</a></span>c_rectangular_window()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(c_double) function measurements_c_api::c_rectangular_window </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>j</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Defines a rectangular window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">j</td><td>The index or bin number (0 &lt;= <code>bin</code> &lt;= <code>n</code>). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The transform length.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The value of the window function at index <code>j</code>. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01144">1144</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>
@@ -879,7 +2563,171 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The value of the regularized beta function at <code>a</code> and <code>b</code>.</dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>The regularized beta function is defined as \( I_{x}(a, b) = \frac{\beta(x; a, b)}{\beta(a, b)} \). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00391">391</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00512">512</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="afafbc79f01438df50e6a15a50b654a2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afafbc79f01438df50e6a15a50b654a2c">&#9670;&nbsp;</a></span>c_remove_dc_offset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_remove_dc_offset </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(out)&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes the DC offset from a signal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The array length. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The N-element array on which to operate. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">y</td><td>An N-element array where the results will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01657">1657</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a2291df45efba28ff274d87e0cdde664c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2291df45efba28ff274d87e0cdde664c">&#9670;&nbsp;</a></span>c_spline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_spline </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>npts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(npts), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(npts), intent(in)&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>ni</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(ni), intent(in)&#160;</td>
+          <td class="paramname"><em>xi</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(ni), intent(out)&#160;</td>
+          <td class="paramname"><em>yi</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>ibcbeg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>ybcbeg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>ibcend</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>ybcend</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Performs a spline interpolation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">npts</td><td>The number of data points. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>An <code>npts</code> element array containing the independent variable data. This array must be monotonic. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>An <code>npts</code> element array containing the dependent variable data. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ni</td><td>The number of points to interpolate. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xi</td><td>An <code>ni</code> element array containing the independent variable values at which to interpolate. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">yi</td><td>An <code>ni</code> element array corresponding to <code>xi</code> where the interpolated values will be written. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ibcbeg</td><td>An input that defines the nature of the boundary condition at the beginning of the spline.<ul>
+<li>SPLINE_QUADRATIC_OVER_INTERVAL: The spline is quadratic over its initial interval. No value is required for <code>ybcbeg</code>. This is often considered a natural boundary condition.</li>
+<li>SPLINE_KNOWN_FIRST_DERIVATIVE: The spline's first derivative at its initial point is provided in <code>ybcbeg</code>.</li>
+<li>SPLINE_KNOWN_SECOND_DERIVATIVE: The spline's second derivative at its initial point is provided in <code>ybcbeg</code>.</li>
+<li>SPLINE_CONTINUOUS_THIRD_DERIVATIVE: The third derivative is continuous at x(2). No value is required for <code>ybcbeg</code>. </li>
+</ul>
+</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ybcbeg</td><td>If needed, the value of the initial point boundary condition. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ibcend</td><td>An input that defines the nature of the boundary condition at the end of the spline.<ul>
+<li>SPLINE_QUADRATIC_OVER_INTERVAL: The spline is quadratic over its final interval. No value is required for <code>ybcend</code>. This is often considered a natural boundary condition.</li>
+<li>SPLINE_KNOWN_FIRST_DERIVATIVE: The spline's first derivative at its initial point is provided in <code>ybcend</code>.</li>
+<li>SPLINE_KNOWN_SECOND_DERIVATIVE: The spline's second derivative at its initial point is provided in <code>ybcend</code>.</li>
+<li>SPLINE_CONTINUOUS_THIRD_DERIVATIVE: The third derivative is continuous at x(n-1). No value is required for <code>ybcend</code>. </li>
+</ul>
+</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ybcend</td><td>If needed, the value of the final point boundary condition. If needed, but not supplied, a default value of zero will be used.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available.</li>
+<li>M_NONMONOTONIC_ARRAY_ERROR: Occurs if <code>x</code> is not monotonically increasing or decreasing. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00659">659</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>
@@ -920,7 +2768,7 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The standard deviation of <code>x</code>.</dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>The standard deviation is computed as \( \sigma = \sqrt{\frac{\sum_{i=1}^{n}(x_{i} - \mu)^{2}}{n - 1}} \) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00097">97</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00111">111</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>
@@ -974,7 +2822,234 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section remark"><dt>Remarks</dt><dd>Student's t-distribution has the form \( f(t) = \frac{\Gamma(\frac{\nu + 1}{2})}{\sqrt{\nu \pi} \Gamma(\frac{\nu}{2})} (1 + \frac{t^{2}}{\nu})^{-\frac{\nu + 1}{2}} \). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00222">222</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00269">269</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a57534e5e463b3f5a6a2e5f13d7f5f45f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57534e5e463b3f5a6a2e5f13d7f5f45f">&#9670;&nbsp;</a></span>c_t_score()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_t_score </td>
+          <td>(</td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(out)&#160;</td>
+          <td class="paramname"><em>t</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the t-score typically used in confidence interval calculations when the population size is limited. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">c</td><td>The confidence level. This value must be between 0 and 1 such that: 0 &lt; c &lt; 1. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The population size. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">t</td><td>The computed t-score.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_INVALID_INPUT_ERROR: Occurs if <code>c</code> is not within its allowed range. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00181">181</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="a60945c9c943ac27a95b897ce48669a94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60945c9c943ac27a95b897ce48669a94">&#9670;&nbsp;</a></span>c_t_test()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine measurements_c_api::c_t_test </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n1), intent(in)&#160;</td>
+          <td class="paramname"><em>x1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n2), intent(in)&#160;</td>
+          <td class="paramname"><em>x2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>method</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">type(<a class="el" href="structmeasurements__core_1_1statistic.html">statistic</a>), intent(out)&#160;</td>
+          <td class="paramname"><em>rst</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Applies Student's t-test to compute the t-statistic. A two-tailed distribution is assumed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n1</td><td>The number of data points in the first data set. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x1</td><td>An <code>n1</code> element array containing the first data set. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n2</td><td>The number of data points in the second data set. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x2</td><td>An <code>n2</code> element array containing the second data set. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">method</td><td>An input flag defining which method to utilize.<ul>
+<li>EQUAL_VARIANCE_ASSUMPTION: This flag enforces an assumption that the variances of both populations are equivalent.</li>
+<li>UNEQUAL_VARIANCE_ASSUMPTION: This flag enforces an assumption that the varainces of both populations are not necessarily equivalent.</li>
+<li>PAIRED_DATA_SET_ASSUMPTION: This flag enforces an assumption that the data sets are paired. This requires that both data sets are the same size. If this flag is defined, and the supplied data sets are different sized, the routine switches to EQUAL_VARIANCE_ASSUMPTION. If no value is specified, the EQUAL_VARIANCE_ASSUMPTION is utilized. </li>
+</ul>
+</td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">rst</td><td>Student's t-statistic and the associated probability term that establishes the significance of the t-statistic. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00469">469</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="adcec0bee6517b46196d18a24ee03a921"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcec0bee6517b46196d18a24ee03a921">&#9670;&nbsp;</a></span>c_trapz_integrate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(c_double) function measurements_c_api::c_trapz_integrate </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Estimates the definite integral of a discretely sampled signal using a trapezoidal approach. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The length of the arrays. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The N-element array containing the independent variable data. @parma[in] y The N-element array containing the dependent variable data.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The result of the integration. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01635">1635</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="ac778f3118b3187d5e1f28a0b00f5be06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac778f3118b3187d5e1f28a0b00f5be06">&#9670;&nbsp;</a></span>c_unwrap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer(c_int) function measurements_c_api::c_unwrap </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(in)&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), intent(in), value&#160;</td>
+          <td class="paramname"><em>cutoff</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(c_double), dimension(n), intent(out)&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Unwraps an array of phase angles. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The array length. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The N-element array to unwrap. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">cutoff</td><td>An input that specifies the threshold value to use when unwrapping steps in <code>x</code>. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">y</td><td>The N-element array where the results will be written.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error flag with the following possible values.<ul>
+<li>M_NO_ERROR: No error occurred. Normal operation.</li>
+<li>M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available. </li>
+</ul>
+</dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01523">1523</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>
@@ -1014,7 +3089,47 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section user"><dt>Remarks</dt><dd>To avoid overflow-type issues, Welford's algorithm is employed. A simple illustration of this algorithm can be found <a href="https://www.johndcook.com/blog/standard_deviation/">here</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00075">75</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00089">89</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+
+</div>
+</div>
+<a id="ad4667088f89eabf66fbda4d05680598a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4667088f89eabf66fbda4d05680598a">&#9670;&nbsp;</a></span>c_welch_window()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(c_double) function measurements_c_api::c_welch_window </td>
+          <td>(</td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>j</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(c_int), intent(in), value&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Defines a Welch window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">j</td><td>The index or bin number (0 &lt;= <code>bin</code> &lt;= <code>n</code>). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>The transform length.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The value of the window function at index <code>j</code>. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l01183">1183</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>
@@ -1058,7 +3173,7 @@ Functions/Subroutines</h2></td></tr>
 </ul>
 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00136">136</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__c__api_8f90_source.html#l00150">150</a> of file <a class="el" href="measurements__c__api_8f90_source.html">measurements_c_api.f90</a>.</p>
 
 </div>
 </div>

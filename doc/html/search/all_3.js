@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['m_5finvalid_5finput_5ferror_20',['m_invalid_input_error',['../namespacemeasurements__core.html#aee0b7c33f78ae04198c8b99f633d2b4f',1,'measurements_core']]],
-  ['m_5fno_5ferror_21',['m_no_error',['../namespacemeasurements__core.html#a766249652c70c7939df2813f7aa652ca',1,'measurements_core']]],
-  ['measurement_5fvariance_22',['measurement_variance',['../structmeasurements__core_1_1process__variance.html#a89e613964d180128d67a9a28c4934e5f',1,'measurements_core::process_variance::measurement_variance()'],['../structprocess__variance.html#a93c68c517b9efd1506282823ab338fc3',1,'process_variance::measurement_variance()']]],
-  ['measurements_5fc_5fapi_23',['measurements_c_api',['../namespacemeasurements__c__api.html',1,'']]],
-  ['measurements_5fcore_24',['measurements_core',['../namespacemeasurements__core.html',1,'']]]
+  ['get_5fcount_57',['get_count',['../structmeasurements__core_1_1interp__manager.html#a089955d5d84db00bed6f3c039251fa49',1,'measurements_core::interp_manager::get_count()'],['../structmeasurements__core_1_1lowess__smoothing.html#a56d32b54f164e4cf97f1292bb7e91d2f',1,'measurements_core::lowess_smoothing::get_count()']]],
+  ['get_5fresiduals_58',['get_residuals',['../structmeasurements__core_1_1lowess__smoothing.html#a8e2cb1426eab54c129dcf88cb9405969',1,'measurements_core::lowess_smoothing']]],
+  ['get_5fx_59',['get_x',['../structmeasurements__core_1_1interp__manager.html#af8e8bc4576a076add43dc8aed88275ed',1,'measurements_core::interp_manager::get_x()'],['../structmeasurements__core_1_1lowess__smoothing.html#a77953cb75ca52bd0c070c2694452cd02',1,'measurements_core::lowess_smoothing::get_x()']]],
+  ['get_5fy_60',['get_y',['../structmeasurements__core_1_1interp__manager.html#a520f5c85e0b518f892f9301965682153',1,'measurements_core::interp_manager::get_y()'],['../structmeasurements__core_1_1lowess__smoothing.html#a25b562ed68e3542acb21993527f64aa8',1,'measurements_core::lowess_smoothing::get_y()']]],
+  ['grr_5fresults_61',['grr_results',['../structmeasurements__core_1_1grr__results.html',1,'measurements_core::grr_results'],['../structgrr__results.html',1,'grr_results']]]
 ];

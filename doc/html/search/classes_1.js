@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['process_5fvariance_34',['process_variance',['../structprocess__variance.html',1,'process_variance'],['../structmeasurements__core_1_1process__variance.html',1,'measurements_core::process_variance']]]
+  ['grr_5fresults_116',['grr_results',['../structmeasurements__core_1_1grr__results.html',1,'measurements_core::grr_results'],['../structgrr__results.html',1,'grr_results']]]
 ];

@@ -106,160 +106,697 @@ $(document).ready(function(){initNavTree('measurements__core_8f90_source.html','
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
 <div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="namespacemeasurements__core.html#a766249652c70c7939df2813f7aa652ca">   11</a></span>&#160;    <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">parameter</span> :: m_no_error = 0</div>
 <div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="namespacemeasurements__core.html#aee0b7c33f78ae04198c8b99f633d2b4f">   13</a></span>&#160;    <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">parameter</span> :: m_invalid_input_error = 10000</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1process__variance.html">   17</a></span>&#160;    <span class="keywordtype">type</span>, <span class="keyword">bind(C)</span> :: process_variance</div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1process__variance.html#a89e613964d180128d67a9a28c4934e5f">   21</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: measurement_variance</div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1process__variance.html#a8274352483693845cf40fc8e7ffb05fd">   23</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: part_variance</div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1process__variance.html#aec5ea59273c586f9b22c6220b9d12b54">   26</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: total_variance</div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1process__variance.html#abd4534176501606c568a872a316f1853">   29</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: equipment_variance</div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1process__variance.html#a78c75f224f0e95a029f035db7179d2f2">   31</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: operator_variance</div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1process__variance.html#aefd42099427877e61d927b84d9f40cd2">   33</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: operator_by_part_variance</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">end type</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1grr__results.html">   37</a></span>&#160;    <span class="keywordtype">type</span>, <span class="keyword">bind(C)</span> :: grr_results</div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1grr__results.html#ae5640b841d0ca03b191c99336ddf2246">   41</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: pt_ratio</div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1grr__results.html#ad78175aa50ac70261f073c13a6e87351">   45</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: ptv_ratio</div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1grr__results.html#afcf3352dc03c52c03c2b487306972fe9">   47</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: tolerance_range</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">end type</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">! ******************************************************************************</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">! MEASUREMENT_STATS.F90</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">interface</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function is_monotonic(x) result(rst)</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function mean(x) result(z)</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="keywordtype">            real</span>(real64) :: z</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keyword">module</span> function median(x) result(z)</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="keywordtype">            real</span>(real64) :: z</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function variance(x) result(v)</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="keywordtype">            real</span>(real64) :: v</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function standard_deviation(x) result(s)</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="keywordtype">            real</span>(real64) :: s</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function data_range(x) result(r)</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="keywordtype">            real</span>(real64) :: r</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        <span class="keyword">module</span> function z_score(c, err) result(z)</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: c</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="keywordtype">            real</span>(real64) :: z</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160; </div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        <span class="keyword">module</span> function t_score(c, n, err) result(t)</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: c</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: n</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="keywordtype">            real</span>(real64) :: t</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function confidence_interval(x, zval) result(ci)</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: zval</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="keywordtype">            real</span>(real64) :: ci</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function normal_distribution(mu, sigma, x) &amp;</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;                result(f)</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: mu, sigma, x</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="keywordtype">            real</span>(real64) :: f</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="namespacemeasurements__core.html#a4e00769aa5b6320e1ea6818b8892c885">   15</a></span>&#160;    <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">parameter</span> :: m_array_size_error = 10001</div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="namespacemeasurements__core.html#a86d9af34df6b6254529a1ce232a55ca3">   17</a></span>&#160;    <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">parameter</span> :: m_out_of_memory_error = 10002</div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="namespacemeasurements__core.html#a8a44c1e0e3301c39f26e14be73936869">   19</a></span>&#160;    <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">parameter</span> :: m_nonmonotonic_array_error = 10003</div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="namespacemeasurements__core.html#a1dae461b61bcef523e2656829490bbf5">   21</a></span>&#160;    <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">parameter</span> :: m_no_data_defined_error = 10004</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="namespacemeasurements__core.html#accc6d25abc615b0eb08207ff1244d595">   23</a></span>&#160;    <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">parameter</span> :: m_underdefined_problem = 10005</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="namespacemeasurements__core.html#afabf4017c336c5af60615a96dcb7f16d">   29</a></span>&#160;    <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">parameter</span> :: spline_quadratic_over_interval = 1000</div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="namespacemeasurements__core.html#a439d328b5d349dd6fcc107dedab267d1">   32</a></span>&#160;    <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">parameter</span> :: spline_known_first_derivative = 1001</div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="namespacemeasurements__core.html#a2fad66858f9b2d09f5ebf7896c0a2526">   35</a></span>&#160;    <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">parameter</span> :: spline_known_second_derivative = 1002</div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="namespacemeasurements__core.html#a79c81ed5c26d065208ba962edb9de3b1">   38</a></span>&#160;    <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">parameter</span> :: spline_continuous_third_derivative = 1003</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="namespacemeasurements__core.html#a21dabc21c6838744aa907ce650c60e8f">   41</a></span>&#160;    <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">parameter</span> :: equal_variance_assumption = 2000</div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="namespacemeasurements__core.html#a159c0b854ea5caa4e7b82ea62d87abc8">   43</a></span>&#160;    <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">parameter</span> :: unequal_variance_assumption = 2001</div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="namespacemeasurements__core.html#a4a5dfdcecd0de2cf224d127040baa058">   45</a></span>&#160;    <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">parameter</span> :: paired_data_set_assumption = 2002</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1process__variance.html">   49</a></span>&#160;    <span class="keywordtype">type</span>, <span class="keyword">bind(C)</span> :: process_variance</div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1process__variance.html#a89e613964d180128d67a9a28c4934e5f">   53</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: measurement_variance</div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1process__variance.html#a8274352483693845cf40fc8e7ffb05fd">   55</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: part_variance</div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1process__variance.html#aec5ea59273c586f9b22c6220b9d12b54">   58</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: total_variance</div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1process__variance.html#abd4534176501606c568a872a316f1853">   61</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: equipment_variance</div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1process__variance.html#a78c75f224f0e95a029f035db7179d2f2">   63</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: operator_variance</div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1process__variance.html#aefd42099427877e61d927b84d9f40cd2">   65</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: operator_by_part_variance</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">end type</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1grr__results.html">   69</a></span>&#160;    <span class="keywordtype">type</span>, <span class="keyword">bind(C)</span> :: grr_results</div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1grr__results.html#ae5640b841d0ca03b191c99336ddf2246">   73</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: pt_ratio</div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1grr__results.html#ad78175aa50ac70261f073c13a6e87351">   77</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: ptv_ratio</div>
+<div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1grr__results.html#afcf3352dc03c52c03c2b487306972fe9">   79</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: tolerance_range</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keyword">end type</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1statistic.html">   84</a></span>&#160;    <span class="keywordtype">type</span>, <span class="keyword">bind(C)</span> :: statistic</div>
+<div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1statistic.html#a78bd5b14a8291627fab2b0a8bd16e6b8">   86</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: value</div>
+<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1statistic.html#a31721fceacf13a8f32de3128d01b1a0b">   89</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: probability</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keyword">end type</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment">! ******************************************************************************</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="comment">! MEASUREMENT_STATS.F90</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keyword">interface</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function is_monotonic(x) result(rst)</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function mean(x) result(z)</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="keywordtype">            real</span>(real64) :: z</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keyword">module</span> function median(x) result(z)</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="keywordtype">            real</span>(real64) :: z</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function variance(x) result(v)</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="keywordtype">            real</span>(real64) :: v</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function standard_deviation(x) result(s)</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="keywordtype">            real</span>(real64) :: s</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function data_range(x) result(r)</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="keywordtype">            real</span>(real64) :: r</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="keyword">module</span> function z_score(c, err) result(z)</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: c</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="keywordtype">            real</span>(real64) :: z</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        <span class="keyword">module</span> function t_score(c, n, err) result(t)</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: c</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: n</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="keywordtype">            real</span>(real64) :: t</div>
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        <span class="keyword">end function</span></div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160; </div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function t_distribution(dof, t) result(f)</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: dof</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: t</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="keywordtype">            real</span>(real64) :: f</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160; </div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function beta_distribution(a, b, x) &amp;</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;                result(z)</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: a, b, x</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="keywordtype">            real</span>(real64) :: z</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function f_distribution(d1, d2, x) result(z)</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: d1, d2, x</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="keywordtype">            real</span>(real64) :: z</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160; </div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function anova(x, alpha) result(rst)</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:,:,:)</span> :: x</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">optional</span> :: alpha</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;            <span class="keywordtype">type</span>(<a class="code" href="structprocess__variance.html">process_variance</a>) :: rst</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160; </div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function control_chart_variance(x) result(rst)</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:,:,:)</span> :: x</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;            <span class="keywordtype">type</span>(<a class="code" href="structprocess__variance.html">process_variance</a>) :: rst</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function confidence_interval(x, zval) result(ci)</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: zval</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="keywordtype">            real</span>(real64) :: ci</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function normal_distribution(mu, sigma, x) &amp;</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;                result(f)</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: mu, sigma, x</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="keywordtype">            real</span>(real64) :: f</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160; </div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function t_distribution(dof, t) result(f)</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: dof</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: t</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="keywordtype">            real</span>(real64) :: f</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160; </div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function beta_distribution(a, b, x) &amp;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;                result(z)</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: a, b, x</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;<span class="keywordtype">            real</span>(real64) :: z</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160; </div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function f_distribution(d1, d2, x) result(z)</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: d1, d2, x</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;<span class="keywordtype">            real</span>(real64) :: z</div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <span class="keyword">end function</span></div>
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160; </div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function compute_grr(k, x, usl, lsl) result(rst)</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: k, usl, lsl</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;            <span class="keywordtype">type</span>(<a class="code" href="structprocess__variance.html">process_variance</a>), <span class="keywordtype">intent(in)</span> :: x</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;            <span class="keywordtype">type</span>(<a class="code" href="structgrr__results.html">grr_results</a>) :: rst</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    <span class="keyword">end interface</span></div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160; </div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;<span class="comment">! ******************************************************************************</span></div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;<span class="comment">! MEASUREMENTS_SPECIAL.F90</span></div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    <span class="keyword">interface</span></div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160; </div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function beta(a, b) result(z)</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: a, b</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="keywordtype">            real</span>(real64) :: z</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160; </div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function regularized_beta(x, a, b) &amp;</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;                result(z)</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: x, a, b</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;<span class="keywordtype">            real</span>(real64) :: z</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160; </div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function incomplete_beta(x, a, b) result(z)</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: x, a, b</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;<span class="keywordtype">            real</span>(real64) :: z</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    <span class="keyword">end interface</span></div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160; </div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160; </div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160; </div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160; </div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160; </div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160; </div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160; </div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160; </div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;<span class="keyword">end module</span></div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function anova(x, alpha) result(rst)</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:,:,:)</span> :: x</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">optional</span> :: alpha</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;            <span class="keywordtype">type</span>(<a class="code" href="structprocess__variance.html">process_variance</a>) :: rst</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160; </div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function control_chart_variance(x) result(rst)</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:,:,:)</span> :: x</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;            <span class="keywordtype">type</span>(<a class="code" href="structprocess__variance.html">process_variance</a>) :: rst</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160; </div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function compute_grr(k, x, usl, lsl) result(rst)</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: k, usl, lsl</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;            <span class="keywordtype">type</span>(<a class="code" href="structprocess__variance.html">process_variance</a>), <span class="keywordtype">intent(in)</span> :: x</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;            <span class="keywordtype">type</span>(<a class="code" href="structgrr__results.html">grr_results</a>) :: rst</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160; </div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function discrimination_ratio(tv, mv) result(x)</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: tv, mv</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;<span class="keywordtype">            real</span>(real64) :: x</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160; </div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function t_test(x1, x2, method) result(rst)</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x1, x2</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span>, <span class="keywordtype">optional</span> :: method</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;            <span class="keywordtype">type</span>(<a class="code" href="structstatistic.html">statistic</a>) :: rst</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160; </div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function f_test(x1, x2) result(rst)</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x1, x2</div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;            <span class="keywordtype">type</span>(<a class="code" href="structstatistic.html">statistic</a>) :: rst</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160; </div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;<span class="comment">! ******************************************************************************</span></div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;<span class="comment">! MEASUREMENTS_SPECIAL.F90</span></div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;    <span class="keyword">interface</span></div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160; </div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function beta(a, b) result(z)</div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: a, b</div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;<span class="keywordtype">            real</span>(real64) :: z</div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160; </div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function regularized_beta(x, a, b) &amp;</div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;                result(z)</div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: x, a, b</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;<span class="keywordtype">            real</span>(real64) :: z</div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160; </div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function incomplete_beta(x, a, b) result(z)</div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: x, a, b</div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;<span class="keywordtype">            real</span>(real64) :: z</div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160; </div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;<span class="comment">! ******************************************************************************</span></div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;<span class="comment">! MEASUREMENTS_INTERP.F90</span></div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00508"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1interp__manager.html">  508</a></span>&#160;    <span class="keyword">type</span>, <span class="keyword">abstract</span> :: interp_manager</div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;    <span class="keywordtype">private</span></div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;        <span class="keywordtype">integer(int32)</span> :: m_order</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;        <span class="keywordtype">integer(int32)</span> :: m_savedIndex</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;        <span class="keywordtype">integer(int32)</span> :: m_indexCheck</div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;        <span class="keywordtype">logical</span> :: m_correlated</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;<span class="keywordtype">        real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: m_x</div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;<span class="keywordtype">        real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: m_y</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;    <span class="keyword">contains</span></div>
+<div class="line"><a name="l00518"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1interp__manager.html#a0c902ddd91853add5c7e9593576c4cc8">  518</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: initialize =&gt; im_init</div>
+<div class="line"><a name="l00521"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1interp__manager.html#af92e48e7793bb4564c52b0a037e025d6">  521</a></span>&#160;        <span class="keywordtype">procedure</span>, non_overridable, <span class="keywordtype">public</span> :: locate =&gt; im_locate</div>
+<div class="line"><a name="l00524"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1interp__manager.html#a2ab362157e3eb5edcee6d1f94a1e639f">  524</a></span>&#160;        <span class="keywordtype">procedure</span>, non_overridable, <span class="keywordtype">public</span> :: hunt =&gt; im_hunt</div>
+<div class="line"><a name="l00527"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1interp__manager.html#ab9602a84870c835183ca6dbd7d6fa4ab">  527</a></span>&#160;        generic, <span class="keywordtype">public</span> :: interpolate =&gt; im_perform, im_perform_array</div>
+<div class="line"><a name="l00529"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1interp__manager.html#a5718174c70df5fc5c254dff3b33279cf">  529</a></span>&#160;        <span class="keywordtype">procedure</span>(interp_xy), <span class="keywordtype">deferred</span> :: raw_interp</div>
+<div class="line"><a name="l00531"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1interp__manager.html#a089955d5d84db00bed6f3c039251fa49">  531</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_count =&gt; im_get_num_pts</div>
+<div class="line"><a name="l00533"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1interp__manager.html#af8e8bc4576a076add43dc8aed88275ed">  533</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_x =&gt; im_get_x</div>
+<div class="line"><a name="l00535"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1interp__manager.html#a520f5c85e0b518f892f9301965682153">  535</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_y =&gt; im_get_y</div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160; </div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;        <span class="keywordtype">procedure</span>, non_overridable :: im_perform</div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;        <span class="keywordtype">procedure</span>, non_overridable :: im_perform_array</div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;    <span class="keyword">end type</span></div>
+<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160; </div>
+<div class="line"><a name="l00543"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1linear__interp.html">  543</a></span>&#160;    <span class="keyword">type</span>, <span class="keyword">extends</span>(interp_manager) :: linear_interp</div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;    <span class="keyword">contains</span></div>
+<div class="line"><a name="l00546"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1linear__interp.html#ade15c2b44f18095680b4ebd7a6013be4">  546</a></span>&#160;        <span class="keywordtype">procedure</span> :: raw_interp =&gt; li_raw_interp</div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;    <span class="keyword">end type</span></div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160; </div>
+<div class="line"><a name="l00551"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1polynomial__interp.html">  551</a></span>&#160;    <span class="keyword">type</span>, <span class="keyword">extends</span>(interp_manager) :: polynomial_interp</div>
+<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;    <span class="keywordtype">private</span></div>
+<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;<span class="keywordtype">        real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: m_c</div>
+<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;<span class="keywordtype">        real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: m_d</div>
+<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;<span class="keywordtype">        real</span>(real64) :: m_dy</div>
+<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;    <span class="keyword">contains</span></div>
+<div class="line"><a name="l00558"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1polynomial__interp.html#a3a00ccd608318f4bebaf6ebfb6031a25">  558</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: initialize =&gt; pi_init</div>
+<div class="line"><a name="l00560"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1polynomial__interp.html#a8f11cfba0c1c418ef51ff48ac2260d97">  560</a></span>&#160;        <span class="keywordtype">procedure</span> :: raw_interp =&gt; pi_raw_interp</div>
+<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;    <span class="keyword">end type</span></div>
+<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160; </div>
+<div class="line"><a name="l00565"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1spline__interp.html">  565</a></span>&#160;    <span class="keyword">type</span>, <span class="keyword">extends</span>(interp_manager) :: spline_interp</div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;    <span class="keywordtype">private</span></div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;<span class="keywordtype">        real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: m_ypp</div>
+<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;    <span class="keyword">contains</span></div>
+<div class="line"><a name="l00570"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1spline__interp.html#a9dd6c9a2797856f0dca303b884a50d69">  570</a></span>&#160;        <span class="keywordtype">procedure</span> :: raw_interp =&gt; si_raw_interp</div>
+<div class="line"><a name="l00573"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1spline__interp.html#aafee3fb844a18300518aa097f40cc091">  573</a></span>&#160;        <span class="keywordtype">procedure</span> :: compute_diff2 =&gt; si_second_deriv</div>
+<div class="line"><a name="l00575"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1spline__interp.html#ade0dc833fd1ed2cd1a16200ca9411d3b">  575</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: initialize =&gt; si_init_1</div>
+<div class="line"><a name="l00578"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1spline__interp.html#a0b1c4d524c9ff61cb81b19ed582add30">  578</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: initialize_spline =&gt; si_init_2</div>
+<div class="line"><a name="l00581"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1spline__interp.html#a52aa3d82305d7723b06365b39872e19b">  581</a></span>&#160;        generic, <span class="keywordtype">public</span> :: first_derivative =&gt; si_diff1, si_diff1_array</div>
+<div class="line"><a name="l00584"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1spline__interp.html#acb3ba28742a94ea4ff4f2306fc772564">  584</a></span>&#160;        generic, <span class="keywordtype">public</span> :: second_derivative =&gt; si_diff2, si_diff2_array</div>
+<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160; </div>
+<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;        <span class="keywordtype">procedure</span> :: si_diff1</div>
+<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;        <span class="keywordtype">procedure</span> :: si_diff1_array</div>
+<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;        <span class="keywordtype">procedure</span> :: si_diff2</div>
+<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;        <span class="keywordtype">procedure</span> :: si_diff2_array</div>
+<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;    <span class="keyword">end type</span></div>
+<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160; </div>
+<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;    <span class="keyword">interface</span></div>
+<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160; </div>
+<div class="line"><a name="l00602"></a><span class="lineno"><a class="line" href="interfacemeasurements__core_1_1interp__xy.html">  602</a></span>&#160;        <span class="keyword">function </span>interp_xy(this, jlo, pt) <span class="keyword">result</span>(yy)</div>
+<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;            <span class="keywordtype">use </span>iso_fortran_env</div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;            <span class="keywordtype">import </span>interp_manager</div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;            <span class="keywordtype">class</span>(interp_manager), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: jlo</div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: pt</div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;<span class="keywordtype">            real</span>(real64) :: yy</div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160; </div>
+<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;    <span class="comment">! INTERP_MANAGER ROUTINES</span></div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;    <span class="keyword">interface</span></div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160; </div>
+<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;        <span class="keyword">module</span> subroutine im_init(this, x, y, order, err)</div>
+<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;            <span class="keywordtype">class</span>(interp_manager), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x, y</div>
+<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span>, <span class="keywordtype">optional</span> :: order</div>
+<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160; </div>
+<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;        <span class="keyword">module</span> function im_locate(this, pt, err) result(j)</div>
+<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;            <span class="keywordtype">class</span>(interp_manager), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: pt</div>
+<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;            <span class="keywordtype">integer</span> :: j</div>
+<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160; </div>
+<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;        <span class="keyword">module</span> function im_hunt(this, pt, err) result(j)</div>
+<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;            <span class="keywordtype">class</span>(interp_manager), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: pt</div>
+<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;            <span class="keywordtype">integer(int32)</span> :: j</div>
+<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160; </div>
+<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;        <span class="keyword">module</span> function im_perform(this, pt, err) result(yy)</div>
+<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;            <span class="keywordtype">class</span>(interp_manager), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: pt</div>
+<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;<span class="keywordtype">            real</span>(real64) :: yy</div>
+<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160; </div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;        <span class="keyword">module</span> function im_perform_array(this, pts, err) result(yy)</div>
+<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;            <span class="keywordtype">class</span>(interp_manager), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: pts</div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">dimension(size(pts))</span> :: yy</div>
+<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160; </div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function im_get_num_pts(this) result(n)</div>
+<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;            <span class="keywordtype">class</span>(interp_manager), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;            <span class="keywordtype">integer(int32)</span> :: n</div>
+<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160; </div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function im_get_x(this, ind) result(x)</div>
+<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;            <span class="keywordtype">class</span>(interp_manager), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: ind</div>
+<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;<span class="keywordtype">            real</span>(real64) :: x</div>
+<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160; </div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function im_get_y(this, ind) result(y)</div>
+<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;            <span class="keywordtype">class</span>(interp_manager), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: ind</div>
+<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;<span class="keywordtype">            real</span>(real64) :: y</div>
+<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160; </div>
+<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;    <span class="comment">! LINAER_INTERP ROUTINES</span></div>
+<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;    <span class="keyword">interface</span></div>
+<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160; </div>
+<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;        <span class="keyword">module</span> function li_raw_interp(this, jlo, pt) result(yy)</div>
+<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;            <span class="keywordtype">class</span>(linear_interp), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: jlo</div>
+<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: pt</div>
+<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;<span class="keywordtype">            real</span>(real64) :: yy</div>
+<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160; </div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;    <span class="comment">! POLYNOMIAL_INTERP ROUTINES</span></div>
+<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;    <span class="keyword">interface</span></div>
+<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160; </div>
+<div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160;        <span class="keyword">module</span> subroutine pi_init(this, x, y, order, err)</div>
+<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;            <span class="keywordtype">class</span>(polynomial_interp), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x, y</div>
+<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span>, <span class="keywordtype">optional</span> :: order</div>
+<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160; </div>
+<div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160;        <span class="keyword">module</span> function pi_raw_interp(this, jlo, pt) result(yy)</div>
+<div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;            <span class="keywordtype">class</span>(polynomial_interp), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: jlo</div>
+<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: pt</div>
+<div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;<span class="keywordtype">            real</span>(real64) :: yy</div>
+<div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l00831"></a><span class="lineno">  831</span>&#160; </div>
+<div class="line"><a name="l00832"></a><span class="lineno">  832</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00833"></a><span class="lineno">  833</span>&#160;    <span class="comment">! SPLINE_INTERP MEMBERS</span></div>
+<div class="line"><a name="l00834"></a><span class="lineno">  834</span>&#160;    <span class="keyword">interface</span></div>
+<div class="line"><a name="l00835"></a><span class="lineno">  835</span>&#160; </div>
+<div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160;        <span class="keyword">module</span> subroutine penta_solve(a1, a2, a3, a4, a5, b, x)</div>
+<div class="line"><a name="l00861"></a><span class="lineno">  861</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: a1, a5</div>
+<div class="line"><a name="l00862"></a><span class="lineno">  862</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">dimension(:)</span> :: a2, a3, a4, b</div>
+<div class="line"><a name="l00863"></a><span class="lineno">  863</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(out)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l00864"></a><span class="lineno">  864</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l00865"></a><span class="lineno">  865</span>&#160; </div>
+<div class="line"><a name="l00873"></a><span class="lineno">  873</span>&#160;        <span class="keyword">module</span> function si_raw_interp(this, jlo, pt) result(yy)</div>
+<div class="line"><a name="l00874"></a><span class="lineno">  874</span>&#160;            <span class="keywordtype">class</span>(spline_interp), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l00875"></a><span class="lineno">  875</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: jlo</div>
+<div class="line"><a name="l00876"></a><span class="lineno">  876</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: pt</div>
+<div class="line"><a name="l00877"></a><span class="lineno">  877</span>&#160;<span class="keywordtype">            real</span>(real64) :: yy</div>
+<div class="line"><a name="l00878"></a><span class="lineno">  878</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00879"></a><span class="lineno">  879</span>&#160; </div>
+<div class="line"><a name="l00920"></a><span class="lineno">  920</span>&#160;        <span class="keyword">module</span> subroutine si_second_deriv(this, ibcbeg, ybcbeg, ibcend, ybcend, err)</div>
+<div class="line"><a name="l00921"></a><span class="lineno">  921</span>&#160;            <span class="keywordtype">class</span>(spline_interp), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: ibcbeg, ibcend</div>
+<div class="line"><a name="l00923"></a><span class="lineno">  923</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: ybcbeg, ybcend</div>
+<div class="line"><a name="l00924"></a><span class="lineno">  924</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l00925"></a><span class="lineno">  925</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160; </div>
+<div class="line"><a name="l00950"></a><span class="lineno">  950</span>&#160;        <span class="keyword">module</span> subroutine si_init_1(this, x, y, order, err)</div>
+<div class="line"><a name="l00951"></a><span class="lineno">  951</span>&#160;            <span class="keywordtype">class</span>(spline_interp), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l00952"></a><span class="lineno">  952</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x, y</div>
+<div class="line"><a name="l00953"></a><span class="lineno">  953</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span>, <span class="keywordtype">optional</span> :: order</div>
+<div class="line"><a name="l00954"></a><span class="lineno">  954</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l00955"></a><span class="lineno">  955</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l00956"></a><span class="lineno">  956</span>&#160; </div>
+<div class="line"><a name="l01007"></a><span class="lineno"> 1007</span>&#160;        <span class="keyword">module</span> subroutine si_init_2(this, x, y, ibcbeg, ybcbeg, ibcend, ybcend, err)</div>
+<div class="line"><a name="l01008"></a><span class="lineno"> 1008</span>&#160;            <span class="keywordtype">class</span>(spline_interp), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01009"></a><span class="lineno"> 1009</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x, y</div>
+<div class="line"><a name="l01010"></a><span class="lineno"> 1010</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span>, <span class="keywordtype">optional</span> :: ibcbeg, ibcend</div>
+<div class="line"><a name="l01011"></a><span class="lineno"> 1011</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">optional</span> :: ybcbeg, ybcend</div>
+<div class="line"><a name="l01012"></a><span class="lineno"> 1012</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01013"></a><span class="lineno"> 1013</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01014"></a><span class="lineno"> 1014</span>&#160; </div>
+<div class="line"><a name="l01029"></a><span class="lineno"> 1029</span>&#160;        <span class="keyword">module</span> function si_diff1(this, pt, err) result(yy)</div>
+<div class="line"><a name="l01030"></a><span class="lineno"> 1030</span>&#160;            <span class="comment">! Arguments</span></div>
+<div class="line"><a name="l01031"></a><span class="lineno"> 1031</span>&#160;            <span class="keywordtype">class</span>(spline_interp), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01032"></a><span class="lineno"> 1032</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: pt</div>
+<div class="line"><a name="l01033"></a><span class="lineno"> 1033</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01034"></a><span class="lineno"> 1034</span>&#160;<span class="keywordtype">            real</span>(real64) :: yy</div>
+<div class="line"><a name="l01035"></a><span class="lineno"> 1035</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01036"></a><span class="lineno"> 1036</span>&#160; </div>
+<div class="line"><a name="l01052"></a><span class="lineno"> 1052</span>&#160;        <span class="keyword">module</span> function si_diff1_array(this, pts, err) result(yy)</div>
+<div class="line"><a name="l01053"></a><span class="lineno"> 1053</span>&#160;            <span class="comment">! Arguments</span></div>
+<div class="line"><a name="l01054"></a><span class="lineno"> 1054</span>&#160;            <span class="keywordtype">class</span>(spline_interp), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01055"></a><span class="lineno"> 1055</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: pts</div>
+<div class="line"><a name="l01056"></a><span class="lineno"> 1056</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01057"></a><span class="lineno"> 1057</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">dimension(size(pts))</span> :: yy</div>
+<div class="line"><a name="l01058"></a><span class="lineno"> 1058</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01059"></a><span class="lineno"> 1059</span>&#160; </div>
+<div class="line"><a name="l01074"></a><span class="lineno"> 1074</span>&#160;        <span class="keyword">module</span> function si_diff2(this, pt, err) result(yy)</div>
+<div class="line"><a name="l01075"></a><span class="lineno"> 1075</span>&#160;            <span class="comment">! Arguments</span></div>
+<div class="line"><a name="l01076"></a><span class="lineno"> 1076</span>&#160;            <span class="keywordtype">class</span>(spline_interp), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01077"></a><span class="lineno"> 1077</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: pt</div>
+<div class="line"><a name="l01078"></a><span class="lineno"> 1078</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01079"></a><span class="lineno"> 1079</span>&#160;<span class="keywordtype">            real</span>(real64) :: yy</div>
+<div class="line"><a name="l01080"></a><span class="lineno"> 1080</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01081"></a><span class="lineno"> 1081</span>&#160; </div>
+<div class="line"><a name="l01097"></a><span class="lineno"> 1097</span>&#160;        <span class="keyword">module</span> function si_diff2_array(this, pts, err) result(yy)</div>
+<div class="line"><a name="l01098"></a><span class="lineno"> 1098</span>&#160;            <span class="comment">! Arguments</span></div>
+<div class="line"><a name="l01099"></a><span class="lineno"> 1099</span>&#160;            <span class="keywordtype">class</span>(spline_interp), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01100"></a><span class="lineno"> 1100</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: pts</div>
+<div class="line"><a name="l01101"></a><span class="lineno"> 1101</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01102"></a><span class="lineno"> 1102</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">dimension(size(pts))</span> :: yy</div>
+<div class="line"><a name="l01103"></a><span class="lineno"> 1103</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01104"></a><span class="lineno"> 1104</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l01105"></a><span class="lineno"> 1105</span>&#160; </div>
+<div class="line"><a name="l01106"></a><span class="lineno"> 1106</span>&#160;<span class="comment">! ******************************************************************************</span></div>
+<div class="line"><a name="l01107"></a><span class="lineno"> 1107</span>&#160;<span class="comment">! MEASUREMENTS_SMOOTHING.F90</span></div>
+<div class="line"><a name="l01108"></a><span class="lineno"> 1108</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01111"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1lowess__smoothing.html"> 1111</a></span>&#160;    <span class="keyword">type</span> lowess_smoothing</div>
+<div class="line"><a name="l01112"></a><span class="lineno"> 1112</span>&#160;        <span class="keywordtype">private</span></div>
+<div class="line"><a name="l01114"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1lowess__smoothing.html#afd4682edd759b72d35be5f9afc5446d1"> 1114</a></span>&#160;<span class="keywordtype">        real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: m_x</div>
+<div class="line"><a name="l01116"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1lowess__smoothing.html#a5fbec2677207058f57e716da9d7e25c8"> 1116</a></span>&#160;<span class="keywordtype">        real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: m_y</div>
+<div class="line"><a name="l01119"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1lowess__smoothing.html#aa5b58290e060bf6052d2e6310e67b91f"> 1119</a></span>&#160;<span class="keywordtype">        real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: m_weights</div>
+<div class="line"><a name="l01121"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1lowess__smoothing.html#af017e0a89d292597a84f107249faab6b"> 1121</a></span>&#160;<span class="keywordtype">        real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: m_residuals</div>
+<div class="line"><a name="l01124"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1lowess__smoothing.html#a97df69d9b071eceb80d19df8d470bc32"> 1124</a></span>&#160;<span class="keywordtype">        real</span>(real64) :: m_delta</div>
+<div class="line"><a name="l01126"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1lowess__smoothing.html#ae698222174f4ef216704c7388b97b457"> 1126</a></span>&#160;        <span class="keywordtype">logical</span> :: m_init = .false.</div>
+<div class="line"><a name="l01127"></a><span class="lineno"> 1127</span>&#160;    <span class="keyword">contains</span></div>
+<div class="line"><a name="l01129"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1lowess__smoothing.html#a97544f9c79bbe44f8c28af522a605f88"> 1129</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: initialize =&gt; ls_init</div>
+<div class="line"><a name="l01131"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1lowess__smoothing.html#a875bfe9eea71fd94c522b0fabf66db81"> 1131</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: smooth =&gt; ls_smooth</div>
+<div class="line"><a name="l01133"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1lowess__smoothing.html#a56d32b54f164e4cf97f1292bb7e91d2f"> 1133</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_count =&gt; ls_get_num_pts</div>
+<div class="line"><a name="l01135"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1lowess__smoothing.html#a77953cb75ca52bd0c070c2694452cd02"> 1135</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_x =&gt; ls_get_x</div>
+<div class="line"><a name="l01137"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1lowess__smoothing.html#a25b562ed68e3542acb21993527f64aa8"> 1137</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_y =&gt; ls_get_y</div>
+<div class="line"><a name="l01139"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1lowess__smoothing.html#a8e2cb1426eab54c129dcf88cb9405969"> 1139</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_residuals =&gt; ls_get_residual</div>
+<div class="line"><a name="l01140"></a><span class="lineno"> 1140</span>&#160;    <span class="keyword">end type</span></div>
+<div class="line"><a name="l01141"></a><span class="lineno"> 1141</span>&#160; </div>
+<div class="line"><a name="l01142"></a><span class="lineno"> 1142</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01143"></a><span class="lineno"> 1143</span>&#160;    <span class="comment">! LOWESS_SMOOTHING ROUTINES</span></div>
+<div class="line"><a name="l01144"></a><span class="lineno"> 1144</span>&#160;    <span class="keyword">interface</span></div>
+<div class="line"><a name="l01145"></a><span class="lineno"> 1145</span>&#160; </div>
+<div class="line"><a name="l01166"></a><span class="lineno"> 1166</span>&#160;        <span class="keyword">module</span> subroutine ls_init(this, x, y, err)</div>
+<div class="line"><a name="l01167"></a><span class="lineno"> 1167</span>&#160;            <span class="keywordtype">class</span>(lowess_smoothing), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01168"></a><span class="lineno"> 1168</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x, y</div>
+<div class="line"><a name="l01169"></a><span class="lineno"> 1169</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01170"></a><span class="lineno"> 1170</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01171"></a><span class="lineno"> 1171</span>&#160; </div>
+<div class="line"><a name="l01192"></a><span class="lineno"> 1192</span>&#160;        <span class="keyword">module</span> function ls_smooth(this, f, err) result(ys)</div>
+<div class="line"><a name="l01193"></a><span class="lineno"> 1193</span>&#160;            <span class="keywordtype">class</span>(lowess_smoothing), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01194"></a><span class="lineno"> 1194</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: f</div>
+<div class="line"><a name="l01195"></a><span class="lineno"> 1195</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01196"></a><span class="lineno"> 1196</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: ys</div>
+<div class="line"><a name="l01197"></a><span class="lineno"> 1197</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01198"></a><span class="lineno"> 1198</span>&#160; </div>
+<div class="line"><a name="l01204"></a><span class="lineno"> 1204</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function ls_get_num_pts(this) result(n)</div>
+<div class="line"><a name="l01205"></a><span class="lineno"> 1205</span>&#160;            <span class="keywordtype">class</span>(lowess_smoothing), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01206"></a><span class="lineno"> 1206</span>&#160;            <span class="keywordtype">integer(int32)</span> :: n</div>
+<div class="line"><a name="l01207"></a><span class="lineno"> 1207</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01208"></a><span class="lineno"> 1208</span>&#160; </div>
+<div class="line"><a name="l01215"></a><span class="lineno"> 1215</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function ls_get_x(this, ind) result(x)</div>
+<div class="line"><a name="l01216"></a><span class="lineno"> 1216</span>&#160;            <span class="keywordtype">class</span>(lowess_smoothing), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01217"></a><span class="lineno"> 1217</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: ind</div>
+<div class="line"><a name="l01218"></a><span class="lineno"> 1218</span>&#160;<span class="keywordtype">            real</span>(real64) :: x</div>
+<div class="line"><a name="l01219"></a><span class="lineno"> 1219</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01220"></a><span class="lineno"> 1220</span>&#160; </div>
+<div class="line"><a name="l01227"></a><span class="lineno"> 1227</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function ls_get_y(this, ind) result(y)</div>
+<div class="line"><a name="l01228"></a><span class="lineno"> 1228</span>&#160;            <span class="keywordtype">class</span>(lowess_smoothing), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01229"></a><span class="lineno"> 1229</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: ind</div>
+<div class="line"><a name="l01230"></a><span class="lineno"> 1230</span>&#160;<span class="keywordtype">            real</span>(real64) :: y</div>
+<div class="line"><a name="l01231"></a><span class="lineno"> 1231</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01232"></a><span class="lineno"> 1232</span>&#160; </div>
+<div class="line"><a name="l01238"></a><span class="lineno"> 1238</span>&#160;        <span class="keyword">module</span> subroutine ls_get_residual(this, x)</div>
+<div class="line"><a name="l01239"></a><span class="lineno"> 1239</span>&#160;            <span class="keywordtype">class</span>(lowess_smoothing), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01240"></a><span class="lineno"> 1240</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(out)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01241"></a><span class="lineno"> 1241</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01242"></a><span class="lineno"> 1242</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l01243"></a><span class="lineno"> 1243</span>&#160; </div>
+<div class="line"><a name="l01244"></a><span class="lineno"> 1244</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01245"></a><span class="lineno"> 1245</span>&#160;    <span class="comment">! ADDITIONAL SMOOTHING ROUTINES</span></div>
+<div class="line"><a name="l01246"></a><span class="lineno"> 1246</span>&#160;    <span class="keyword">interface</span></div>
+<div class="line"><a name="l01247"></a><span class="lineno"> 1247</span>&#160; </div>
+<div class="line"><a name="l01263"></a><span class="lineno"> 1263</span>&#160;        <span class="keyword">module</span> subroutine moving_average(x, npts, err)</div>
+<div class="line"><a name="l01264"></a><span class="lineno"> 1264</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01265"></a><span class="lineno"> 1265</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: npts</div>
+<div class="line"><a name="l01266"></a><span class="lineno"> 1266</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01267"></a><span class="lineno"> 1267</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01268"></a><span class="lineno"> 1268</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l01269"></a><span class="lineno"> 1269</span>&#160; </div>
+<div class="line"><a name="l01270"></a><span class="lineno"> 1270</span>&#160;<span class="comment">! ******************************************************************************</span></div>
+<div class="line"><a name="l01271"></a><span class="lineno"> 1271</span>&#160;<span class="comment">! MEASUREMENTS_REGRESSION.F90</span></div>
+<div class="line"><a name="l01272"></a><span class="lineno"> 1272</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01273"></a><span class="lineno"> 1273</span>&#160;    <span class="keyword">interface</span></div>
+<div class="line"><a name="l01274"></a><span class="lineno"> 1274</span>&#160; </div>
+<div class="line"><a name="l01313"></a><span class="lineno"> 1313</span>&#160;        <span class="keyword">module</span> function linear_least_squares_mimo(x, y, thrsh, err) result(a)</div>
+<div class="line"><a name="l01314"></a><span class="lineno"> 1314</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:,:)</span> :: x, y</div>
+<div class="line"><a name="l01315"></a><span class="lineno"> 1315</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">optional</span> :: thrsh</div>
+<div class="line"><a name="l01316"></a><span class="lineno"> 1316</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01317"></a><span class="lineno"> 1317</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:,:)</span> :: a</div>
+<div class="line"><a name="l01318"></a><span class="lineno"> 1318</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01319"></a><span class="lineno"> 1319</span>&#160; </div>
+<div class="line"><a name="l01358"></a><span class="lineno"> 1358</span>&#160;        <span class="keyword">module</span> function linear_least_squares_miso(x, y, thrsh, err) result(a)</div>
+<div class="line"><a name="l01359"></a><span class="lineno"> 1359</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:,:)</span> :: x</div>
+<div class="line"><a name="l01360"></a><span class="lineno"> 1360</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: y</div>
+<div class="line"><a name="l01361"></a><span class="lineno"> 1361</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">optional</span> :: thrsh</div>
+<div class="line"><a name="l01362"></a><span class="lineno"> 1362</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01363"></a><span class="lineno"> 1363</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: a</div>
+<div class="line"><a name="l01364"></a><span class="lineno"> 1364</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01365"></a><span class="lineno"> 1365</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l01366"></a><span class="lineno"> 1366</span>&#160; </div>
+<div class="line"><a name="l01367"></a><span class="lineno"> 1367</span>&#160;<span class="comment">! ******************************************************************************</span></div>
+<div class="line"><a name="l01368"></a><span class="lineno"> 1368</span>&#160;<span class="comment">! MEASUREMENTS_PEAK.F90</span></div>
+<div class="line"><a name="l01369"></a><span class="lineno"> 1369</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01372"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1peak__info.html"> 1372</a></span>&#160;    <span class="keyword">type</span> peak_info</div>
+<div class="line"><a name="l01374"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1peak__info.html#ae6c909cdf6e9de0d779db63729eba5b1"> 1374</a></span>&#160;<span class="keywordtype">        real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: max_values</div>
+<div class="line"><a name="l01376"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1peak__info.html#a39449234c775708ded197bb172c3aac9"> 1376</a></span>&#160;        <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: max_value_indices</div>
+<div class="line"><a name="l01378"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1peak__info.html#ab96b5246b102bd43d8551d5fa890e4a3"> 1378</a></span>&#160;<span class="keywordtype">        real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: min_values</div>
+<div class="line"><a name="l01380"></a><span class="lineno"><a class="line" href="structmeasurements__core_1_1peak__info.html#a6647b918f81a2f26f8a796377b1bf48a"> 1380</a></span>&#160;        <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: min_value_indices</div>
+<div class="line"><a name="l01381"></a><span class="lineno"> 1381</span>&#160;    <span class="keyword">end type</span></div>
+<div class="line"><a name="l01382"></a><span class="lineno"> 1382</span>&#160; </div>
+<div class="line"><a name="l01383"></a><span class="lineno"> 1383</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01384"></a><span class="lineno"> 1384</span>&#160;    <span class="keyword">interface</span></div>
+<div class="line"><a name="l01385"></a><span class="lineno"> 1385</span>&#160; </div>
+<div class="line"><a name="l01404"></a><span class="lineno"> 1404</span>&#160;        <span class="keyword">module</span> function peak_detect(v, delta, err) result(rst)</div>
+<div class="line"><a name="l01405"></a><span class="lineno"> 1405</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: v</div>
+<div class="line"><a name="l01406"></a><span class="lineno"> 1406</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: delta</div>
+<div class="line"><a name="l01407"></a><span class="lineno"> 1407</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01408"></a><span class="lineno"> 1408</span>&#160;            <span class="keywordtype">type</span>(peak_info) :: rst</div>
+<div class="line"><a name="l01409"></a><span class="lineno"> 1409</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01410"></a><span class="lineno"> 1410</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l01411"></a><span class="lineno"> 1411</span>&#160; </div>
+<div class="line"><a name="l01412"></a><span class="lineno"> 1412</span>&#160;<span class="comment">! ******************************************************************************</span></div>
+<div class="line"><a name="l01413"></a><span class="lineno"> 1413</span>&#160;<span class="comment">! MEASUREMENT_SPECTRUM.F90</span></div>
+<div class="line"><a name="l01414"></a><span class="lineno"> 1414</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01415"></a><span class="lineno"> 1415</span>&#160;    <span class="keyword">interface</span></div>
+<div class="line"><a name="l01416"></a><span class="lineno"> 1416</span>&#160; </div>
+<div class="line"><a name="l01421"></a><span class="lineno"><a class="line" href="interfacemeasurements__core_1_1window__function.html"> 1421</a></span>&#160;        <span class="keyword">function </span>window_function(bin, n) <span class="keyword">result</span>(x)</div>
+<div class="line"><a name="l01422"></a><span class="lineno"> 1422</span>&#160;            <span class="keywordtype">use </span>iso_fortran_env</div>
+<div class="line"><a name="l01423"></a><span class="lineno"> 1423</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: bin, n</div>
+<div class="line"><a name="l01424"></a><span class="lineno"> 1424</span>&#160;<span class="keywordtype">            real</span>(real64) :: x</div>
+<div class="line"><a name="l01425"></a><span class="lineno"> 1425</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01426"></a><span class="lineno"> 1426</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l01427"></a><span class="lineno"> 1427</span>&#160; </div>
+<div class="line"><a name="l01428"></a><span class="lineno"> 1428</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01429"></a><span class="lineno"> 1429</span>&#160;    <span class="keyword">interface</span></div>
+<div class="line"><a name="l01430"></a><span class="lineno"> 1430</span>&#160; </div>
+<div class="line"><a name="l01434"></a><span class="lineno"> 1434</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function is_power_of_two(n) result(rst)</div>
+<div class="line"><a name="l01435"></a><span class="lineno"> 1435</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: n</div>
+<div class="line"><a name="l01436"></a><span class="lineno"> 1436</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
+<div class="line"><a name="l01437"></a><span class="lineno"> 1437</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01438"></a><span class="lineno"> 1438</span>&#160; </div>
+<div class="line"><a name="l01446"></a><span class="lineno"> 1446</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function next_power_of_two(x) result(n)</div>
+<div class="line"><a name="l01447"></a><span class="lineno"> 1447</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: x</div>
+<div class="line"><a name="l01448"></a><span class="lineno"> 1448</span>&#160;            <span class="keywordtype">integer(int32)</span> :: n</div>
+<div class="line"><a name="l01449"></a><span class="lineno"> 1449</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01450"></a><span class="lineno"> 1450</span>&#160; </div>
+<div class="line"><a name="l01457"></a><span class="lineno"> 1457</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function pad_with_zeros(x) result(xp)</div>
+<div class="line"><a name="l01458"></a><span class="lineno"> 1458</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01459"></a><span class="lineno"> 1459</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: xp</div>
+<div class="line"><a name="l01460"></a><span class="lineno"> 1460</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01461"></a><span class="lineno"> 1461</span>&#160; </div>
+<div class="line"><a name="l01476"></a><span class="lineno"> 1476</span>&#160;        <span class="keyword">module</span> function fourier_transform(x, err) result(f)</div>
+<div class="line"><a name="l01477"></a><span class="lineno"> 1477</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01478"></a><span class="lineno"> 1478</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01479"></a><span class="lineno"> 1479</span>&#160;            <span class="keywordtype">complex(real64)</span>, <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: f</div>
+<div class="line"><a name="l01480"></a><span class="lineno"> 1480</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01481"></a><span class="lineno"> 1481</span>&#160; </div>
+<div class="line"><a name="l01506"></a><span class="lineno"> 1506</span>&#160;        <span class="keyword">module</span> function periodogram(x, winfun, nfft, err) result(p)</div>
+<div class="line"><a name="l01507"></a><span class="lineno"> 1507</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01508"></a><span class="lineno"> 1508</span>&#160;            <span class="keywordtype">procedure</span>(window_function), <span class="keywordtype">pointer</span>, <span class="keywordtype">intent(in)</span> :: winfun</div>
+<div class="line"><a name="l01509"></a><span class="lineno"> 1509</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: nfft</div>
+<div class="line"><a name="l01510"></a><span class="lineno"> 1510</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01511"></a><span class="lineno"> 1511</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: p</div>
+<div class="line"><a name="l01512"></a><span class="lineno"> 1512</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01513"></a><span class="lineno"> 1513</span>&#160; </div>
+<div class="line"><a name="l01526"></a><span class="lineno"> 1526</span>&#160;        <span class="keywordtype">pure</span> <span class="keywordtype">elemental</span> <span class="keyword">module</span> function fourier_frequency(fs, i, nxfrm) result(f)</div>
+<div class="line"><a name="l01527"></a><span class="lineno"> 1527</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: fs</div>
+<div class="line"><a name="l01528"></a><span class="lineno"> 1528</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i, nxfrm</div>
+<div class="line"><a name="l01529"></a><span class="lineno"> 1529</span>&#160;<span class="keywordtype">            real</span>(real64) :: f</div>
+<div class="line"><a name="l01530"></a><span class="lineno"> 1530</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01531"></a><span class="lineno"> 1531</span>&#160; </div>
+<div class="line"><a name="l01538"></a><span class="lineno"> 1538</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function rectangular_window(j, n) result(x)</div>
+<div class="line"><a name="l01539"></a><span class="lineno"> 1539</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: j, n</div>
+<div class="line"><a name="l01540"></a><span class="lineno"> 1540</span>&#160;<span class="keywordtype">            real</span>(real64) :: x</div>
+<div class="line"><a name="l01541"></a><span class="lineno"> 1541</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01542"></a><span class="lineno"> 1542</span>&#160; </div>
+<div class="line"><a name="l01549"></a><span class="lineno"> 1549</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function hann_window(j, n) result(x)</div>
+<div class="line"><a name="l01550"></a><span class="lineno"> 1550</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: j, n</div>
+<div class="line"><a name="l01551"></a><span class="lineno"> 1551</span>&#160;<span class="keywordtype">            real</span>(real64) :: x</div>
+<div class="line"><a name="l01552"></a><span class="lineno"> 1552</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01553"></a><span class="lineno"> 1553</span>&#160; </div>
+<div class="line"><a name="l01560"></a><span class="lineno"> 1560</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function hamming_window(j, n) result(x)</div>
+<div class="line"><a name="l01561"></a><span class="lineno"> 1561</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: j, n</div>
+<div class="line"><a name="l01562"></a><span class="lineno"> 1562</span>&#160;<span class="keywordtype">            real</span>(real64) :: x</div>
+<div class="line"><a name="l01563"></a><span class="lineno"> 1563</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01564"></a><span class="lineno"> 1564</span>&#160; </div>
+<div class="line"><a name="l01571"></a><span class="lineno"> 1571</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function welch_window(j, n) result(x)</div>
+<div class="line"><a name="l01572"></a><span class="lineno"> 1572</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: j, n</div>
+<div class="line"><a name="l01573"></a><span class="lineno"> 1573</span>&#160;<span class="keywordtype">            real</span>(real64) :: x</div>
+<div class="line"><a name="l01574"></a><span class="lineno"> 1574</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01575"></a><span class="lineno"> 1575</span>&#160; </div>
+<div class="line"><a name="l01582"></a><span class="lineno"> 1582</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function blackman_harris_window(j, n) result(x)</div>
+<div class="line"><a name="l01583"></a><span class="lineno"> 1583</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: j, n</div>
+<div class="line"><a name="l01584"></a><span class="lineno"> 1584</span>&#160;<span class="keywordtype">            real</span>(real64) :: x</div>
+<div class="line"><a name="l01585"></a><span class="lineno"> 1585</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01586"></a><span class="lineno"> 1586</span>&#160; </div>
+<div class="line"><a name="l01602"></a><span class="lineno"> 1602</span>&#160;        <span class="keyword">module</span> function fft(x, err) result(f)</div>
+<div class="line"><a name="l01603"></a><span class="lineno"> 1603</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01604"></a><span class="lineno"> 1604</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01605"></a><span class="lineno"> 1605</span>&#160;            <span class="keywordtype">complex(real64)</span>, <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: f</div>
+<div class="line"><a name="l01606"></a><span class="lineno"> 1606</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01607"></a><span class="lineno"> 1607</span>&#160; </div>
+<div class="line"><a name="l01621"></a><span class="lineno"> 1621</span>&#160;        <span class="keyword">module</span> function ifft(x, err) result(f)</div>
+<div class="line"><a name="l01622"></a><span class="lineno"> 1622</span>&#160;            <span class="keywordtype">complex(real64)</span>, <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01623"></a><span class="lineno"> 1623</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01624"></a><span class="lineno"> 1624</span>&#160;            <span class="keywordtype">complex(real64)</span>, <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: f</div>
+<div class="line"><a name="l01625"></a><span class="lineno"> 1625</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01626"></a><span class="lineno"> 1626</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l01627"></a><span class="lineno"> 1627</span>&#160; </div>
+<div class="line"><a name="l01628"></a><span class="lineno"> 1628</span>&#160;<span class="comment">! ******************************************************************************</span></div>
+<div class="line"><a name="l01629"></a><span class="lineno"> 1629</span>&#160;<span class="comment">! MEASUREMENTS_FILTER.F90</span></div>
+<div class="line"><a name="l01630"></a><span class="lineno"> 1630</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01631"></a><span class="lineno"> 1631</span>&#160;    <span class="keyword">interface</span></div>
+<div class="line"><a name="l01632"></a><span class="lineno"> 1632</span>&#160; </div>
+<div class="line"><a name="l01650"></a><span class="lineno"> 1650</span>&#160;        <span class="keyword">module</span> function low_pass_filter(x, fs, cutoff, err) result(y)</div>
+<div class="line"><a name="l01651"></a><span class="lineno"> 1651</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01652"></a><span class="lineno"> 1652</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: fs, cutoff</div>
+<div class="line"><a name="l01653"></a><span class="lineno"> 1653</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01654"></a><span class="lineno"> 1654</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: y</div>
+<div class="line"><a name="l01655"></a><span class="lineno"> 1655</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01656"></a><span class="lineno"> 1656</span>&#160; </div>
+<div class="line"><a name="l01675"></a><span class="lineno"> 1675</span>&#160;        <span class="keyword">module</span> function high_pass_filter(x, fs, cutoff, err) result(y)</div>
+<div class="line"><a name="l01676"></a><span class="lineno"> 1676</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01677"></a><span class="lineno"> 1677</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: fs, cutoff</div>
+<div class="line"><a name="l01678"></a><span class="lineno"> 1678</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01679"></a><span class="lineno"> 1679</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: y</div>
+<div class="line"><a name="l01680"></a><span class="lineno"> 1680</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01681"></a><span class="lineno"> 1681</span>&#160; </div>
+<div class="line"><a name="l01703"></a><span class="lineno"> 1703</span>&#160;        <span class="keyword">module</span> function band_pass_filter(x, fs, cutoff1, cutoff2, err) result(y)</div>
+<div class="line"><a name="l01704"></a><span class="lineno"> 1704</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01705"></a><span class="lineno"> 1705</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: fs, cutoff1, cutoff2</div>
+<div class="line"><a name="l01706"></a><span class="lineno"> 1706</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01707"></a><span class="lineno"> 1707</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: y</div>
+<div class="line"><a name="l01708"></a><span class="lineno"> 1708</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01709"></a><span class="lineno"> 1709</span>&#160; </div>
+<div class="line"><a name="l01731"></a><span class="lineno"> 1731</span>&#160;        <span class="keyword">module</span> function band_stop_filter(x, fs, cutoff1, cutoff2, err) result(y)</div>
+<div class="line"><a name="l01732"></a><span class="lineno"> 1732</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01733"></a><span class="lineno"> 1733</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span> :: fs, cutoff1, cutoff2</div>
+<div class="line"><a name="l01734"></a><span class="lineno"> 1734</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01735"></a><span class="lineno"> 1735</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: y</div>
+<div class="line"><a name="l01736"></a><span class="lineno"> 1736</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01737"></a><span class="lineno"> 1737</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l01738"></a><span class="lineno"> 1738</span>&#160; </div>
+<div class="line"><a name="l01739"></a><span class="lineno"> 1739</span>&#160;<span class="comment">! ******************************************************************************</span></div>
+<div class="line"><a name="l01740"></a><span class="lineno"> 1740</span>&#160;<span class="comment">! MEASUREMENTS_ARRAY.F90</span></div>
+<div class="line"><a name="l01741"></a><span class="lineno"> 1741</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01742"></a><span class="lineno"> 1742</span>&#160;    <span class="keyword">interface</span></div>
+<div class="line"><a name="l01743"></a><span class="lineno"> 1743</span>&#160; </div>
+<div class="line"><a name="l01756"></a><span class="lineno"> 1756</span>&#160;        <span class="keyword">module</span> function cumulative_sum(x, err) result(y)</div>
+<div class="line"><a name="l01757"></a><span class="lineno"> 1757</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01758"></a><span class="lineno"> 1758</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01759"></a><span class="lineno"> 1759</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: y</div>
+<div class="line"><a name="l01760"></a><span class="lineno"> 1760</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01761"></a><span class="lineno"> 1761</span>&#160; </div>
+<div class="line"><a name="l01776"></a><span class="lineno"> 1776</span>&#160;        <span class="keyword">module</span> function difference(x, err) result(dx)</div>
+<div class="line"><a name="l01777"></a><span class="lineno"> 1777</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01778"></a><span class="lineno"> 1778</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01779"></a><span class="lineno"> 1779</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: dx</div>
+<div class="line"><a name="l01780"></a><span class="lineno"> 1780</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01781"></a><span class="lineno"> 1781</span>&#160; </div>
+<div class="line"><a name="l01797"></a><span class="lineno"> 1797</span>&#160;        <span class="keyword">module</span> function unwrap(x, cutoff, err) result(p)</div>
+<div class="line"><a name="l01798"></a><span class="lineno"> 1798</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01799"></a><span class="lineno"> 1799</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">optional</span> :: cutoff</div>
+<div class="line"><a name="l01800"></a><span class="lineno"> 1800</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01801"></a><span class="lineno"> 1801</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: p</div>
+<div class="line"><a name="l01802"></a><span class="lineno"> 1802</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01803"></a><span class="lineno"> 1803</span>&#160; </div>
+<div class="line"><a name="l01822"></a><span class="lineno"> 1822</span>&#160;        <span class="keyword">module</span> function finite_difference(x, y, err) result(dydx)</div>
+<div class="line"><a name="l01823"></a><span class="lineno"> 1823</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x, y</div>
+<div class="line"><a name="l01824"></a><span class="lineno"> 1824</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01825"></a><span class="lineno"> 1825</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: dydx</div>
+<div class="line"><a name="l01826"></a><span class="lineno"> 1826</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01827"></a><span class="lineno"> 1827</span>&#160; </div>
+<div class="line"><a name="l01848"></a><span class="lineno"> 1848</span>&#160;        <span class="keyword">module</span> function integrate(x, y, c, err) result(f)</div>
+<div class="line"><a name="l01849"></a><span class="lineno"> 1849</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x, y</div>
+<div class="line"><a name="l01850"></a><span class="lineno"> 1850</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">optional</span> :: c</div>
+<div class="line"><a name="l01851"></a><span class="lineno"> 1851</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01852"></a><span class="lineno"> 1852</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: f</div>
+<div class="line"><a name="l01853"></a><span class="lineno"> 1853</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01854"></a><span class="lineno"> 1854</span>&#160; </div>
+<div class="line"><a name="l01871"></a><span class="lineno"> 1871</span>&#160;        <span class="keyword">module</span> function trapz_integrate(x, y, err) result(f)</div>
+<div class="line"><a name="l01872"></a><span class="lineno"> 1872</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x, y</div>
+<div class="line"><a name="l01873"></a><span class="lineno"> 1873</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01874"></a><span class="lineno"> 1874</span>&#160;<span class="keywordtype">            real</span>(real64) :: f</div>
+<div class="line"><a name="l01875"></a><span class="lineno"> 1875</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01876"></a><span class="lineno"> 1876</span>&#160; </div>
+<div class="line"><a name="l01890"></a><span class="lineno"> 1890</span>&#160;        <span class="keyword">module</span> function remove_dc_offset(x, err) result(y)</div>
+<div class="line"><a name="l01891"></a><span class="lineno"> 1891</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01892"></a><span class="lineno"> 1892</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01893"></a><span class="lineno"> 1893</span>&#160;<span class="keywordtype">            real</span>(real64), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: y</div>
+<div class="line"><a name="l01894"></a><span class="lineno"> 1894</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01895"></a><span class="lineno"> 1895</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l01896"></a><span class="lineno"> 1896</span>&#160;    </div>
+<div class="line"><a name="l01897"></a><span class="lineno"> 1897</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01898"></a><span class="lineno"> 1898</span>&#160;<span class="keyword">end module</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespacemeasurements__core_html"><div class="ttname"><a href="namespacemeasurements__core.html">measurements_core</a></div><div class="ttdoc">A module containing types and routines to support measurement-related calculations.</div><div class="ttdef"><b>Definition:</b> <a href="measurements__core_8f90_source.html#l00005">measurements_core.f90:5</a></div></div>
-<div class="ttc" id="astructprocess__variance_html"><div class="ttname"><a href="structprocess__variance.html">process_variance</a></div><div class="ttdef"><b>Definition:</b> <a href="measurements_8h_source.html#l00007">measurements.h:7</a></div></div>
-<div class="ttc" id="astructgrr__results_html"><div class="ttname"><a href="structgrr__results.html">grr_results</a></div><div class="ttdef"><b>Definition:</b> <a href="measurements_8h_source.html#l00027">measurements.h:27</a></div></div>
+<div class="ttc" id="astructprocess__variance_html"><div class="ttname"><a href="structprocess__variance.html">process_variance</a></div><div class="ttdef"><b>Definition:</b> <a href="measurements_8h_source.html#l00053">measurements.h:53</a></div></div>
+<div class="ttc" id="astructgrr__results_html"><div class="ttname"><a href="structgrr__results.html">grr_results</a></div><div class="ttdef"><b>Definition:</b> <a href="measurements_8h_source.html#l00073">measurements.h:73</a></div></div>
+<div class="ttc" id="astructstatistic_html"><div class="ttname"><a href="structstatistic.html">statistic</a></div><div class="ttdef"><b>Definition:</b> <a href="measurements_8h_source.html#l00090">measurements.h:90</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['tolerance_5frange_31',['tolerance_range',['../structmeasurements__core_1_1grr__results.html#afcf3352dc03c52c03c2b487306972fe9',1,'measurements_core::grr_results::tolerance_range()'],['../structgrr__results.html#a2776c2f1afcc3af7b2298a40398b0a73',1,'grr_results::tolerance_range()']]],
-  ['total_5fvariance_32',['total_variance',['../structmeasurements__core_1_1process__variance.html#aec5ea59273c586f9b22c6220b9d12b54',1,'measurements_core::process_variance::total_variance()'],['../structprocess__variance.html#a7b154927ce05084d5f39a13f927f8cf6',1,'process_variance::total_variance()']]]
+  ['linear_5finterp_68',['linear_interp',['../structmeasurements__core_1_1linear__interp.html',1,'measurements_core']]],
+  ['locate_69',['locate',['../structmeasurements__core_1_1interp__manager.html#af92e48e7793bb4564c52b0a037e025d6',1,'measurements_core::interp_manager']]],
+  ['lowess_5fsmoothing_70',['lowess_smoothing',['../structmeasurements__core_1_1lowess__smoothing.html',1,'measurements_core']]]
 ];

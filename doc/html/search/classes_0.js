@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['grr_5fresults_33',['grr_results',['../structmeasurements__core_1_1grr__results.html',1,'measurements_core::grr_results'],['../structgrr__results.html',1,'grr_results']]]
+  ['c_5fwindow_5ffunction_115',['c_window_function',['../interfacemeasurements__c__api_1_1c__window__function.html',1,'measurements_c_api']]]
 ];
