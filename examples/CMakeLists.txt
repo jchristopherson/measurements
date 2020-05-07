@@ -1,0 +1,3 @@
+# Peak Detection Example
+add_executable(peak_detect_example peak_detect_example.f90)
+target_link_libraries(peak_detect_example measurements)

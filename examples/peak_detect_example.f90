@@ -1,10 +1,5 @@
-# measurements
-A library that provides routines supporting calculations related to measurement activities.
+! peak_detect_example.f90
 
-## Peak Detection Example
-The following example highlights basic usage of the peak-detection functionallity.
-
-```fortran
 program main
     use iso_fortran_env
     use measurements_core
@@ -50,16 +45,3 @@ program main
             pks%min_values(i)
     end do
 end program
-```
-The above program produces the following output.
-```text
-Peaks (indices, t, x)
-        97      0.09600 0.81826
-        516     0.51500 0.35404
-        935     0.93400 0.15319
-Valleys (indices, t, x)
-        306     0.30500 -0.53823
-        725     0.72400 -0.23288
-```
-The following plot illustrates the peak detection results.
-![](images/peak_detect_example.png?raw=true)
