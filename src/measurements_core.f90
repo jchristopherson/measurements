@@ -44,41 +44,6 @@ module measurements_core
     !> @brief Defines a paired data set assumption.
     integer(int32), parameter :: PAIRED_DATA_SET_ASSUMPTION = 2002
 
-    !> @brief A type containing variance components describing a measurement
-    !! process.
-    type, bind(C) :: process_variance
-        !> @brief The measurement variation component.  In a gauge analysis this
-        !! is referred to as the gauge R&R.  It is the sum of the repeatability
-        !! and reproducibility variance components.
-        real(real64) :: measurement_variance
-        !> @brief The part variance component.
-        real(real64) :: part_variance
-        !> @brief The total process variance.  This is the sum of the 
-        !! measurement variance and part variance.
-        real(real64) :: total_variance
-        !> @brief The equipment variance component.  This is often referred to
-        !! as the repeatability component.
-        real(real64) :: equipment_variance
-        !> @brief The operator variance component.
-        real(real64) :: operator_variance
-        !> @brief The operator by part variance component.
-        real(real64) :: operator_by_part_variance
-    end type
-
-    !> @brief A type containing gauge R&R results.
-    type, bind(C) :: grr_results
-        !> @brief The precision to tolerance ratio (P/T ratio).  This ratio
-        !! is simply the ratio of the measurement standard deviation to
-        !! the tolerance range.
-        real(real64) :: pt_ratio
-        !> @brief The precision to total variation ratio (P/TV ratio).  This 
-        !! ratio is simply the ratio of the measurement standard deviation to
-        !! the total process standard deviation.
-        real(real64) :: ptv_ratio
-        !> @brief The tolerance range.
-        real(real64) :: tolerance_range
-    end type
-
     !> @brief A type containing information regarding a given statistic and its
     !! associated probability.
     type, bind(C) :: statistic
@@ -319,85 +284,6 @@ module measurements_core
         pure elemental module function f_distribution(d1, d2, x) result(z)
             real(real64), intent(in) :: d1, d2, x
             real(real64) :: z
-        end function
-
-        !> @brief Utilizes an analysis of variance (ANOVA) to determine the
-        !! variance components of a measurement process represented by the
-        !! supplied data set.
-        !!
-        !! @param[in] x An M-by-N-by-P data set from the measurement process
-        !!  to analyze where M is the number of parts tested (must be greater
-        !!  than 1), N is the number of tests performed per part (must be
-        !!  greater than 1), and P is the number of operators performing the
-        !!  tests (must be at least 1).
-        !! @param[in] alpha An optional parameter used to determine the 
-        !!  appropriate calculation path.  The default value is 0.05.
-        !!
-        !! @return The resulting variance components of the process.
-        !!
-        !! @remarks It is possible for this routine to return zero-valued
-        !!  variance components.  In such an event it is recommended that
-        !!  another variance estimator is utilized.
-        pure module function anova(x, alpha) result(rst)
-            real(real64), intent(in), dimension(:,:,:) :: x
-            real(real64), intent(in), optional :: alpha
-            type(process_variance) :: rst
-        end function
-
-        !> @brief Utilizes a control chart type approach to evaluate the 
-        !! measurement process utilized to collect the supplied data set.
-        !!
-        !! @param[in] x An M-by-N-by-P data set from the measurement process
-        !!  to analyze where M is the number of parts tested (must be greater
-        !!  than 1), N is the number of tests performed per part (must be
-        !!  greater than 1), and P is the number of operators performing the
-        !!  tests (must be at least 1).
-        !!
-        !! @return The resulting variance components of the process.
-        !!
-        !! @remarks This approach is best suited for smaller data sets whose
-        !!  dimension doesn't exceed 25-30.  Anything over this size is better
-        !!  served by another technique.
-        pure module function control_chart_variance(x) result(rst)
-            real(real64), intent(in), dimension(:,:,:) :: x
-            type(process_variance) :: rst
-        end function
-
-        !> @brief Computes the gauge R&R statistics given a supplied set of
-        !! process variance data.
-        !!
-        !! @param[in] k The multiplier to use when computing the P/T ratio.
-        !!  Typically, a value of 6 is used for this factor.
-        !! @param[in] x The process variance data.
-        !! @param[in] usl The upper specification limit.
-        !! @param[in] lsl The lower specification limit.
-        !!
-        !! @return The gauge R&R statistics.
-        pure module function compute_grr(k, x, usl, lsl) result(rst)
-            real(real64), intent(in) :: k, usl, lsl
-            type(process_variance), intent(in) :: x
-            type(grr_results) :: rst
-        end function
-
-        !> @brief Computes the discrimination ratio.
-        !!
-        !! @param[in] tv The total variance.
-        !! @param[in] mv The measurement system variance.
-        !!
-        !! @return The results of the operation.
-        !!
-        !! @par 
-        !! The discrimination ratio is computed as follows.
-        !! @par
-        !! /f$ DR = \sqrt{\frac{2 \sigma_{total}^2}{\sigma_{meas}^2} - 1} /f$
-        !! @par
-        !! An alternate means of computing this parameter (as used in JMP)
-        !! is as follows.
-        !! @par
-        !! /f$ DR = 1.41 \frac{\sigma_{parts}}{\sigma_{meas}} /f$
-        pure elemental module function discrimination_ratio(tv, mv) result(x)
-            real(real64), intent(in) :: tv, mv
-            real(real64) :: x
         end function
 
         !> @brief Applies Student's t-test to compute the t-statistic.  A 
