@@ -10,3 +10,7 @@ target_link_libraries(interpolation_example measurements)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 add_executable(c_interpolation_example c_interpolation_example.c)
 target_link_libraries(c_interpolation_example measurements)
+
+# ANOVA Example
+add_executable(anova_example anova_example.f90)
+target_link_libraries(anova_example measurements)

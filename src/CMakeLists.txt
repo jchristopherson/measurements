@@ -41,6 +41,7 @@ set(measurements_sources
     measurements_spectrum.f90
     measurements_filter.f90
     measurements_array.f90
+    measurements_anova.f90
 )
 
 # Build the library

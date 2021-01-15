@@ -327,6 +327,54 @@ module measurements_core
             real(real64), intent(in), dimension(:) :: x1, x2
             type(statistic) :: rst
         end function
+
+        !> @brief Removes all NaN's from an array.
+        !!
+        !! @param[in] x The array.
+        !! 
+        !! @return The array @p x without any NaN's.
+        pure module function remove_nans(x) result(rst)
+            real(real64), intent(in), dimension(:) :: x
+            real(real64), allocatable, dimension(:) :: rst
+        end function
+
+        !> @brief Removes all values sufficiently close to zero from an array.
+        !!
+        !! @param[in] x The array.
+        !! @param[in] tol An optional input that specifies the tolerance
+        !!  defining acceptable closeness to zero to consider zero.  The 
+        !!  default value is twice machine precision.
+        !!
+        !! @return The array @p x without zero values.
+        pure module function remove_zeros(x, tol) result(rst)
+            real(real64), intent(in), dimension(:) :: x
+            real(real64), intent(in), optional :: tol
+            real(real64), allocatable, dimension(:) :: rst
+        end function
+
+        !> @brief Computes the R-squared value of a data set and a model of
+        !! the data.
+        !!
+        !! @param[in] y An N-element array containing the dependent variables 
+        !!  from the data set.
+        !! @param[in] ym An N-element array containing the corresponding modeled
+        !!  values.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_ARRAY_SIZE_ERROR: Occurs if @p y and @p ym are not the same
+        !!      size.
+        !!
+        !! @return The R-squared value.
+        module function r_squared(y, ym, err) result(rst)
+            ! Arguments
+            real(real64), intent(in), dimension(:) :: y, ym
+            class(errors), intent(inout), optional, target :: err
+            real(real64) :: rst
+        end function
     end interface
 
 ! ******************************************************************************
@@ -1779,6 +1827,174 @@ module measurements_core
             real(real64), allocatable, dimension(:) :: y
         end function
     end interface
-    
+
+! ******************************************************************************
+! MEASUREMENTS_ANOVA.F90
+! ------------------------------------------------------------------------------
+    !> @brief A single entry in an ANOVA table.
+    type anova_table_entry
+        !> @brief The number of degrees of freedom.
+        integer(int32) :: dof
+        !> @brief The sum of the squares.
+        real(real64) :: sum_of_squares
+        !> @brief The mean of the squares.
+        real(real64) :: mean_of_squares
+        !> @brief The F statistic.
+        real(real64) :: f_stat
+        !> @brief The mean value.
+        real(real64) :: mean
+    end type
+
+! ------------------------------------------------------------------------------
+    !> @brief A gage repeatablilty and reproducibility (GR&R) ANOVA table.
+    type gage_anova_table
+        !> @brief The individual operator information.
+        type(anova_table_entry), allocatable, dimension(:) :: operator
+        !> @brief The combined operator information.
+        type(anova_table_entry) :: operators
+        !> @brief The individual part information.
+        type(anova_table_entry), allocatable, dimension(:) :: part
+        !> @brief The combined part information
+        type(anova_table_entry) :: parts
+        !> @brief The operator-by-part information
+        type(anova_table_entry) :: operator_by_part
+        !> @brief The measurement equipment information.
+        type(anova_table_entry) :: equipment
+        !> @brief The total variability information.
+        type(anova_table_entry) :: total
+    end type
+
+! ------------------------------------------------------------------------------
+    interface
+        !> @brief Computes a crossed-effects analysis of variance (ANOVA) for
+        !! a set of measurement data in order to better understand variance
+        !! contributions of each part of a measurement system or gage analysis.
+        !!
+        !! @param[in] x An M-by-N-by-P matrix containing the measurement results
+        !! taken by each operator where M is the number of parts tested by each
+        !! operator, N is the number of times each operator tested each part, 
+        !! and P is the number of test operators or inspectors.  Each value
+        !! must be greater than one.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!
+        !! @return A @p gage_anova_table object containing the variance results.
+        !!
+        !! @par Example
+        !! The following example illustrates an analysis of variance example
+        !! worked from https://www.spcforexcel.com/knowledge/measurement-systems-analysis/anova-gage-rr-part-1.
+        !! @code{.f90}
+        !! program main
+        !!     use iso_fortran_env
+        !!     use measurements_core
+        !!     implicit none
+        !!
+        !!     ! Parameters
+        !!     integer(int32), parameter :: nops = 3
+        !!     integer(int32), parameter :: nparts = 5
+        !!     integer(int32), parameter :: ntrials = 3
+        !!
+        !!     ! Local Variables
+        !!     real(real64) :: x(nparts, ntrials, nops)
+        !!     type(gage_anova_table) :: rst
+        !!
+        !!     ! Operator 1 Results
+        !!     x(:,:,1) = reshape([&
+        !!         3.29d0, 2.44d0, 4.34d0, 3.47d0, 2.2d0, &
+        !!         3.41d0, 2.32d0, 4.17d0, 3.5d0, 2.08d0, &
+        !!         3.64d0, 2.42d0, 4.27d0, 3.64d0, 2.16d0], &
+        !!         [nparts, ntrials])
+        !!
+        !!     ! Operator 2 Results
+        !!     x(:,:,2) = reshape([ &
+        !!         3.08d0, 2.53d0, 4.19d0, 3.01d0, 2.44d0, &
+        !!         3.25d0, 1.78d0, 3.94d0, 4.03d0, 1.8d0, &
+        !!         3.07d0, 2.32d0, 4.34d0, 3.2d0, 1.72d0], &
+        !!         [nparts, ntrials])
+        !!
+        !!     ! Operator 3 Results
+        !!     x(:,:,3) = reshape([ &
+        !!         3.04d0, 1.62d0, 3.88d0, 3.14d0, 1.54d0, &
+        !!         2.89d0, 1.87d0, 4.09d0, 3.2d0, 1.93d0, &
+        !!         2.85d0, 2.04d0, 3.67d0, 3.11d0, 1.55d0], &
+        !!         [nparts, ntrials])
+        !!
+        !!     ! Perform the ANOVA
+        !!     rst = gage_anova(x)
+        !!
+        !!     ! Display the results
+        !!     print '(A)', "Operator Results:"
+        !!     print '(AI0)', achar(9) // "DOF: ", rst%operators%dof
+        !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%operators%sum_of_squares
+        !!     print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%operators%mean_of_squares
+        !!     print '(AF0.3)', achar(9) // "F Statistic: ", rst%operators%f_stat
+        !!
+        !!     print '(A)', new_line('a') // "Part Results:"
+        !!     print '(AI0)', achar(9) // "DOF: ", rst%parts%dof
+        !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%parts%sum_of_squares
+        !!     print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%parts%mean_of_squares
+        !!     print '(AF0.3)', achar(9) // "F Statistic: ", rst%parts%f_stat
+        !!
+        !!     print '(A)', new_line('a') // "Equipment Results:"
+        !!     print '(AI0)', achar(9) // "DOF: ", rst%equipment%dof
+        !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%equipment%sum_of_squares
+        !!     print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%equipment%mean_of_squares
+        !!
+        !!     print '(A)', new_line('a') // "Operator-Part Interaction Results:"
+        !!     print '(AI0)', achar(9) // "DOF: ", rst%operator_by_part%dof
+        !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%operator_by_part%sum_of_squares
+        !!     print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%operator_by_part%mean_of_squares
+        !!     print '(AF0.3)', achar(9) // "F Statistic: ", rst%operator_by_part%f_stat
+        !!
+        !!     print '(A)', new_line('a') // "Total Results:"
+        !!     print '(AI0)', achar(9) // "DOF: ", rst%total%dof
+        !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%total%sum_of_squares
+        !!     print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%total%mean_of_squares
+        !!     print '(AF0.3)', achar(9) // "Overall Mean: ", rst%total%mean
+        !! end program
+        !! @endcode
+        !! @code{.txt}
+        !! Operator Results:
+        !!         DOF: 2
+        !!         Sum of Squares: 1.630
+        !!         Mean of Squares (Variance): .815
+        !!         F Statistic: 100.322
+        !!
+        !! Part Results:
+        !!         DOF: 4
+        !!         Sum of Squares: 28.909
+        !!         Mean of Squares (Variance): 7.227
+        !!         F Statistic: 889.458
+        !!
+        !! Equipment Results:
+        !!         DOF: 30
+        !!         Sum of Squares: 1.712
+        !!         Mean of Squares (Variance): .057
+        !!
+        !! Operator-Part Interaction Results:
+        !!         DOF: 8
+        !!         Sum of Squares: .065
+        !!         Mean of Squares (Variance): .008
+        !!         F Statistic: .142
+        !!
+        !! Total Results:
+        !!         DOF: 44
+        !!         Sum of Squares: 32.317
+        !!         Mean of Squares (Variance): .734
+        !!         Overall Mean: 2.944
+        !! @endcode
+        module function gage_anova(x, err) result(rst)
+            real(real64), intent(in), target, contiguous, dimension(:,:,:) :: x
+            class(errors), intent(inout), optional, target :: err
+            type(gage_anova_table) :: rst
+        end function
+    end interface
+
 ! ------------------------------------------------------------------------------
 end module

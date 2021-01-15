@@ -417,6 +417,97 @@ pure module function f_test(x1, x2) result(rst)
     if (rst%probability > 1.0d0) rst%probability = 2.0d0 - rst%probability
 end function
 
+! ------------------------------------------------------------------------------
+pure module function remove_nans(x) result(rst)
+    ! Arguments
+    real(real64), intent(in), dimension(:) :: x
+    real(real64), allocatable, dimension(:) :: rst
+
+    ! Local Variables
+    integer(int32) :: i, j, n
+    real(real64), allocatable, dimension(:) :: buffer
+
+    ! Process
+    n = size(x)
+    allocate(buffer(n))
+    j = 0
+    do i = 1, n
+        if (.not.isnan(x(i))) then
+            j = j + 1
+            buffer(j) = x(i)
+        end if
+    end do
+    rst = buffer(1:j)
+end function
+
+! ------------------------------------------------------------------------------
+pure module function remove_zeros(x, tol) result(rst)
+    ! Arguments
+    real(real64), intent(in), dimension(:) :: x
+    real(real64), intent(in), optional :: tol
+    real(real64), allocatable, dimension(:) :: rst
+
+    ! Local Variables
+    integer(int32) :: i, j, n
+    real(real64), allocatable, dimension(:) :: buffer
+    real(real64) :: t
+
+    ! Process
+    n = size(x)
+    allocate(buffer(n))
+    t = 2.0d0 * epsilon(t)
+    if (present(tol)) t = tol
+    j = 0
+    do i = 1, n
+        if (abs(x(i)) > t) then
+            j = j + 1
+            buffer(j) = x(i)
+        end if
+    end do
+    rst = buffer(1:j)
+end function
+
+! ------------------------------------------------------------------------------
+module function r_squared(y, ym, err) result(rst)
+    ! Arguments
+    real(real64), intent(in), dimension(:) :: y, ym
+    class(errors), intent(inout), optional, target :: err
+    real(real64) :: rst
+
+    ! Local Variables
+    integer(int32) :: i, n
+    real(real64) :: esum, vt
+    class(errors), pointer :: errmgr
+    type(errors), target :: deferr
+    
+    ! Setting up error handling
+    if (present(err)) then
+        errmgr => err
+    else
+        errmgr => deferr
+    end if
+
+    ! Ensure the input arrays are properly sized
+    n = size(y)
+    if (size(ym) /= n) then
+        call errmgr%report_error("r_squared", "The input arrays must " // &
+            "be the same size.", M_ARRAY_SIZE_ERROR)
+        return
+    end if
+
+    ! Compute the sum of the errors squared
+    esum = 0.0d0
+    do i = 1, n
+        esum = esum + (y(i) - ym(i))**2
+    end do
+
+    ! Compute the total variance
+    vt = variance(y) * (n - 1.0d0)
+
+    ! Compute the r-squared as 1 - esum / vt
+    rst = 1.0d0 - esum / vt
+end function
+
 ! ******************************************************************************
 ! PRIVATE ROUTINES
 ! ------------------------------------------------------------------------------
