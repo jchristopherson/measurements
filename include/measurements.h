@@ -873,6 +873,40 @@ double c_trapz_integrate(int n, const double *x, const double *y);
  */
 int c_remove_dc_offset(int n, const double *x, double *y);
 
+/**
+ * Removes all NaN's from an array.
+ * 
+ * @param nx The array length.
+ * @param x The array of length @p nx on which to operate.
+ * @param y An array of length @p nx where the results will be written.
+ * @param ny The actual number of items written to @p y.
+ */
+void c_remove_nans(int nx, const double *x, double *y, int *ny);
+
+/**
+ * Removes all zeros from an array.
+ * 
+ * @param nx The array length.
+ * @param x The array of length @p nx on which to operate.
+ * @param y An array of length @p nx where the results will be written.
+ * @param ny The actual number of items written to @p y.
+ */
+void c_remove_zeros(int nx, const double *x, double *y, int *ny);
+
+/**
+ * Computes the R-squared value of a data set and a model of
+ * the data.
+ *
+ * @param n The array length.
+ * @param y An N-element array containing the dependent variables 
+ *  from the data set.
+ * @param ym An N-element array containing the corresponding modeled
+ *  values.
+ *
+ * @return The R-squared value.
+ */
+double c_r_squared(int n, const double *y, const double *ym);
+
 #ifdef __cplusplus
 }
 #endif  // __cplusplus

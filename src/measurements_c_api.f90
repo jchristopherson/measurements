@@ -1568,4 +1568,49 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    subroutine c_remove_nans(nx, x, y, ny) bind(C, name = "c_remove_nans")
+        ! Arguments
+        integer(c_int), intent(in), value :: nx
+        real(c_double), intent(in) :: x(nx)
+        real(c_double), intent(out) :: y(nx)
+        integer(c_int), intent(out) :: ny
+
+        ! Local Variables
+        real(real64), allocatable, dimension(:) :: yf
+
+        ! Process
+        yf = remove_nans(x)
+        ny = size(yf)
+        y(1:ny) = yf
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    subroutine c_remove_zeros(nx, x, y, ny) bind(C, name = "c_remove_zeros")
+        ! Arguments
+        integer(c_int), intent(in), value :: nx
+        real(c_double), intent(in) :: x(nx)
+        real(c_double), intent(out) :: y(nx)
+        integer(c_int), intent(out) :: ny
+
+        ! Local Variables
+        real(real64), allocatable, dimension(:) :: yf
+
+        ! Process
+        yf = remove_zeros(x)
+        ny = size(yf)
+        y(1:ny) = yf
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    function c_r_squared(n, y, ym) result(rst) bind(C, name = "c_r_squared")
+        ! Arguments
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: y(n), ym(n)
+        real(c_double) :: rst
+
+        ! Process
+        rst = r_squared(y, ym)
+    end function
+
+! ------------------------------------------------------------------------------
 end module
