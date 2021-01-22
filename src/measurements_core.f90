@@ -1956,12 +1956,14 @@ module measurements_core
         !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%operators%sum_of_squares
         !!     print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%operators%mean_of_squares
         !!     print '(AF0.3)', achar(9) // "F Statistic: ", rst%operators%f_stat
+        !!     print '(AF0.5)', achar(9) // "Probability: ", rst%operators%probability
         !!
         !!     print '(A)', new_line('a') // "Part Results:"
         !!     print '(AI0)', achar(9) // "DOF: ", rst%parts%dof
         !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%parts%sum_of_squares
         !!     print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%parts%mean_of_squares
         !!     print '(AF0.3)', achar(9) // "F Statistic: ", rst%parts%f_stat
+        !!     print '(AF0.5)', achar(9) // "Probability: ", rst%parts%probability
         !!
         !!     print '(A)', new_line('a') // "Equipment Results:"
         !!     print '(AI0)', achar(9) // "DOF: ", rst%equipment%dof
@@ -1973,6 +1975,7 @@ module measurements_core
         !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%operator_by_part%sum_of_squares
         !!     print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%operator_by_part%mean_of_squares
         !!     print '(AF0.3)', achar(9) // "F Statistic: ", rst%operator_by_part%f_stat
+        !!     print '(AF0.5)', achar(9) // "Probability: ", rst%operator_by_part%probability
         !!
         !!     print '(A)', new_line('a') // "Total Results:"
         !!     print '(AI0)', achar(9) // "DOF: ", rst%total%dof
@@ -1987,12 +1990,14 @@ module measurements_core
         !!         Sum of Squares: 1.630
         !!         Mean of Squares (Variance): .815
         !!         F Statistic: 100.322
+        !!         Probability: .00000
         !!
         !! Part Results:
         !!         DOF: 4
         !!         Sum of Squares: 28.909
         !!         Mean of Squares (Variance): 7.227
         !!         F Statistic: 889.458
+        !!         Probability: -.00000
         !!
         !! Equipment Results:
         !!         DOF: 30
@@ -2004,6 +2009,7 @@ module measurements_core
         !!         Sum of Squares: .065
         !!         Mean of Squares (Variance): .008
         !!         F Statistic: .142
+        !!         Probability: .99637
         !!
         !! Total Results:
         !!         DOF: 44
