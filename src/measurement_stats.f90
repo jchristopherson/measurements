@@ -391,30 +391,16 @@ pure module function f_test(x1, x2) result(rst)
     type(statistic) :: rst
 
     ! Local Variables
-    integer(int32) :: n1, n2
-    real(real64) :: avg1, avg2, var1, var2, df1, df2
+    integer(int32) :: d1, d2
+    real(real64) :: var1, var2
 
     ! Process
-    n1 = size(x1)
-    n2 = size(x2)
-    avg1 = mean(x1)
-    avg2 = mean(x2)
+    d1 = size(x1) - 1
+    d2 = size(x2) - 1
     var1 = variance(x1)
     var2 = variance(x2)
-    if (var1 > var2) then
-        rst%value = var1 / var2
-        df1 = n1 - 1.0d0
-        df2 = n2 - 1.0d0
-    else
-        rst%value = var2 / var1
-        df1 = n2 - 1.0d0
-        df2 = n1 - 1.0d0
-    end if
-    rst%probability = 2.0d0 * regularized_beta( &
-        df2 / (df2 + df1 * rst%value), &
-        0.5d0 * df2, &
-        0.5d0 * df1)
-    if (rst%probability > 1.0d0) rst%probability = 2.0d0 - rst%probability
+    rst%value = var1 / var2
+    rst%probability = ftest_probability(rst%value, d1, d2)
 end function
 
 ! ------------------------------------------------------------------------------
@@ -509,7 +495,7 @@ module function r_squared(y, ym, err) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-module function ftest_probability(f, dof1, dof2) result(rst)
+pure module function ftest_probability(f, dof1, dof2) result(rst)
     ! Arguments
     real(real64), intent(in) :: f
     integer(int32), intent(in) :: dof1, dof2

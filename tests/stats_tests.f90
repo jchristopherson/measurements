@@ -689,9 +689,10 @@ function f_test_test() result(rst)
 
     ! Parameters
     integer(int32), parameter :: n1 = 15
-    integer(int32), parameter :: n2 = 12
-    real(real64), parameter :: tol = 1.0d-8
-    real(real64), parameter :: ans = 0.672432090576604d0
+    integer(int32), parameter :: n2 = 15
+    real(real64), parameter :: tol = 1.0d-6
+    real(real64), parameter :: fans = 0.95278924436d0
+    real(real64), parameter :: ans = 0.46459183414d0
 
     ! Local Variables
     real(real64) :: x1(n1), x2(n2), delta
@@ -699,42 +700,54 @@ function f_test_test() result(rst)
 
     ! Initialization
     rst = .true.
-    x1 = [0.5875701638177520d0, &
-        0.4925038626867790d0, &
-        0.0997847738770978d0, &
-        0.5540924574002610d0, &
-        0.0833121626712929d0, &
-        0.1738451549308330d0, &
-        0.3521655274264620d0, &
-        0.2239625528107020d0, &
-        0.6871828620071030d0, &
-        0.3248518075223050d0, &
-        0.0551977898473518d0, &
-        0.8648552295498370d0, &
-        0.9239272586628300d0, &
-        0.4917627939852090d0, &
-        0.3508690262031490d0]
-    x2 = [0.7557955531972870d0, &
-        0.0482975843398515d0, &
-        0.7609889442453010d0, &
-        0.4898203045069780d0, &
-        0.4382872343657070d0, &
-        0.9676872466629530d0, &
-        0.1167483190258670d0, &
-        0.0399776180777329d0, &
-        0.2528774837460510d0, &
-        0.6824976673552180d0, &
-        0.6602062072459940d0, &
-        0.4015093296585650d0]
+    x1 = [0.58387698128673400d0, &
+        0.94872643185602900d0, &
+        0.17008749217405500d0, &
+        0.05400035877767780d0, &
+        0.49007414183526400d0, &
+        0.91498304265046300d0, &
+        0.27730662176870100d0, &
+        0.14672540316540200d0, &
+        0.75310066420122200d0, &
+        0.50398721165895900d0, &
+        0.59636223974370000d0, &
+        0.47819755122118100d0, &
+        0.96709705143154200d0, &
+        0.86367902851430800d0, &
+        0.61084279368466600d0]
+    x2 = [0.2186373486915680d0, &
+        0.7881189936359480d0, &
+        0.8980582651872070d0, &
+        0.2036242143271850d0, &
+        0.2080903307925950d0, &
+        0.0143712341343581d0, &
+        0.7474501270172240d0, &
+        0.4900316414528420d0, &
+        0.6221226099553770d0, &
+        0.4632448747935360d0, &
+        0.6138713552592840d0, &
+        0.9901017538082670d0, &
+        0.2822073800781740d0, &
+        0.3928656727796740d0, &
+        0.0401029216162131d0]
 
     ! Process
     f = f_test(x1, x2)
     delta = ans - f%probability
     if (abs(delta) > tol) then
         rst = .false.
-        print '(A)', "F_TEST_TEST FAILED."
+        print '(A)', "F_TEST_TEST FAILED - PROBABILITY TERM."
         print *, "Expected: ", ans
         print *, "Computed: ", f%probability
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+    
+    delta = fans - f%value
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "F_TEST_TEST FAILED."
+        print *, "Expected: ", fans
+        print *, "Computed: ", f%value
         print *, "Difference (Expected - Computed): ", delta
     end if
 end function

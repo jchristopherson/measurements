@@ -390,7 +390,7 @@ module measurements_core
         !! @return The probability value.  Subtract this value from 1 to 
         !! determine the validity of the null hypothesis.  If the result is
         !! less than the desired alpha, the null hypothesis is invalid.
-        module function ftest_probability(f, dof1, dof2) result(rst)
+        pure module function ftest_probability(f, dof1, dof2) result(rst)
             real(real64), intent(in) :: f
             integer(int32), intent(in) :: dof1, dof2
         end function
