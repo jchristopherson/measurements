@@ -9,6 +9,9 @@ contains
 ! ------------------------------------------------------------------------------
     ! REF: https://www.spcforexcel.com/knowledge/measurement-systems-analysis/anova-gage-rr-part-1
     module function gage_anova(x, err) result(rst)
+        ! Additional Modules
+        use ieee_arithmetic
+
         ! Arguments
         real(real64), intent(in), target, contiguous, dimension(:,:,:) :: x
         class(errors), intent(inout), optional, target :: err
@@ -16,11 +19,12 @@ contains
 
         ! Local Variables
         integer(int32) :: i, j, k, nops, nresults, ntrials, n, nr, kr, flag
-        real(real64) :: avg
+        real(real64) :: avg, nan
         real(real64), pointer, dimension(:) :: xptr
         real(real64), allocatable, dimension(:) :: xsub
         class(errors), pointer :: errmgr
         type(errors), target :: deferr
+        character(len = 256) :: errmsg
         
         ! Set up error handling
         if (present(err)) then
@@ -34,8 +38,26 @@ contains
         ntrials = size(x, 2)
         nops = size(x, 3)
         n = nresults * ntrials * nops
+        nan = ieee_value(nan, ieee_quiet_nan)
 
         ! Input Checking
+        if (nresults < 2) then
+            write(errmsg, '(AI0A)') "Only ", nresults, &
+                " part results provided.  A minimum of 2 results " // &
+                "sets are required."
+            call errmgr%report_error("gage_anova", trim(errmsg), &
+                M_INSUFFICIENT_DATA_ERROR)
+            return
+        end if
+
+        if (ntrials < 2) then
+            write(errmsg, '(AI0A)') "Only ", ntrials, &
+                " trials for each part were provided.  A minimum of 2 " // &
+                "results sets are required."
+            call errmgr%report_error("gage_anova", trim(errmsg), &
+                M_INSUFFICIENT_DATA_ERROR)
+            return
+        end if
 
         ! Memory Allocation
         allocate(rst%operator(nops), stat = flag)
@@ -76,8 +98,12 @@ contains
             rst%operators%sum_of_squares = &
                 rst%operators%sum_of_squares + rst%operator(i)%sum_of_squares
         end do
-        rst%operators%mean_of_squares = &
-            rst%operators%sum_of_squares / rst%operators%dof
+        if (nops == 1) then
+            rst%operators%mean_of_squares = 0.0d0
+        else
+            rst%operators%mean_of_squares = &
+                rst%operators%sum_of_squares / rst%operators%dof
+        end if
         rst%operators%mean = rst%total%mean
 
         ! Compute the part information
@@ -136,27 +162,30 @@ contains
             rst%operator_by_part%sum_of_squares / rst%operator_by_part%dof
 
         ! Compute the F statistics
-        rst%total%f_stat = 0.0d0
-        rst%equipment%f_stat = 0.0d0
+        rst%total%f_stat = nan
+        rst%equipment%f_stat = nan
         rst%operator_by_part%f_stat = &
             rst%operator_by_part%mean_of_squares / rst%equipment%mean_of_squares
         rst%parts%f_stat = &
             rst%parts%mean_of_squares / rst%operator_by_part%mean_of_squares
         rst%operators%f_stat = &
             rst%operators%mean_of_squares / rst%operator_by_part%mean_of_squares
+
+        ! Compute the probability terms
+        rst%total%probability = nan
+        rst%equipment%probability = nan
+        
+        rst%operator_by_part%probability = 1.0d0 - ftest_probability( &
+            rst%operator_by_part%f_stat, &
+            rst%operator_by_part%dof, &
+            rst%equipment%dof)
+        
+        rst%parts%probability = 1.0d0 - ftest_probability(rst%parts%f_stat, &
+            rst%parts%dof, rst%operator_by_part%dof)
+
+        rst%operators%probability = 1.0d0 - ftest_probability( &
+            rst%operators%f_stat, rst%operators%dof, rst%operator_by_part%dof)
     end function
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
 end submodule

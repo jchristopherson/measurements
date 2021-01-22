@@ -21,6 +21,8 @@ module measurements_core
     integer(int32), parameter :: M_NO_DATA_DEFINED_ERROR = 10004
     !> @brief A flag denoting an underdefined problem error.
     integer(int32), parameter :: M_UNDERDEFINED_PROBLEM = 10005
+    !> @brief A flag denoting an insufficient data error.
+    integer(int32), parameter :: M_INSUFFICIENT_DATA_ERROR = 10006
 
     !> Indicates that the spline is quadratic over the interval under
     !! consideration (beginning or ending interval).  This is equivalent to
@@ -374,6 +376,23 @@ module measurements_core
             real(real64), intent(in), dimension(:) :: y, ym
             class(errors), intent(inout), optional, target :: err
             real(real64) :: rst
+        end function
+
+        !> @brief Computes the probability of the null hypothesis being valid
+        !! given the results of an f-test.
+        !!
+        !! @param[in] f The F-statistic.
+        !! @param[in] dof1 The number of degrees of freedom in the first data
+        !!  set.
+        !! @param[in] dof2 The number of degrees of freedom in the second data
+        !!  set.
+        !!
+        !! @return The probability value.  Subtract this value from 1 to 
+        !! determine the validity of the null hypothesis.  If the result is
+        !! less than the desired alpha, the null hypothesis is invalid.
+        module function ftest_probability(f, dof1, dof2) result(rst)
+            real(real64), intent(in) :: f
+            integer(int32), intent(in) :: dof1, dof2
         end function
     end interface
 
@@ -1843,6 +1862,8 @@ module measurements_core
         real(real64) :: f_stat
         !> @brief The mean value.
         real(real64) :: mean
+        !> @brief The probability (p-value) that the null hypothesis is true.
+        real(real64) :: probability
     end type
 
 ! ------------------------------------------------------------------------------
@@ -1883,6 +1904,7 @@ module measurements_core
         !!  encountered are as follows.
         !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
         !!      available.
+        !!  - M_INSUFFICIENT_DATA_ERROR:
         !!
         !! @return A @p gage_anova_table object containing the variance results.
         !!

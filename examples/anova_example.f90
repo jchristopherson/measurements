@@ -44,12 +44,14 @@ program main
     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%operators%sum_of_squares
     print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%operators%mean_of_squares
     print '(AF0.3)', achar(9) // "F Statistic: ", rst%operators%f_stat
+    print '(AF0.5)', achar(9) // "Probability: ", rst%operators%probability
     
     print '(A)', new_line('a') // "Part Results:"
     print '(AI0)', achar(9) // "DOF: ", rst%parts%dof
     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%parts%sum_of_squares
     print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%parts%mean_of_squares
     print '(AF0.3)', achar(9) // "F Statistic: ", rst%parts%f_stat
+    print '(AF0.5)', achar(9) // "Probability: ", rst%parts%probability
 
     print '(A)', new_line('a') // "Equipment Results:"
     print '(AI0)', achar(9) // "DOF: ", rst%equipment%dof
@@ -61,6 +63,7 @@ program main
     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%operator_by_part%sum_of_squares
     print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%operator_by_part%mean_of_squares
     print '(AF0.3)', achar(9) // "F Statistic: ", rst%operator_by_part%f_stat
+    print '(AF0.5)', achar(9) // "Probability: ", rst%operator_by_part%probability
 
     print '(A)', new_line('a') // "Total Results:"
     print '(AI0)', achar(9) // "DOF: ", rst%total%dof

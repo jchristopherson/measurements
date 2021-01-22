@@ -508,6 +508,22 @@ module function r_squared(y, ym, err) result(rst)
     rst = 1.0d0 - esum / vt
 end function
 
+! ------------------------------------------------------------------------------
+module function ftest_probability(f, dof1, dof2) result(rst)
+    ! Arguments
+    real(real64), intent(in) :: f
+    integer(int32), intent(in) :: dof1, dof2
+
+    ! Local Variables
+    real(real64) :: arg, d1, d2
+
+    ! Process
+    d1 = real(min(dof1, dof2), real64)
+    d2 = real(max(dof1, dof2), real64)
+    arg = d1 * f / (d1 * f + d2)
+    rst = regularized_beta(arg, 0.5d0 * d1, 0.5d0 * d2)
+end function
+
 ! ******************************************************************************
 ! PRIVATE ROUTINES
 ! ------------------------------------------------------------------------------
