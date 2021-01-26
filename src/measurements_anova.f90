@@ -5,13 +5,12 @@
 ! - https://simongrund1.github.io/posts/anova-with-multiply-imputed-data-sets/
 
 submodule (measurements_core) measurements_anova
+    use ieee_arithmetic
+
 contains
 ! ------------------------------------------------------------------------------
     ! REF: https://www.spcforexcel.com/knowledge/measurement-systems-analysis/anova-gage-rr-part-1
     module function gage_anova(x, err) result(rst)
-        ! Additional Modules
-        use ieee_arithmetic
-
         ! Arguments
         real(real64), intent(in), target, contiguous, dimension(:,:,:) :: x
         class(errors), intent(inout), optional, target :: err
@@ -185,6 +184,95 @@ contains
 
         rst%operators%probability = 1.0d0 - ftest_probability( &
             rst%operators%f_stat, rst%operators%dof, rst%operator_by_part%dof)
+    end function
+
+! ------------------------------------------------------------------------------
+    ! https://sphweb.bumc.bu.edu/otlt/MPH-Modules/BS/BS704_HypothesisTesting-ANOVA/BS704_HypothesisTesting-Anova3.html#:~:text=The%20ANOVA%20table%20breaks%20down,Source%20of%20Variation
+    module function anova(x, err) result(rst)
+        ! Arguments
+        real(real64), intent(in), target, contiguous, dimension(:,:) :: x
+        class(errors), intent(inout), optional, target :: err
+        type(anova_table) :: rst
+
+        ! Local Variables
+        integer(int32) :: i, j, npoints, nsets, n, flag
+        real(real64), pointer, dimension(:) :: xptr
+        real(real64), allocatable, dimension(:) :: avgs
+        real(real64) :: nan
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        character(len = 256) :: errmsg
+        
+        ! Set up error handling
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Initialization
+        npoints = size(x, 1)
+        nsets = size(x, 2)
+        n = npoints * nsets
+        nan = ieee_value(nan, ieee_quiet_nan)
+
+        ! Input Checking
+
+        ! Local Memory Allocation
+        allocate(avgs(nsets), stat = flag)
+        if (flag /= 0) then
+            call errmgr%report_error("anova", &
+                "Insufficient memory available.", &
+                M_OUT_OF_MEMORY_ERROR)
+            return
+        end if
+
+        ! Compute the overall mean
+        xptr(1:n) => x
+        rst%total%mean = mean(xptr)
+
+        ! Compute the overall variance
+        rst%total%mean_of_squares = variance(xptr)
+        rst%total%sum_of_squares = rst%total%mean_of_squares * (n - 1.0d0)
+        rst%total%dof = n - 1
+
+        ! Look at each data set
+        rst%between%sum_of_squares = 0.0d0
+        rst%between%dof = nsets - 1
+        do i = 1, nsets
+            ! Compute the mean for the data set
+            avgs(i) = mean(x(:,i))
+
+            ! Compute thet sum of squares contribution
+            rst%between%sum_of_squares = rst%between%sum_of_squares + &
+                npoints * (avgs(i) - rst%total%mean)**2
+        end do
+        rst%between%mean_of_squares = &
+            rst%between%sum_of_squares / rst%between%dof
+
+        ! Compute the residuals
+        rst%residual%sum_of_squares = 0.0d0
+        rst%residual%dof = n - nsets
+        do j = 1, nsets
+            do i = 1, npoints
+                rst%residual%sum_of_squares = rst%residual%sum_of_squares + &
+                    (x(i,j) - avgs(j))**2
+            end do
+        end do
+        rst%residual%mean_of_squares = rst%residual%sum_of_squares / &
+            rst%residual%dof
+
+        ! Compute the F statistic
+        rst%between%f_stat = rst%between%mean_of_squares / &
+            rst%residual%mean_of_squares
+        rst%residual%f_stat = 0.0d0
+        rst%total%f_stat = 0.0d0
+
+        ! Compute the probability term
+        rst%between%probability = 1.0d0 - ftest_probability( &
+            rst%between%f_stat, rst%between%dof, rst%residual%dof)
+        rst%residual%probability = nan
+        rst%total%probability = nan
     end function
 
 ! ------------------------------------------------------------------------------
