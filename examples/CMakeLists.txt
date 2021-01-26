@@ -14,3 +14,7 @@ target_link_libraries(c_interpolation_example measurements)
 # ANOVA Example
 add_executable(anova_example anova_example.f90)
 target_link_libraries(anova_example measurements)
+
+# ANOVA Example 2
+add_executable(anova_example_2 anova_example_2.f90)
+target_link_libraries(anova_example_2 measurements)
