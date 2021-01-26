@@ -1886,6 +1886,18 @@ module measurements_core
     end type
 
 ! ------------------------------------------------------------------------------
+    !> @brief A basic ANOVA table.
+    type anova_table
+        !> @brief The results from comparison of variances between the data
+        !! sets.
+        type(anova_table_entry) :: between
+        !> @brief The residual variation.
+        type(anova_table_entry) :: residual
+        !> @brief THe total variation information.
+        type(anova_table_entry) :: total
+    end type
+
+! ------------------------------------------------------------------------------
     interface
         !> @brief Computes a crossed-effects analysis of variance (ANOVA) for
         !! a set of measurement data in order to better understand variance
@@ -1904,7 +1916,8 @@ module measurements_core
         !!  encountered are as follows.
         !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
         !!      available.
-        !!  - M_INSUFFICIENT_DATA_ERROR:
+        !!  - M_INSUFFICIENT_DATA_ERROR: Occurs if there is only 1 row or 1
+        !!      column in @p x.
         !!
         !! @return A @p gage_anova_table object containing the variance results.
         !!
@@ -2021,6 +2034,28 @@ module measurements_core
             real(real64), intent(in), target, contiguous, dimension(:,:,:) :: x
             class(errors), intent(inout), optional, target :: err
             type(gage_anova_table) :: rst
+        end function
+
+        !> @brief Computes a one-way analysis of variance (ANOVA).
+        !!
+        !! @param[in] x An M-by-N matrix containing N data sets, each of 
+        !!  M points.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!  - M_INSUFFICIENT_DATA_ERROR: Occurs if there is only 1 row or 1
+        !!      column in @p x.
+        !!
+        !! @return The ANOVA table.
+        module function anova(x, err) result(rst)
+            real(real64), intent(in), target, contiguous, dimension(:,:) :: x
+            class(errors), intent(inout), optional, target :: err
+            type(anova_table) :: rst
         end function
     end interface
 
