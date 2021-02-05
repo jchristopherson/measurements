@@ -87,6 +87,7 @@ endif ()
 find_package(ferror 1.3.0)
 find_package(linalg 1.6.0)
 find_package(nonlin 1.4.0)
+find_package(integral)
 
 if (ferror_FOUND)
   message(STATUS "FERROR library found.")
@@ -101,6 +102,11 @@ endif()
 if (nonlin_FOUND)
     message(STATUS "NONLIN library found.")
     set(nonlin_LIBRARIES nonlin)
+endif()
+
+if (integral_FOUND)
+    message(STATUS "INTEGRAL library found.")
+    set(integral_LIBRARIES integral)
 endif()
 
 # Locate the source directory
