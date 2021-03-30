@@ -87,7 +87,7 @@ endif ()
 find_package(ferror 1.3.0)
 find_package(linalg 1.6.0)
 find_package(nonlin 1.4.0)
-find_package(integral)
+find_package(integral 1.1.0)
 
 if (ferror_FOUND)
   message(STATUS "FERROR library found.")
