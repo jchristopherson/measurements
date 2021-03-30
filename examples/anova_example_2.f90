@@ -28,17 +28,17 @@ program main
     print '(A)', "Between Category Results:"
     print '(AI0)', achar(9) // "DOF: ", rst%between%dof
     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%between%sum_of_squares
-    print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%between%mean_of_squares
+    print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%between%mean_of_squares
     print '(AF0.3)', achar(9) // "F Statistic: ", rst%between%f_stat
     print '(AF0.5)', achar(9) // "Probability: ", rst%between%probability
 
     print '(A)', new_line('a') // "Residual Results:"
     print '(AI0)', achar(9) // "DOF: ", rst%residual%dof
     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%residual%sum_of_squares
-    print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%residual%mean_of_squares
+    print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%residual%mean_of_squares
 
     print '(A)', new_line('a') // "Total Results:"
     print '(AI0)', achar(9) // "DOF: ", rst%total%dof
     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%total%sum_of_squares
-    print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%total%mean_of_squares
+    print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%total%mean_of_squares
 end program

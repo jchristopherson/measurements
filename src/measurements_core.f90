@@ -1862,7 +1862,8 @@ module measurements_core
         real(real64) :: f_stat
         !> @brief The mean value.
         real(real64) :: mean
-        !> @brief The probability (p-value) that the null hypothesis is true.
+        !> @brief The probability (p-value) that the null hypothesis is true
+        !! (i.e. the variances are equal).
         real(real64) :: probability
     end type
 
@@ -1967,33 +1968,33 @@ module measurements_core
         !!     print '(A)', "Operator Results:"
         !!     print '(AI0)', achar(9) // "DOF: ", rst%operators%dof
         !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%operators%sum_of_squares
-        !!     print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%operators%mean_of_squares
+        !!     print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%operators%mean_of_squares
         !!     print '(AF0.3)', achar(9) // "F Statistic: ", rst%operators%f_stat
         !!     print '(AF0.5)', achar(9) // "Probability: ", rst%operators%probability
         !!
         !!     print '(A)', new_line('a') // "Part Results:"
         !!     print '(AI0)', achar(9) // "DOF: ", rst%parts%dof
         !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%parts%sum_of_squares
-        !!     print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%parts%mean_of_squares
+        !!     print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%parts%mean_of_squares
         !!     print '(AF0.3)', achar(9) // "F Statistic: ", rst%parts%f_stat
         !!     print '(AF0.5)', achar(9) // "Probability: ", rst%parts%probability
         !!
         !!     print '(A)', new_line('a') // "Equipment Results:"
         !!     print '(AI0)', achar(9) // "DOF: ", rst%equipment%dof
         !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%equipment%sum_of_squares
-        !!     print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%equipment%mean_of_squares
+        !!     print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%equipment%mean_of_squares
         !!
         !!     print '(A)', new_line('a') // "Operator-Part Interaction Results:"
         !!     print '(AI0)', achar(9) // "DOF: ", rst%operator_by_part%dof
         !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%operator_by_part%sum_of_squares
-        !!     print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%operator_by_part%mean_of_squares
+        !!     print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%operator_by_part%mean_of_squares
         !!     print '(AF0.3)', achar(9) // "F Statistic: ", rst%operator_by_part%f_stat
         !!     print '(AF0.5)', achar(9) // "Probability: ", rst%operator_by_part%probability
         !!
         !!     print '(A)', new_line('a') // "Total Results:"
         !!     print '(AI0)', achar(9) // "DOF: ", rst%total%dof
         !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%total%sum_of_squares
-        !!     print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%total%mean_of_squares
+        !!     print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%total%mean_of_squares
         !!     print '(AF0.3)', achar(9) // "Overall Mean: ", rst%total%mean
         !! end program
         !! @endcode
@@ -2001,33 +2002,33 @@ module measurements_core
         !! Operator Results:
         !!         DOF: 2
         !!         Sum of Squares: 1.630
-        !!         Mean of Squares (Variance): .815
+        !!         Mean of Squares: .815
         !!         F Statistic: 100.322
         !!         Probability: .00000
         !!
         !! Part Results:
         !!         DOF: 4
         !!         Sum of Squares: 28.909
-        !!         Mean of Squares (Variance): 7.227
+        !!         Mean of Squares: 7.227
         !!         F Statistic: 889.458
         !!         Probability: -.00000
         !!
         !! Equipment Results:
         !!         DOF: 30
         !!         Sum of Squares: 1.712
-        !!         Mean of Squares (Variance): .057
+        !!         Mean of Squares: .057
         !!
         !! Operator-Part Interaction Results:
         !!         DOF: 8
         !!         Sum of Squares: .065
-        !!         Mean of Squares (Variance): .008
+        !!         Mean of Squares: .008
         !!         F Statistic: .142
         !!         Probability: .99637
         !!
         !! Total Results:
         !!         DOF: 44
         !!         Sum of Squares: 32.317
-        !!         Mean of Squares (Variance): .734
+        !!         Mean of Squares: .734
         !!         Overall Mean: 2.944
         !! @endcode
         module function gage_anova(x, err) result(rst)
@@ -2052,6 +2053,85 @@ module measurements_core
         !!      column in @p x.
         !!
         !! @return The ANOVA table.
+        !!
+        !! @par Example
+        !! The following example illustrates an analysis of variance example
+        !! worked from https://sphweb.bumc.bu.edu/otlt/MPH-Modules/BS/BS704_HypothesisTesting-ANOVA/BS704_HypothesisTesting-Anova3.html#:~:text=The%20ANOVA%20table%20breaks%20down,Source%20of%20Variation
+        !! @code{.f90}
+        !! program main
+        !!     use iso_fortran_env
+        !!     use measurements_core
+        !!     implicit none
+        !!
+        !!     ! Parameters
+        !!     integer(int32), parameter :: nsamples = 5
+        !!     integer(int32), parameter :: ncategories = 4
+        !!
+        !!     ! Local Variables
+        !!     real(real64) :: x(nsamples, ncategories)
+        !!     type(anova_table) :: rst
+        !!
+        !!     ! Data by category
+        !!     x = reshape([ &
+        !!         8.0d0, 9.0d0, 6.0d0, 7.0d0, 3.0d0, &
+        !!         2.0d0, 4.0d0, 3.0d0, 5.0d0, 1.0d0, &
+        !!         3.0d0, 5.0d0, 4.0d0, 2.0d0, 3.0d0, &
+        !!         2.0d0, 2.0d0, -1.0d0, 0.0d0, 3.0d0], [nsamples, ncategories])
+        !!
+        !!     ! Perform the ANOVA
+        !!     rst = anova(x)
+        !!
+        !!     ! Display the results
+        !!     print '(A)', "Between Category Results:"
+        !!     print '(AI0)', achar(9) // "DOF: ", rst%between%dof
+        !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%between%sum_of_squares
+        !!     print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%between%mean_of_squares
+        !!     print '(AF0.3)', achar(9) // "F Statistic: ", rst%between%f_stat
+        !!     print '(AF0.5)', achar(9) // "Probability: ", rst%between%probability
+        !!
+        !!     print '(A)', new_line('a') // "Residual Results:"
+        !!     print '(AI0)', achar(9) // "DOF: ", rst%residual%dof
+        !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%residual%sum_of_squares
+        !!     print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%residual%mean_of_squares
+        !!
+        !!     print '(A)', new_line('a') // "Total Results:"
+        !!     print '(AI0)', achar(9) // "DOF: ", rst%total%dof
+        !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%total%sum_of_squares
+        !!     print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%total%mean_of_squares
+        !! end program
+        !! @endcode
+        !! @code{.txt}
+        !! Operator Results:
+        !!         DOF: 2
+        !!         Sum of Squares: 1.630
+        !!         Mean of Squares (Variance): .815
+        !!         F Statistic: 100.322
+        !!         Probability: .00000
+        !!
+        !! Part Results:
+        !!         DOF: 4
+        !!         Sum of Squares: 28.909
+        !!         Mean of Squares (Variance): 7.227
+        !!         F Statistic: 889.458
+        !!         Probability: -.00000
+        !!
+        !! Equipment Results:
+        !!         DOF: 30
+        !!         Sum of Squares: 1.712
+        !!         Mean of Squares (Variance): .057
+        !! Operator-Part Interaction Results:
+        !!         DOF: 8
+        !!         Sum of Squares: .065
+        !!         Mean of Squares (Variance): .008
+        !!         F Statistic: .142
+        !!         Probability: .99637
+        !!
+        !! Total Results:
+        !!         DOF: 44
+        !!         Sum of Squares: 32.317
+        !!         Mean of Squares (Variance): .734
+        !!         Overall Mean: 2.944
+        !! @endcode
         module function anova(x, err) result(rst)
             real(real64), intent(in), target, contiguous, dimension(:,:) :: x
             class(errors), intent(inout), optional, target :: err

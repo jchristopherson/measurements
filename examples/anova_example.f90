@@ -42,32 +42,32 @@ program main
     print '(A)', "Operator Results:"
     print '(AI0)', achar(9) // "DOF: ", rst%operators%dof
     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%operators%sum_of_squares
-    print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%operators%mean_of_squares
+    print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%operators%mean_of_squares
     print '(AF0.3)', achar(9) // "F Statistic: ", rst%operators%f_stat
     print '(AF0.5)', achar(9) // "Probability: ", rst%operators%probability
     
     print '(A)', new_line('a') // "Part Results:"
     print '(AI0)', achar(9) // "DOF: ", rst%parts%dof
     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%parts%sum_of_squares
-    print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%parts%mean_of_squares
+    print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%parts%mean_of_squares
     print '(AF0.3)', achar(9) // "F Statistic: ", rst%parts%f_stat
     print '(AF0.5)', achar(9) // "Probability: ", rst%parts%probability
 
     print '(A)', new_line('a') // "Equipment Results:"
     print '(AI0)', achar(9) // "DOF: ", rst%equipment%dof
     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%equipment%sum_of_squares
-    print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%equipment%mean_of_squares
+    print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%equipment%mean_of_squares
 
     print '(A)', new_line('a') // "Operator-Part Interaction Results:"
     print '(AI0)', achar(9) // "DOF: ", rst%operator_by_part%dof
     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%operator_by_part%sum_of_squares
-    print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%operator_by_part%mean_of_squares
+    print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%operator_by_part%mean_of_squares
     print '(AF0.3)', achar(9) // "F Statistic: ", rst%operator_by_part%f_stat
     print '(AF0.5)', achar(9) // "Probability: ", rst%operator_by_part%probability
 
     print '(A)', new_line('a') // "Total Results:"
     print '(AI0)', achar(9) // "DOF: ", rst%total%dof
     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%total%sum_of_squares
-    print '(AF0.3)', achar(9) // "Mean of Squares (Variance): ", rst%total%mean_of_squares
+    print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%total%mean_of_squares
     print '(AF0.3)', achar(9) // "Overall Mean: ", rst%total%mean
 end program

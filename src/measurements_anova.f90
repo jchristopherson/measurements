@@ -217,6 +217,13 @@ contains
         nan = ieee_value(nan, ieee_quiet_nan)
 
         ! Input Checking
+        if (nsets < 2) then
+            write(errmsg, '(AI0A)') "Only ", nsets, " data sets " // &
+                "were provided.  A minimum of 2 data sets are required."
+            call errmgr%report_error("anova", trim(errmsg), &
+                M_INSUFFICIENT_DATA_ERROR)
+            return
+        end if
 
         ! Local Memory Allocation
         allocate(avgs(nsets), stat = flag)
