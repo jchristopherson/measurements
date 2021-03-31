@@ -536,6 +536,11 @@ pure elemental module function t_distribution_cdf(dof, x) result(rst)
     real(real64) :: rst
 
     ! Local Variables
+    real(real64) :: z
+
+    ! Process
+    z = dof / (x**2 + dof)
+    rst = 1.0d0 - 0.5d0 * regularized_beta(z, 0.5d0 * dof, 0.5d0)
 end function
 
 ! ------------------------------------------------------------------------------

@@ -243,11 +243,6 @@ module measurements_core
         !!
         !! @param[in] dof The number of degrees of freedom of the data set.
         !! @param[in] t The value at which to evaluate the distribution.
-        !! @param[in] comp An optional input, that if set to true, allows
-        !!  evaluation of the cumulative distribution function; else, if set
-        !!  to false, the probability density function is evaluated.  The 
-        !!  default is false such that the probabidlity density function is
-        !!  evaluated.
         !!
         !! @return The value of the distribution function at @p t.
         !!
@@ -260,6 +255,18 @@ module measurements_core
             real(real64), intent(in) :: dof
             real(real64), intent(in) :: t
             real(real64) :: f
+        end function
+
+        !> @brief Evalautes the cumulative distribution function of 
+        !! Student's t-distribution.
+        !!
+        !! @param[in] dof The number of degrees of freedom of the data set.
+        !! @param[in] x The value at which to evaluate the distribution.
+        !!
+        !! @return The value of the distribution function at @p x.
+        pure elemental module function t_distribution_cdf(dof, x) result(rst)
+            real(real64), intent(in) :: dof, x
+            real(real64) :: rst
         end function
 
         !> @brief Evaluates the probability distribution function of the 
