@@ -60,6 +60,32 @@ typedef struct {
     double probability;
 } statistic;
 
+/** A single entry (row) in an ANOVA table. */
+typedef struct {
+    /** The number of degrees of freedom. */
+    int dof;
+    /** The sum of the squares. */
+    double sum_of_squares;
+    /** The mean of the squares. */
+    double mean_of_squares;
+    /** The F statistic. */
+    double f_stat;
+    /** The mean value. */
+    double mean;
+    /** The probability (p-value) that the null hypothesis is true. */
+    double probability;
+} anova_table_entry;
+
+/** A basic ANOVA table. */
+typedef struct {
+    /** The results from comparison of variances between the data sets. */
+    anova_table_entry between;
+    /** The residual variation. */
+    anova_table_entry residual;
+    /** The total variation information. */
+    anova_table_entry total;
+} anova_table;
+
 /**
  * Defines a window function.
  *
@@ -906,6 +932,33 @@ void c_remove_zeros(int nx, const double *x, double *y, int *ny);
  * @return The R-squared value.
  */
 double c_r_squared(int n, const double *y, const double *ym);
+
+/**
+ * Computes the adjusted R-squared value of a data set and a model of
+ * the data.
+ *
+ * @param p The number of model parameters.
+ * @param n The array length.
+ * @param y An N-element array containing the dependent variables 
+ *  from the data set.
+ * @param ym An N-element array containing the corresponding modeled
+ *  values.
+ *
+ * @return The R-squared value.
+ */
+double c_adjusted_r_squared(int p, int n, const double *y, const double *ym);
+
+/**
+ * Computes a one-way analysis of variance (ANOVA).
+ *
+ * @param npts The number of data points in each data set.
+ * @param nsets The number of data sets.
+ * @param x An NPTS-by-NSETS matrix of data to analyze.
+ * @param ldx The leading dimension of @p x.  This value must be
+ *  greater than or equal to @p npts.
+ * @param tbl The ANOVA table to populate with results.
+ */
+void c_anova(int npts, int nsets, const double *x, int ldx, anova_table *tbl);
 
 #ifdef __cplusplus
 }

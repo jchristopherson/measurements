@@ -1568,6 +1568,12 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Removes all NaN's from an array.
+    !!
+    !! @param[in] nx The array length.
+    !! @param[in] x The array of length @p nx on which to operate.
+    !! @param[out] y An array of length @p nx where the results will be written.
+    !! @param[out] ny The actual number of items written to @p y.
     subroutine c_remove_nans(nx, x, y, ny) bind(C, name = "c_remove_nans")
         ! Arguments
         integer(c_int), intent(in), value :: nx
@@ -1585,6 +1591,12 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
+    !> @brief Removes all zero's from an array.
+    !!
+    !! @param[in] nx The array length.
+    !! @param[in] x The array of length @p nx on which to operate.
+    !! @param[out] y An array of length @p nx where the results will be written.
+    !! @param[out] ny The actual number of items written to @p y.
     subroutine c_remove_zeros(nx, x, y, ny) bind(C, name = "c_remove_zeros")
         ! Arguments
         integer(c_int), intent(in), value :: nx
@@ -1602,6 +1614,16 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
+    !> @brief Computes the R-squared value of a data set and a model of the
+    !! data.
+    !!
+    !! @param[in] n The array length.
+    !! @param[in] y An @p n-element array containing the dependent variables 
+    !   from the data set.
+    !! @param[in] ym An @p n-element array containing the corresponding model
+    !!  values.
+    !!
+    !! @return The R-squared value.
     function c_r_squared(n, y, ym) result(rst) bind(C, name = "c_r_squared")
         ! Arguments
         integer(c_int), intent(in), value :: n
@@ -1611,6 +1633,48 @@ contains
         ! Process
         rst = r_squared(y, ym)
     end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Computes the adjusted R-squared value of a data set and a model 
+    !! of the data.
+    !!
+    !! @param[in] p The number of model parameters.
+    !! @param[in] n The array length.
+    !! @param[in] y An @p n-element array containing the dependent variables 
+    !   from the data set.
+    !! @param[in] ym An @p n-element array containing the corresponding model
+    !!  values.
+    !!
+    !! @return The R-squared value.
+    function c_adjusted_r_squared(p, n, y, ym) result(rst) &
+            bind(C, name = "c_adjusted_r_squared")
+        ! Arguments
+        integer(c_int), intent(in), value :: p, n
+        real(c_double), intent(in) :: y(n), ym(n)
+        real(c_double) :: rst
+
+        ! Process
+        rst = adjusted_r_squared(p, y, ym)
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Computes a one-way analysis of variance (ANOVA).
+    !!
+    !! @param[in] npts The number of data points in each data set.
+    !! @param[in] nsets The number of data sets.
+    !! @param[in] x An NPTS-by-NSETS matrix of data to analyze.
+    !! @param[in] ldx The leading dimension of @p x.  This value must be
+    !!  greater than or equal to @p npts.
+    !! @param[out] tbl The ANOVA table to populate with results.
+    subroutine c_anova(npts, nsets, x, ldx, tbl) bind(C, name = "c_anova")
+        ! Arguments
+        integer(c_int), intent(in), value :: npts, nsets, ldx
+        real(c_double), intent(in) :: x(ldx,*)
+        type(anova_table), intent(out) :: tbl
+
+        ! Process
+        tbl = anova(x(1:npts,1:nsets))
+    end subroutine
 
 ! ------------------------------------------------------------------------------
 end module

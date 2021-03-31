@@ -495,6 +495,26 @@ module function r_squared(y, ym, err) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
+module function adjusted_r_squared(p, y, ym, err) result(rst)
+    ! Arguments
+    integer(int32), intent(in) :: p
+    real(real64), intent(in), dimension(:) :: y, ym
+    class(errors), intent(inout), optional, target :: err
+    real(real64) :: rst
+
+    ! Local Variables
+    integer(int32) :: n
+    real(real64) :: r2
+    
+    ! Compute the R-squared value
+    r2 = r_squared(y, ym, err)
+
+    ! Compute the adjustment
+    n = size(y)
+    rst = 1.0d0 - (1.0d0 - r2) * (n - 1.0d0) / (n - p - 1.0d0)
+end function
+
+! ------------------------------------------------------------------------------
 pure module function ftest_probability(f, dof1, dof2) result(rst)
     ! Arguments
     real(real64), intent(in) :: f
@@ -509,6 +529,33 @@ pure module function ftest_probability(f, dof1, dof2) result(rst)
     arg = d1 * f / (d1 * f + d2)
     rst = regularized_beta(arg, 0.5d0 * d1, 0.5d0 * d2)
 end function
+
+! ------------------------------------------------------------------------------
+pure elemental function normal_distribution_cdf(mu, sigma, x) result(rst)
+    ! Arguments
+    real(real64), intent(in) :: mu, sigma, x
+    real(real64) :: rst
+
+    ! Process
+    rst = 0.5d0 * (1.0d0 + erf((x - mu) / (sqrt(2.0d0) * sigma)))
+end function
+
+! ------------------------------------------------------------------------------
+pure elemental module function t_distribution_cdf(dof, t) result(rst)
+    ! Arguments
+    real(real64), intent(in) :: dof, t
+    real(real64) :: rst
+
+    ! Local Variables
+end function
+
+! ------------------------------------------------------------------------------
+! beta
+
+! ------------------------------------------------------------------------------
+! f
+
+! ------------------------------------------------------------------------------
 
 ! ******************************************************************************
 ! PRIVATE ROUTINES

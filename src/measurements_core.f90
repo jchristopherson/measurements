@@ -378,6 +378,31 @@ module measurements_core
             real(real64) :: rst
         end function
 
+        !> @brief Computes the adjusted R-squared value of a data set and a 
+        !! model of the data.
+        !!
+        !! @param[in] p The number of model parameters.
+        !! @param[in] y An N-element array containing the dependent variables 
+        !!  from the data set.
+        !! @param[in] ym An N-element array containing the corresponding modeled
+        !!  values.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - M_ARRAY_SIZE_ERROR: Occurs if @p y and @p ym are not the same
+        !!      size.
+        !!
+        !! @return The R-squared value.
+        module function adjusted_r_squared(p, y, ym, err) result(rst)
+            integer(int32), intent(in) :: p
+            real(real64), intent(in), dimension(:) :: y, ym
+            class(errors), intent(inout), optional, target :: err
+            real(real64) :: rst
+        end function
+
         !> @brief Computes the probability of the null hypothesis being valid
         !! given the results of an f-test.
         !!
@@ -1850,8 +1875,8 @@ module measurements_core
 ! ******************************************************************************
 ! MEASUREMENTS_ANOVA.F90
 ! ------------------------------------------------------------------------------
-    !> @brief A single entry in an ANOVA table.
-    type anova_table_entry
+    !> @brief A single entry (row) in an ANOVA table.
+    type, bind(C) :: anova_table_entry
         !> @brief The number of degrees of freedom.
         integer(int32) :: dof
         !> @brief The sum of the squares.
@@ -1888,13 +1913,13 @@ module measurements_core
 
 ! ------------------------------------------------------------------------------
     !> @brief A basic ANOVA table.
-    type anova_table
+    type, bind(C) :: anova_table
         !> @brief The results from comparison of variances between the data
         !! sets.
         type(anova_table_entry) :: between
         !> @brief The residual variation.
         type(anova_table_entry) :: residual
-        !> @brief THe total variation information.
+        !> @brief The total variation information.
         type(anova_table_entry) :: total
     end type
 
