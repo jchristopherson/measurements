@@ -174,16 +174,23 @@ contains
         rst%total%probability = nan
         rst%equipment%probability = nan
         
-        rst%operator_by_part%probability = 1.0d0 - ftest_probability( &
-            rst%operator_by_part%f_stat, &
-            rst%operator_by_part%dof, &
-            rst%equipment%dof)
+        rst%operator_by_part%probability = 1.0d0 - f_distribution_cdf( &
+            real(rst%operator_by_part%dof, real64), &
+            real(rst%equipment%dof, real64), &
+            rst%operator_by_part%f_stat &
+        )
         
-        rst%parts%probability = 1.0d0 - ftest_probability(rst%parts%f_stat, &
-            rst%parts%dof, rst%operator_by_part%dof)
+        rst%parts%probability = 1.0d0 - f_distribution_cdf( &
+            real(rst%parts%dof, real64), &
+            real(rst%operator_by_part%dof, real64), &
+            rst%parts%f_stat &
+        )
 
-        rst%operators%probability = 1.0d0 - ftest_probability( &
-            rst%operators%f_stat, rst%operators%dof, rst%operator_by_part%dof)
+        rst%operators%probability = 1.0d0 - f_distribution_cdf( &
+            real(rst%operators%dof, real64), &
+            real(rst%operator_by_part%dof, real64), &
+            rst%operators%f_stat &
+        )
     end function
 
 ! ------------------------------------------------------------------------------
@@ -276,8 +283,11 @@ contains
         rst%total%f_stat = 0.0d0
 
         ! Compute the probability term
-        rst%between%probability = 1.0d0 - ftest_probability( &
-            rst%between%f_stat, rst%between%dof, rst%residual%dof)
+        rst%between%probability = 1.0d0 - f_distribution_cdf( &
+            real(rst%between%dof, real64), &
+            real(rst%residual%dof, real64), &
+            rst%between%f_stat &
+        )
         rst%residual%probability = nan
         rst%total%probability = nan
     end function

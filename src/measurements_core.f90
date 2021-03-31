@@ -217,6 +217,27 @@ module measurements_core
             real(real64) :: f
         end function
 
+        !> @brief Evaluates the cumulative distribution function of the 
+        !! normal distribution.
+        !!
+        !!
+        !! @param[in] mu The population mean.
+        !! @param[in] sigma The population standard deviation.
+        !! @param[in] x The value at which to evaluate the distrubition 
+        !!  funciton.
+        !! @param[in] comp An optional input, that if set to true, allows
+        !!  evaluation of the cumulative distribution function; else, if set
+        !!  to false, the probability density function is evaluated.  The 
+        !!  default is false such that the probabidlity density function is
+        !!  evaluated.
+        !!
+        !! @return The value of the distribution function at @p x.
+        pure elemental module function normal_distribution_cdf(mu, sigma, x) &
+                result(rst)
+            real(real64), intent(in) :: mu, sigma, x
+            real(real64) :: rst
+        end function
+
         !> @brief Evalautes the probability distribution function of 
         !! Student's t-distribution.
         !!
@@ -286,6 +307,20 @@ module measurements_core
         pure elemental module function f_distribution(d1, d2, x) result(z)
             real(real64), intent(in) :: d1, d2, x
             real(real64) :: z
+        end function
+
+        !> @brief Evaluates the cumulative distribution function of the 
+        !! F-distribution.
+        !!
+        !! @param[in] d1 A model parameter.
+        !! @param[in] d2 A model parameter.
+        !! @param[in] x The value at which to evaluate the distrubition 
+        !!  funciton.
+        !!
+        !! @return The value of the distribution function at @p x.
+        pure elemental module function f_distribution_cdf(d1, d2, x) result(rst)
+            real(real64), intent(in) :: d1, d2, x
+            real(real64) :: rst
         end function
 
         !> @brief Applies Student's t-test to compute the t-statistic.  A 
@@ -403,22 +438,6 @@ module measurements_core
             real(real64) :: rst
         end function
 
-        !> @brief Computes the probability of the null hypothesis being valid
-        !! given the results of an f-test.
-        !!
-        !! @param[in] f The F-statistic.
-        !! @param[in] dof1 The number of degrees of freedom in the first data
-        !!  set.
-        !! @param[in] dof2 The number of degrees of freedom in the second data
-        !!  set.
-        !!
-        !! @return The probability value.  Subtract this value from 1 to 
-        !! determine the validity of the null hypothesis.  If the result is
-        !! less than the desired alpha, the null hypothesis is invalid.
-        pure module function ftest_probability(f, dof1, dof2) result(rst)
-            real(real64), intent(in) :: f
-            integer(int32), intent(in) :: dof1, dof2
-        end function
     end interface
 
 ! ******************************************************************************
@@ -2126,36 +2145,22 @@ module measurements_core
         !! end program
         !! @endcode
         !! @code{.txt}
-        !! Operator Results:
-        !!         DOF: 2
-        !!         Sum of Squares: 1.630
-        !!         Mean of Squares (Variance): .815
-        !!         F Statistic: 100.322
-        !!         Probability: .00000
+        !! Between Category Results:
+        !!         DOF: 3
+        !!         Sum of Squares: 75.750 
+        !!         Mean of Squares: 25.250
+        !!         F Statistic: 8.559     
+        !!         Probability: .00128
         !!
-        !! Part Results:
-        !!         DOF: 4
-        !!         Sum of Squares: 28.909
-        !!         Mean of Squares (Variance): 7.227
-        !!         F Statistic: 889.458
-        !!         Probability: -.00000
-        !!
-        !! Equipment Results:
-        !!         DOF: 30
-        !!         Sum of Squares: 1.712
-        !!         Mean of Squares (Variance): .057
-        !! Operator-Part Interaction Results:
-        !!         DOF: 8
-        !!         Sum of Squares: .065
-        !!         Mean of Squares (Variance): .008
-        !!         F Statistic: .142
-        !!         Probability: .99637
+        !! Residual Results:
+        !!         DOF: 16
+        !!         Sum of Squares: 47.200
+        !!         Mean of Squares: 2.950
         !!
         !! Total Results:
-        !!         DOF: 44
-        !!         Sum of Squares: 32.317
-        !!         Mean of Squares (Variance): .734
-        !!         Overall Mean: 2.944
+        !!         DOF: 19
+        !!         Sum of Squares: 122.950
+        !!         Mean of Squares: 6.471
         !! @endcode
         module function anova(x, err) result(rst)
             real(real64), intent(in), target, contiguous, dimension(:,:) :: x

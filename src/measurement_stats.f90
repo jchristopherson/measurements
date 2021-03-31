@@ -4,6 +4,7 @@ submodule (measurements_core) measurement_stats
     use linalg_core
     use nonlin_core
     use nonlin_solve
+    use integral_core
 contains
 ! ------------------------------------------------------------------------------
 pure module function is_monotonic(x) result(rst)
@@ -400,7 +401,11 @@ pure module function f_test(x1, x2) result(rst)
     var1 = variance(x1)
     var2 = variance(x2)
     rst%value = var1 / var2
-    rst%probability = ftest_probability(rst%value, d1, d2)
+    rst%probability = f_distribution_cdf( &
+        real(min(d1, d2), real64), &
+        real(max(d1, d2), real64), &
+        rst%value &
+    )
 end function
 
 ! ------------------------------------------------------------------------------
@@ -515,23 +520,7 @@ module function adjusted_r_squared(p, y, ym, err) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-pure module function ftest_probability(f, dof1, dof2) result(rst)
-    ! Arguments
-    real(real64), intent(in) :: f
-    integer(int32), intent(in) :: dof1, dof2
-
-    ! Local Variables
-    real(real64) :: arg, d1, d2
-
-    ! Process
-    d1 = real(min(dof1, dof2), real64)
-    d2 = real(max(dof1, dof2), real64)
-    arg = d1 * f / (d1 * f + d2)
-    rst = regularized_beta(arg, 0.5d0 * d1, 0.5d0 * d2)
-end function
-
-! ------------------------------------------------------------------------------
-pure elemental function normal_distribution_cdf(mu, sigma, x) result(rst)
+pure elemental module function normal_distribution_cdf(mu, sigma, x) result(rst)
     ! Arguments
     real(real64), intent(in) :: mu, sigma, x
     real(real64) :: rst
@@ -541,9 +530,9 @@ pure elemental function normal_distribution_cdf(mu, sigma, x) result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
-pure elemental module function t_distribution_cdf(dof, t) result(rst)
+pure elemental module function t_distribution_cdf(dof, x) result(rst)
     ! Arguments
-    real(real64), intent(in) :: dof, t
+    real(real64), intent(in) :: dof, x
     real(real64) :: rst
 
     ! Local Variables
@@ -553,7 +542,18 @@ end function
 ! beta
 
 ! ------------------------------------------------------------------------------
-! f
+pure elemental module function f_distribution_cdf(d1, d2, x) result(rst)
+    ! Arguments
+    real(real64), intent(in) :: x, d1, d2
+    real(real64) :: rst
+
+    ! Local Variables
+    real(real64) :: arg
+
+    ! Process
+    arg = d1 * x / (d1 * x + d2)
+    rst = regularized_beta(arg, 0.5d0 * d1, 0.5d0 * d2)
+end function
 
 ! ------------------------------------------------------------------------------
 
