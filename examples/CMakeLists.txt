@@ -22,3 +22,9 @@ target_link_libraries(anova_example_2 measurements)
 # C API ANOVA Example
 add_executable(c_anova_example c_anova_example.c)
 target_link_libraries(c_anova_example measurements)
+
+# Distribution Example
+find_package(fplot)
+find_package(fcore)
+add_executable(distribution_example distribution_example.f90)
+target_link_libraries(distribution_example measurements fplot fcore)

@@ -1,5 +1,28 @@
 ! measurements_core.f90
 
+! TO DO:
+! - build a distribution object type that utilizes the already defined 
+! distribution calculations, and provides the following features
+! - PDF
+! - CDF
+! - mean
+! - median
+! - mode
+! - variance
+! - skewness
+!
+! Let the model parameters be set as part of the object so PDF & CDF interface
+! can be common - this allows use of a nonlinear solver to fit data to a
+! distribution
+
+! TO DO:
+! - provide a binning function to categorize data into a distribution type
+!   format
+
+! TO DO:
+! - Include more distributions such as Chi-Squared, Poisson, Gamma
+
+
 !> @brief A module containing types and routines to support measurement-related 
 !! calculations.
 module measurements_core
@@ -199,11 +222,6 @@ module measurements_core
         !! @param[in] sigma The population standard deviation.
         !! @param[in] x The value at which to evaluate the distrubition 
         !!  funciton.
-        !! @param[in] comp An optional input, that if set to true, allows
-        !!  evaluation of the cumulative distribution function; else, if set
-        !!  to false, the probability density function is evaluated.  The 
-        !!  default is false such that the probabidlity density function is
-        !!  evaluated.
         !!
         !! @return The value of the distribution function at @p x.
         !!
@@ -225,15 +243,40 @@ module measurements_core
         !! @param[in] sigma The population standard deviation.
         !! @param[in] x The value at which to evaluate the distrubition 
         !!  funciton.
-        !! @param[in] comp An optional input, that if set to true, allows
-        !!  evaluation of the cumulative distribution function; else, if set
-        !!  to false, the probability density function is evaluated.  The 
-        !!  default is false such that the probabidlity density function is
-        !!  evaluated.
         !!
         !! @return The value of the distribution function at @p x.
         pure elemental module function normal_distribution_cdf(mu, sigma, x) &
                 result(rst)
+            real(real64), intent(in) :: mu, sigma, x
+            real(real64) :: rst
+        end function
+
+        !> @brief Evaluates the probability distribution function of the 
+        !! log normal distribution.
+        !!
+        !! @param[in] mu The population mean.
+        !! @param[in] sigma The population standard deviation.
+        !! @param[in] x The value at which to evaluate the distrubition 
+        !!  funciton.
+        !!
+        !! @return The value of the distribution function at @p x.
+        pure elemental module function log_normal_distribution(mu, sigma, x) &
+                result(rst)
+            real(real64), intent(in) :: mu, sigma, x
+            real(real64) :: rst
+        end function
+
+        !> @brief Evaluates the cumulative distribution function of the 
+        !! log normal distribution.
+        !!
+        !! @param[in] mu The population mean.
+        !! @param[in] sigma The population standard deviation.
+        !! @param[in] x The value at which to evaluate the distrubition 
+        !!  funciton.
+        !!
+        !! @return The value of the distribution function at @p x.
+        pure elemental module function log_normal_distribution_cdf(mu, &
+                sigma, x) result(rst)
             real(real64), intent(in) :: mu, sigma, x
             real(real64) :: rst
         end function
@@ -291,6 +334,26 @@ module measurements_core
             real(real64), intent(in) :: a, b, x
             real(real64) :: z
         end function
+
+        !> @brief Evaluates the probability distribution function of the 
+        !! beta distribution.
+        !!
+        !! @param[in] a The first argument of the function.
+        !! @param[in] b The second argument of the function.
+        !! @param[in] x The value at which to evaluate the distrubition 
+        !!  funciton.
+        !! @param[in] comp An optional input, that if set to true, allows
+        !!  evaluation of the cumulative distribution function; else, if set
+        !!  to false, the probability density function is evaluated.  The 
+        !!  default is false such that the probabidlity density function is
+        !!  evaluated.
+        !!
+        !! @return The value of the distribution function at @p x.
+        pure elemental module function beta_distribution_cdf(a, b, x) &
+                result(rst)
+            real(real64), intent(in) :: a, b, x
+            real(real64) :: rst
+        end function        
 
         !> @brief Evaluates the probability distribution function of the 
         !! F-distribution.

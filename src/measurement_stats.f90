@@ -540,11 +540,22 @@ pure elemental module function t_distribution_cdf(dof, x) result(rst)
 
     ! Process
     z = dof / (x**2 + dof)
-    rst = 1.0d0 - 0.5d0 * regularized_beta(z, 0.5d0 * dof, 0.5d0)
+    if (x < 0.0d0) then
+        rst = 0.5d0 * regularized_beta(z, 0.5d0 * dof, 0.5d0)
+    else
+        rst = 1.0d0 - 0.5d0 * regularized_beta(z, 0.5d0 * dof, 0.5d0)
+    end if
 end function
 
 ! ------------------------------------------------------------------------------
-! beta
+pure elemental module function beta_distribution_cdf(a, b, x) result(rst)
+    ! Arguments
+    real(real64), intent(in) :: a, b, x
+    real(real64) :: rst
+
+    ! Process
+    rst = regularized_beta(x, a, b)
+end function
 
 ! ------------------------------------------------------------------------------
 pure elemental module function f_distribution_cdf(d1, d2, x) result(rst)
@@ -559,6 +570,32 @@ pure elemental module function f_distribution_cdf(d1, d2, x) result(rst)
     arg = d1 * x / (d1 * x + d2)
     rst = regularized_beta(arg, 0.5d0 * d1, 0.5d0 * d2)
 end function
+
+! ------------------------------------------------------------------------------
+pure elemental module function log_normal_distribution(mu, sigma, x) result(rst)
+    ! Arguments
+    real(real64), intent(in) :: mu, sigma, x
+    real(real64) :: rst
+
+    ! Constants
+    real(real64), parameter :: pi = 2.0d0 * acos(0.0d0)
+
+    ! Process
+    rst = (1.0d0 / (x * sigma * sqrt(2.0d0 * pi))) * &
+        exp(-(log(x) - mu)**2 / (2.0d0 * sigma**2))
+end function
+
+! ------------------------------------------------------------------------------
+pure elemental module function log_normal_distribution_cdf(mu, sigma, x) result(rst)
+    ! Arguments
+    real(real64), intent(in) :: mu, sigma, x
+    real(real64) :: rst
+
+    ! Process
+    rst = 0.5d0 + 0.5d0 * erf((log(x) - mu) / (sigma * sqrt(2.0d0)))
+end function
+
+! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
 

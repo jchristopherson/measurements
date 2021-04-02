@@ -32,22 +32,18 @@ pure elemental module function incomplete_beta(x, a, b) result(z)
     real(real64) :: z
 
     ! Local Variables
-    ! real(real64) :: xtp
+    real(real64) :: c, tol
 
     ! Process
-    ! xtp = (a + 1.0d0) / (a + b + 2.0d0)
-    ! if (x > xtp) then
-    !     z = beta(a, b) - beta_distribution(b, a, 1.0d0 - x)
-    ! else
-    !     z = (x**a) * ((1.0d0 - x)**b) * inc_beta_partial_fraction(x, a, b)
-    ! end if
+    tol = sqrt(epsilon(tol))
+    c = (x**a) * ((1.0d0 - x)**b)
     if (x == 0.0d0) then
         z = 0.0d0
-    else if (x == 1.0d0) then
+    else if (abs(1.0d0 - x) < tol) then
         ! The incomplete beta function simply reduces to the beta function
         z = beta(a, b)
     else
-        z = (x**a) * ((1.0d0 - x)**b) * inc_beta_partial_fraction(x, a, b)
+        z = c * inc_beta_partial_fraction(x, a, b)
     end if
 end function
 
@@ -62,7 +58,7 @@ pure elemental function inc_beta_partial_fraction(x, a, b) result(z)
     ! Parameters
     integer(int32), parameter :: max_iter = 100000
     real(real64), parameter :: tol = 1.0d-12
-
+    
     ! Local Variables
     integer(int32) :: m, k
     real(real64) :: ab, p, d, df, f, fold
