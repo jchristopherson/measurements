@@ -12,6 +12,7 @@ program main
     type(plot_2d) :: plt
     type(plot_data_2d) :: pd1, pd2
     class(legend), pointer :: lgnd
+    type(normal_distribution) :: nd
 
     ! Initialize the plot & set up font properties to improve readability
     call plt%initialize()
@@ -23,8 +24,10 @@ program main
 
     ! Look at a Normal Distribution
     x = linspace(-5.0d0, 5.0d0, npts)
-    pdf = normal_distribution(0.0d0, 0.5d0, x)
-    cdf = normal_distribution_cdf(0.0d0, 0.5d0, x)
+    call nd%set_mean(0.0d0)
+    call nd%set_standard_deviation(0.5d0)
+    pdf = nd%pdf(x)
+    cdf = nd%cdf(x)
 
     ! Plot the data
     call plt%set_title("Normal Distribution")
@@ -44,7 +47,7 @@ program main
     call plt%draw()
 
     ! Look at Student's T Distribution
-    pdf = t_distribution(10.0d0, x)
+    pdf = t_distribution_pdf(10.0d0, x)
     cdf = t_distribution_cdf(10.0d0, x)
 
     ! Plot the data
@@ -61,7 +64,7 @@ program main
 
     ! Look at an F Distribution
     x = linspace(0.0d0, 5.0d0, npts)
-    pdf = f_distribution(5.0d0, 2.0d0, x)
+    pdf = f_distribution_pdf(5.0d0, 2.0d0, x)
     cdf = f_distribution_cdf(5.0d0, 2.0d0, x)
 
     ! Plot the data
@@ -80,7 +83,7 @@ program main
 
     ! Look at a Beta Distribution
     x = linspace(0.0d0, 1.0d0, npts)
-    pdf = beta_distribution(2.0d0, 5.0d0, x)
+    pdf = beta_distribution_pdf(2.0d0, 5.0d0, x)
     cdf = beta_distribution_cdf(2.0d0, 5.0d0, x)
 
     ! Plot the data
@@ -99,7 +102,7 @@ program main
 
     ! Look at the log normal distribution
     x = linspace(0.0d0, 3.0d0, npts)
-    pdf = log_normal_distribution(0.0d0, 0.5d0, x)
+    pdf = log_normal_distribution_pdf(0.0d0, 0.5d0, x)
     cdf = log_normal_distribution_cdf(0.0d0, 0.5d0, x)
 
     ! Plot the data

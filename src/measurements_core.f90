@@ -215,184 +215,6 @@ module measurements_core
             real(real64) :: ci
         end function
 
-        !> @brief Evaluates the probability distribution function of the 
-        !! normal distribution.
-        !!
-        !! @param[in] mu The population mean.
-        !! @param[in] sigma The population standard deviation.
-        !! @param[in] x The value at which to evaluate the distrubition 
-        !!  funciton.
-        !!
-        !! @return The value of the distribution function at @p x.
-        !!
-        !! @remarks
-        !! The normal distribution has the form 
-        !! \f$ f(x) = \frac{1}{\sigma \sqrt{2 \pi}} 
-        !! \exp(-\frac{1}{2}(\frac{x-\mu}{\sigma})^{2}) \f$.
-        pure elemental module function normal_distribution(mu, sigma, x) &
-                result(f)
-            real(real64), intent(in) :: mu, sigma, x
-            real(real64) :: f
-        end function
-
-        !> @brief Evaluates the cumulative distribution function of the 
-        !! normal distribution.
-        !!
-        !!
-        !! @param[in] mu The population mean.
-        !! @param[in] sigma The population standard deviation.
-        !! @param[in] x The value at which to evaluate the distrubition 
-        !!  funciton.
-        !!
-        !! @return The value of the distribution function at @p x.
-        pure elemental module function normal_distribution_cdf(mu, sigma, x) &
-                result(rst)
-            real(real64), intent(in) :: mu, sigma, x
-            real(real64) :: rst
-        end function
-
-        !> @brief Evaluates the probability distribution function of the 
-        !! log normal distribution.
-        !!
-        !! @param[in] mu The population mean.
-        !! @param[in] sigma The population standard deviation.
-        !! @param[in] x The value at which to evaluate the distrubition 
-        !!  funciton.
-        !!
-        !! @return The value of the distribution function at @p x.
-        pure elemental module function log_normal_distribution(mu, sigma, x) &
-                result(rst)
-            real(real64), intent(in) :: mu, sigma, x
-            real(real64) :: rst
-        end function
-
-        !> @brief Evaluates the cumulative distribution function of the 
-        !! log normal distribution.
-        !!
-        !! @param[in] mu The population mean.
-        !! @param[in] sigma The population standard deviation.
-        !! @param[in] x The value at which to evaluate the distrubition 
-        !!  funciton.
-        !!
-        !! @return The value of the distribution function at @p x.
-        pure elemental module function log_normal_distribution_cdf(mu, &
-                sigma, x) result(rst)
-            real(real64), intent(in) :: mu, sigma, x
-            real(real64) :: rst
-        end function
-
-        !> @brief Evalautes the probability distribution function of 
-        !! Student's t-distribution.
-        !!
-        !! @param[in] dof The number of degrees of freedom of the data set.
-        !! @param[in] t The value at which to evaluate the distribution.
-        !!
-        !! @return The value of the distribution function at @p t.
-        !!
-        !! @remarks
-        !! Student's t-distribution has the form \f$ f(t) = 
-        !! \frac{\Gamma(\frac{\nu + 1}{2})}{\sqrt{\nu \pi} 
-        !! \Gamma(\frac{\nu}{2})} (1 + \frac{t^{2}}{\nu})^{-\frac{\nu + 1}{2}} 
-        !! \f$.
-        pure elemental module function t_distribution(dof, t) result(f)
-            real(real64), intent(in) :: dof
-            real(real64), intent(in) :: t
-            real(real64) :: f
-        end function
-
-        !> @brief Evalautes the cumulative distribution function of 
-        !! Student's t-distribution.
-        !!
-        !! @param[in] dof The number of degrees of freedom of the data set.
-        !! @param[in] x The value at which to evaluate the distribution.
-        !!
-        !! @return The value of the distribution function at @p x.
-        pure elemental module function t_distribution_cdf(dof, x) result(rst)
-            real(real64), intent(in) :: dof, x
-            real(real64) :: rst
-        end function
-
-        !> @brief Evaluates the probability distribution function of the 
-        !! beta distribution.
-        !!
-        !! @param[in] a The first argument of the function.
-        !! @param[in] b The second argument of the function.
-        !! @param[in] x The value at which to evaluate the distrubition 
-        !!  funciton.
-        !! @param[in] comp An optional input, that if set to true, allows
-        !!  evaluation of the cumulative distribution function; else, if set
-        !!  to false, the probability density function is evaluated.  The 
-        !!  default is false such that the probabidlity density function is
-        !!  evaluated.
-        !!
-        !! @return The value of the distribution function at @p x.
-        !!
-        !! @remarks The beta distribution has the form \f$ f(x) = 
-        !! \frac{x^{a-1} (1 - x)^{b-1}}{\beta(a,b)} \f$.
-        pure elemental module function beta_distribution(a, b, x) &
-                result(z)
-            real(real64), intent(in) :: a, b, x
-            real(real64) :: z
-        end function
-
-        !> @brief Evaluates the probability distribution function of the 
-        !! beta distribution.
-        !!
-        !! @param[in] a The first argument of the function.
-        !! @param[in] b The second argument of the function.
-        !! @param[in] x The value at which to evaluate the distrubition 
-        !!  funciton.
-        !! @param[in] comp An optional input, that if set to true, allows
-        !!  evaluation of the cumulative distribution function; else, if set
-        !!  to false, the probability density function is evaluated.  The 
-        !!  default is false such that the probabidlity density function is
-        !!  evaluated.
-        !!
-        !! @return The value of the distribution function at @p x.
-        pure elemental module function beta_distribution_cdf(a, b, x) &
-                result(rst)
-            real(real64), intent(in) :: a, b, x
-            real(real64) :: rst
-        end function        
-
-        !> @brief Evaluates the probability distribution function of the 
-        !! F-distribution.
-        !!
-        !! @param[in] d1 A model parameter.
-        !! @param[in] d2 A model parameter.
-        !! @param[in] x The value at which to evaluate the distrubition 
-        !!  funciton.
-        !!
-        !! @return The value of the distribution function at @p x.
-        !!
-        !! @remarks The F distribution has the form 
-        !! @par
-        !! \f$ f(x) = 
-        !! \frac{\sqrt{\alpha}}{x \beta(\frac{d_1}{2}, \frac{d_2}{2})} \f$
-        !! @par
-        !! where
-        !! @par
-        !! \f$ \alpha = 
-        !! \frac{(d_1 x)^{d_1} d_{2}^{d_2}}{(d_1 x + d_2)^{d_1 + d_2}} \f$.
-        pure elemental module function f_distribution(d1, d2, x) result(z)
-            real(real64), intent(in) :: d1, d2, x
-            real(real64) :: z
-        end function
-
-        !> @brief Evaluates the cumulative distribution function of the 
-        !! F-distribution.
-        !!
-        !! @param[in] d1 A model parameter.
-        !! @param[in] d2 A model parameter.
-        !! @param[in] x The value at which to evaluate the distrubition 
-        !!  funciton.
-        !!
-        !! @return The value of the distribution function at @p x.
-        pure elemental module function f_distribution_cdf(d1, d2, x) result(rst)
-            real(real64), intent(in) :: d1, d2, x
-            real(real64) :: rst
-        end function
-
         !> @brief Applies Student's t-test to compute the t-statistic.  A 
         !! two-tailed distribution is assumed.
         !!
@@ -2238,6 +2060,498 @@ module measurements_core
             type(anova_table) :: rst
         end function
     end interface
+
+! ******************************************************************************
+! MEASUREMENTS_DISTRIBUTION.F90
+! ------------------------------------------------------------------------------
+    !> @brief Defines a generic distribution type.
+    type, abstract :: distribution
+    contains
+        !> @brief Evaluates the probability distribution function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) pdf(class(distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in] this The distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !!
+        !! @return The value of the distribution function at @p x.
+        procedure(distribution_function), public, deferred, pass :: pdf
+        !> @brief Evaluates the cumulative distribution function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) pdf(class(distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in] this The distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !!
+        !! @return The value of the distribution function at @p x.
+        procedure(distribution_function), public, deferred, pass :: cdf
+        !> @brief Returns the mean of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) mean(class(distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The distribution object.
+        !! @return The mean value.
+        procedure(distribution_parameter), public, deferred, pass :: mean
+        !> @brief Returns the median of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) median(class(distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The distribution object.
+        !! @return The median value.
+        procedure(distribution_parameter), public, deferred, pass :: median
+        !> @brief Returns the mode of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) mode(class(distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The distribution object.
+        !! @return The mode value.
+        procedure(distribution_parameter), public, deferred, pass :: mode
+        !> @brief Returns the variance of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) variance(class(distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The distribution object.
+        !! @return The variance value.
+        procedure(distribution_parameter), public, deferred, pass :: variance
+        !> @brief Updates the model parameters.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! set_model_parameters(class(distribution) this, real(real64) x(:))
+        !! @endcode
+        !!
+        !! @param[in,out] this The distribution object.
+        !! @param[in] x An array containing the model parameters.
+        procedure(distribution_set_model_parameters), public, deferred, &
+            pass :: set_model_parameters
+    end type
+
+    interface
+        !> @brief Evaluates the distribution function.
+        !!
+        !! @param[in] this The distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !!
+        !! @return The value of the distribution function at @p x.
+        pure elemental function distribution_function(this, x) result(rst)
+            use, intrinsic :: iso_fortran_env, only : real64
+            import distribution
+            class(distribution), intent(in) :: this
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+        !> @brief Returns a distribution parameter.
+        !!
+        !! @param[in] this The distribution object.
+        !! @return The parameter value.
+        pure function distribution_parameter(this) result(rst)
+            use, intrinsic :: iso_fortran_env, only : real64
+            import distribution
+            class(distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+        !> @brief Updates the model parameters.
+        !!
+        !! @param[in,out] this The distribution object.
+        !! @param[in] x An array containing the model parameters.
+        subroutine distribution_set_model_parameters(this, x)
+            use, intrinsic :: iso_fortran_env, only : real64
+            import distribution
+            class(distribution), intent(inout) :: this
+            real(real64), intent(in), dimension(:) :: x
+        end subroutine
+    end interface
+
+! ------------------------------------------------------------------------------
+    interface
+        !> @brief Evaluates the probability distribution function of the 
+        !! normal distribution.
+        !!
+        !! @param[in] mu The population mean.
+        !! @param[in] sigma The population standard deviation.
+        !! @param[in] x The value at which to evaluate the distrubition 
+        !!  funciton.
+        !!
+        !! @return The value of the distribution function at @p x.
+        !!
+        !! @remarks
+        !! The normal distribution has the form 
+        !! \f$ f(x) = \frac{1}{\sigma \sqrt{2 \pi}} 
+        !! \exp(-\frac{1}{2}(\frac{x-\mu}{\sigma})^{2}) \f$.
+        pure elemental module function normal_distribution_pdf(mu, sigma, x) &
+                result(f)
+            real(real64), intent(in) :: mu, sigma, x
+            real(real64) :: f
+        end function
+
+        !> @brief Evaluates the cumulative distribution function of the 
+        !! normal distribution.
+        !!
+        !!
+        !! @param[in] mu The population mean.
+        !! @param[in] sigma The population standard deviation.
+        !! @param[in] x The value at which to evaluate the distrubition 
+        !!  funciton.
+        !!
+        !! @return The value of the distribution function at @p x.
+        pure elemental module function normal_distribution_cdf(mu, sigma, x) &
+                result(rst)
+            real(real64), intent(in) :: mu, sigma, x
+            real(real64) :: rst
+        end function
+
+        !> @brief Evaluates the probability distribution function of the 
+        !! log normal distribution.
+        !!
+        !! @param[in] mu The population mean.
+        !! @param[in] sigma The population standard deviation.
+        !! @param[in] x The value at which to evaluate the distrubition 
+        !!  funciton.
+        !!
+        !! @return The value of the distribution function at @p x.
+        pure elemental module function log_normal_distribution_pdf(mu, sigma, x) &
+                result(rst)
+            real(real64), intent(in) :: mu, sigma, x
+            real(real64) :: rst
+        end function
+
+        !> @brief Evaluates the cumulative distribution function of the 
+        !! log normal distribution.
+        !!
+        !! @param[in] mu The population mean.
+        !! @param[in] sigma The population standard deviation.
+        !! @param[in] x The value at which to evaluate the distrubition 
+        !!  funciton.
+        !!
+        !! @return The value of the distribution function at @p x.
+        pure elemental module function log_normal_distribution_cdf(mu, &
+                sigma, x) result(rst)
+            real(real64), intent(in) :: mu, sigma, x
+            real(real64) :: rst
+        end function
+
+        !> @brief Evalautes the probability distribution function of 
+        !! Student's t-distribution.
+        !!
+        !! @param[in] dof The number of degrees of freedom of the data set.
+        !! @param[in] t The value at which to evaluate the distribution.
+        !!
+        !! @return The value of the distribution function at @p t.
+        !!
+        !! @remarks
+        !! Student's t-distribution has the form \f$ f(t) = 
+        !! \frac{\Gamma(\frac{\nu + 1}{2})}{\sqrt{\nu \pi} 
+        !! \Gamma(\frac{\nu}{2})} (1 + \frac{t^{2}}{\nu})^{-\frac{\nu + 1}{2}} 
+        !! \f$.
+        pure elemental module function t_distribution_pdf(dof, t) result(f)
+            real(real64), intent(in) :: dof
+            real(real64), intent(in) :: t
+            real(real64) :: f
+        end function
+
+        !> @brief Evalautes the cumulative distribution function of 
+        !! Student's t-distribution.
+        !!
+        !! @param[in] dof The number of degrees of freedom of the data set.
+        !! @param[in] x The value at which to evaluate the distribution.
+        !!
+        !! @return The value of the distribution function at @p x.
+        pure elemental module function t_distribution_cdf(dof, x) result(rst)
+            real(real64), intent(in) :: dof, x
+            real(real64) :: rst
+        end function
+
+        !> @brief Evaluates the probability distribution function of the 
+        !! beta distribution.
+        !!
+        !! @param[in] a The first argument of the function.
+        !! @param[in] b The second argument of the function.
+        !! @param[in] x The value at which to evaluate the distrubition 
+        !!  funciton.
+        !! @param[in] comp An optional input, that if set to true, allows
+        !!  evaluation of the cumulative distribution function; else, if set
+        !!  to false, the probability density function is evaluated.  The 
+        !!  default is false such that the probabidlity density function is
+        !!  evaluated.
+        !!
+        !! @return The value of the distribution function at @p x.
+        !!
+        !! @remarks The beta distribution has the form \f$ f(x) = 
+        !! \frac{x^{a-1} (1 - x)^{b-1}}{\beta(a,b)} \f$.
+        pure elemental module function beta_distribution_pdf(a, b, x) &
+                result(z)
+            real(real64), intent(in) :: a, b, x
+            real(real64) :: z
+        end function
+
+        !> @brief Evaluates the probability distribution function of the 
+        !! beta distribution.
+        !!
+        !! @param[in] a The first argument of the function.
+        !! @param[in] b The second argument of the function.
+        !! @param[in] x The value at which to evaluate the distrubition 
+        !!  funciton.
+        !! @param[in] comp An optional input, that if set to true, allows
+        !!  evaluation of the cumulative distribution function; else, if set
+        !!  to false, the probability density function is evaluated.  The 
+        !!  default is false such that the probabidlity density function is
+        !!  evaluated.
+        !!
+        !! @return The value of the distribution function at @p x.
+        pure elemental module function beta_distribution_cdf(a, b, x) &
+                result(rst)
+            real(real64), intent(in) :: a, b, x
+            real(real64) :: rst
+        end function        
+
+        !> @brief Evaluates the probability distribution function of the 
+        !! F-distribution.
+        !!
+        !! @param[in] d1 A model parameter.
+        !! @param[in] d2 A model parameter.
+        !! @param[in] x The value at which to evaluate the distrubition 
+        !!  funciton.
+        !!
+        !! @return The value of the distribution function at @p x.
+        !!
+        !! @remarks The F distribution has the form 
+        !! @par
+        !! \f$ f(x) = 
+        !! \frac{\sqrt{\alpha}}{x \beta(\frac{d_1}{2}, \frac{d_2}{2})} \f$
+        !! @par
+        !! where
+        !! @par
+        !! \f$ \alpha = 
+        !! \frac{(d_1 x)^{d_1} d_{2}^{d_2}}{(d_1 x + d_2)^{d_1 + d_2}} \f$.
+        pure elemental module function f_distribution_pdf(d1, d2, x) result(z)
+            real(real64), intent(in) :: d1, d2, x
+            real(real64) :: z
+        end function
+
+        !> @brief Evaluates the cumulative distribution function of the 
+        !! F-distribution.
+        !!
+        !! @param[in] d1 A model parameter.
+        !! @param[in] d2 A model parameter.
+        !! @param[in] x The value at which to evaluate the distrubition 
+        !!  funciton.
+        !!
+        !! @return The value of the distribution function at @p x.
+        pure elemental module function f_distribution_cdf(d1, d2, x) result(rst)
+            real(real64), intent(in) :: d1, d2, x
+            real(real64) :: rst
+        end function
+    end interface
+
+! ------------------------------------------------------------------------------
+    !> @brief Defines a normal distribution.
+    type, extends(distribution) :: normal_distribution
+    private
+        real(real64) :: m_mean = 0.0d0
+        real(real64) :: m_sigma = 1.0d0
+    contains
+        !> @brief Evaluates the probability distribution function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) pdf(class(normal_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in] this The normal_distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !!
+        !! @return The value of the distribution function at @p x.
+        procedure, public :: pdf => nrm_pdf
+        !> @brief Evaluates the cumulative distribution function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) pdf(class(normal_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in] this The normal_distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !!
+        !! @return The value of the distribution function at @p x.
+        procedure, public :: cdf => nrm_cdf
+        !> @brief Returns the mean of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) mean(class(normal_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The normal_distribution object.
+        !! @return The mean value.
+        procedure, public :: mean => nrm_mean
+        !> @brief Returns the median of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) median(class(normal_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The normal_distribution object.
+        !! @return The median value.
+        procedure, public :: median => nrm_median
+        !> @brief Returns the mode of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) mode(class(normal_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The normal_distribution object.
+        !! @return The mode value.
+        procedure, public :: mode => nrm_mode
+        !> @brief Returns the variance of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) variance(class(normal_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The normal_distribution object.
+        !! @return The variance value.
+        procedure, public :: variance => nrm_variance
+        !> @brief Updates the model parameters.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! set_model_parameters(class(normal_distribution) this, real(real64) x(:))
+        !! @endcode
+        !!
+        !! @param[in,out] this The normal_distribution object.
+        !! @param[in] x An array containing the model parameters.
+        procedure, public :: set_model_parameters => nrm_set_params
+        !> @brief Gets the mean value.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) get_mean(class(normal_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The normal_distribution object.
+        !! @return The value.
+        procedure, public :: get_mean => nrm_get_mean
+        !> @brief Sets the mean value.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! set_mean(class(normal_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in,out] this The normal_distribution object.
+        !! @param[in] x The value.
+        procedure, public :: set_mean => nrm_set_mean
+        !> @brief Gets the standard deviation value.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) get_standard_deviation(class(normal_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The normal_distribution object.
+        !! @return The value.
+        procedure, public :: get_standard_deviation => nrm_get_sigma
+        !> @brief Sets the standard deviation value.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! set_standard_deviation(class(normal_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in,out] this The normal_distribution object.
+        !! @param[in] x The value.
+        procedure, public :: set_standard_deviation => nrm_set_sigma
+    end type
+
+    interface
+        pure elemental module function nrm_pdf(this, x) result(rst)
+            class(normal_distribution), intent(in) :: this
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        pure elemental module function nrm_cdf(this, x) result(rst)
+            class(normal_distribution), intent(in) :: this
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        pure module function nrm_mean(this) result(rst)
+            class(normal_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function nrm_median(this) result(rst)
+            class(normal_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function nrm_mode(this) result(rst)
+            class(normal_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function nrm_variance(this) result(rst)
+            class(normal_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        module subroutine nrm_set_params(this, x)
+            class(normal_distribution), intent(inout) :: this
+            real(real64), intent(in), dimension(:) :: x
+        end subroutine
+
+        pure module function nrm_get_mean(this) result(rst)
+            class(normal_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        module subroutine nrm_set_mean(this, x)
+            class(normal_distribution), intent(inout) :: this
+            real(real64), intent(in) :: x
+        end subroutine
+
+        pure module function nrm_get_sigma(this) result(rst)
+            class(normal_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        module subroutine nrm_set_sigma(this, x)
+            class(normal_distribution), intent(inout) :: this
+            real(real64), intent(in) :: x
+        end subroutine
+    end interface
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
 end module

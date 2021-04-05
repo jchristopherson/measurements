@@ -246,7 +246,7 @@ contains
         real(c_double), intent(out) :: f(n)
 
         ! Process
-        f = normal_distribution(mu, sigma, x)
+        f = normal_distribution_pdf(mu, sigma, x)
     end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -273,7 +273,7 @@ contains
         real(c_double), intent(out) :: f(n)
 
         ! Process
-        f = t_distribution(dof, t)
+        f = t_distribution_pdf(dof, t)
     end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -299,7 +299,7 @@ contains
         real(c_double), intent(out) :: f(n)
 
         ! Process
-        f = beta_distribution(a, b, x)
+        f = beta_distribution_pdf(a, b, x)
     end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -332,7 +332,7 @@ contains
         real(c_double), intent(out) :: f(n)
 
         ! Process
-        f = f_distribution(d1, d2, x)
+        f = f_distribution_pdf(d1, d2, x)
     end subroutine
 
 ! ------------------------------------------------------------------------------
