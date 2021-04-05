@@ -1,3 +1,15 @@
 [submodule "src/fftpack"]
 	path = src/fftpack
 	url = https://github.com/jlokimlin/modern_fftpack.git
+[submodule "src/ferror"]
+	path = src/ferror
+	url = https://github.com/jchristopherson/ferror.git
+[submodule "src/linalg"]
+	path = src/linalg
+	url = https://github.com/jchristopherson/linalg.git
+[submodule "src/nonlin"]
+	path = src/nonlin
+	url = https://github.com/jchristopherson/nonlin.git
+[submodule "src/integral"]
+	path = src/integral
+	url = https://github.com/jchristopherson/integral.git
