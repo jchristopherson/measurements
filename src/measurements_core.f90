@@ -383,6 +383,17 @@ module measurements_core
             real(real64), intent(in) :: x, a, b
             real(real64) :: z
         end function
+
+        !> @brief Computes the digamma function \f$ \psi(x) = 
+        !! \frac{d}{dx}\left( \ln \left( \Gamma \left( x \right) \right) 
+        !! \right) \f$.
+        !!
+        !! @param[in] x The value at which to evaluate the function.
+        !! @return The function value.
+        pure elemental module function digamma(x) result(rst)
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
     end interface
 
 ! ******************************************************************************
@@ -1805,6 +1816,116 @@ module measurements_core
 
 ! ------------------------------------------------------------------------------
     !> @brief A gage repeatablilty and reproducibility (GR&R) ANOVA table.
+    !!
+    !! @par Example
+    !! The following example illustrates an analysis of variance example
+    !! worked from https://www.spcforexcel.com/knowledge/measurement-systems-analysis/anova-gage-rr-part-1.
+    !! @code{.f90}
+    !! program main
+    !!     use iso_fortran_env
+    !!     use measurements_core
+    !!     implicit none
+    !!
+    !!     ! Parameters
+    !!     integer(int32), parameter :: nops = 3
+    !!     integer(int32), parameter :: nparts = 5
+    !!     integer(int32), parameter :: ntrials = 3
+    !!
+    !!     ! Local Variables
+    !!     real(real64) :: x(nparts, ntrials, nops)
+    !!     type(gage_anova_table) :: rst
+    !!
+    !!     ! Operator 1 Results
+    !!     x(:,:,1) = reshape([&
+    !!         3.29d0, 2.44d0, 4.34d0, 3.47d0, 2.2d0, &
+    !!         3.41d0, 2.32d0, 4.17d0, 3.5d0, 2.08d0, &
+    !!         3.64d0, 2.42d0, 4.27d0, 3.64d0, 2.16d0], &
+    !!         [nparts, ntrials])
+    !!
+    !!     ! Operator 2 Results
+    !!     x(:,:,2) = reshape([ &
+    !!         3.08d0, 2.53d0, 4.19d0, 3.01d0, 2.44d0, &
+    !!         3.25d0, 1.78d0, 3.94d0, 4.03d0, 1.8d0, &
+    !!         3.07d0, 2.32d0, 4.34d0, 3.2d0, 1.72d0], &
+    !!         [nparts, ntrials])
+    !!
+    !!     ! Operator 3 Results
+    !!     x(:,:,3) = reshape([ &
+    !!         3.04d0, 1.62d0, 3.88d0, 3.14d0, 1.54d0, &
+    !!         2.89d0, 1.87d0, 4.09d0, 3.2d0, 1.93d0, &
+    !!         2.85d0, 2.04d0, 3.67d0, 3.11d0, 1.55d0], &
+    !!         [nparts, ntrials])
+    !!
+    !!     ! Perform the ANOVA
+    !!     rst = gage_anova(x)
+    !!
+    !!     ! Display the results
+    !!     print '(A)', "Operator Results:"
+    !!     print '(AI0)', achar(9) // "DOF: ", rst%operators%dof
+    !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%operators%sum_of_squares
+    !!     print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%operators%mean_of_squares
+    !!     print '(AF0.3)', achar(9) // "F Statistic: ", rst%operators%f_stat
+    !!     print '(AF0.5)', achar(9) // "Probability: ", rst%operators%probability
+    !!
+    !!     print '(A)', new_line('a') // "Part Results:"
+    !!     print '(AI0)', achar(9) // "DOF: ", rst%parts%dof
+    !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%parts%sum_of_squares
+    !!     print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%parts%mean_of_squares
+    !!     print '(AF0.3)', achar(9) // "F Statistic: ", rst%parts%f_stat
+    !!     print '(AF0.5)', achar(9) // "Probability: ", rst%parts%probability
+    !!
+    !!     print '(A)', new_line('a') // "Equipment Results:"
+    !!     print '(AI0)', achar(9) // "DOF: ", rst%equipment%dof
+    !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%equipment%sum_of_squares
+    !!     print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%equipment%mean_of_squares
+    !!
+    !!     print '(A)', new_line('a') // "Operator-Part Interaction Results:"
+    !!     print '(AI0)', achar(9) // "DOF: ", rst%operator_by_part%dof
+    !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%operator_by_part%sum_of_squares
+    !!     print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%operator_by_part%mean_of_squares
+    !!     print '(AF0.3)', achar(9) // "F Statistic: ", rst%operator_by_part%f_stat
+    !!     print '(AF0.5)', achar(9) // "Probability: ", rst%operator_by_part%probability
+    !!
+    !!     print '(A)', new_line('a') // "Total Results:"
+    !!     print '(AI0)', achar(9) // "DOF: ", rst%total%dof
+    !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%total%sum_of_squares
+    !!     print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%total%mean_of_squares
+    !!     print '(AF0.3)', achar(9) // "Overall Mean: ", rst%total%mean
+    !! end program
+    !! @endcode
+    !! @code{.txt}
+    !! Operator Results:
+    !!         DOF: 2
+    !!         Sum of Squares: 1.630
+    !!         Mean of Squares: .815
+    !!         F Statistic: 100.322
+    !!         Probability: .00000
+    !!
+    !! Part Results:
+    !!         DOF: 4
+    !!         Sum of Squares: 28.909
+    !!         Mean of Squares: 7.227
+    !!         F Statistic: 889.458
+    !!         Probability: -.00000
+    !!
+    !! Equipment Results:
+    !!         DOF: 30
+    !!         Sum of Squares: 1.712
+    !!         Mean of Squares: .057
+    !!
+    !! Operator-Part Interaction Results:
+    !!         DOF: 8
+    !!         Sum of Squares: .065
+    !!         Mean of Squares: .008
+    !!         F Statistic: .142
+    !!         Probability: .99637
+    !!
+    !! Total Results:
+    !!         DOF: 44
+    !!         Sum of Squares: 32.317
+    !!         Mean of Squares: .734
+    !!         Overall Mean: 2.944
+    !! @endcode
     type gage_anova_table
         !> @brief The individual operator information.
         type(anova_table_entry), allocatable, dimension(:) :: operator
@@ -1824,6 +1945,71 @@ module measurements_core
 
 ! ------------------------------------------------------------------------------
     !> @brief A basic ANOVA table.
+    !!
+    !! @par Example
+    !! The following example illustrates an analysis of variance example
+    !! worked from https://sphweb.bumc.bu.edu/otlt/MPH-Modules/BS/BS704_HypothesisTesting-ANOVA/BS704_HypothesisTesting-Anova3.html#:~:text=The%20ANOVA%20table%20breaks%20down,Source%20of%20Variation
+    !! @code{.f90}
+    !! program main
+    !!     use iso_fortran_env
+    !!     use measurements_core
+    !!     implicit none
+    !!
+    !!     ! Parameters
+    !!     integer(int32), parameter :: nsamples = 5
+    !!     integer(int32), parameter :: ncategories = 4
+    !!
+    !!     ! Local Variables
+    !!     real(real64) :: x(nsamples, ncategories)
+    !!     type(anova_table) :: rst
+    !!
+    !!     ! Data by category
+    !!     x = reshape([ &
+    !!         8.0d0, 9.0d0, 6.0d0, 7.0d0, 3.0d0, &
+    !!         2.0d0, 4.0d0, 3.0d0, 5.0d0, 1.0d0, &
+    !!         3.0d0, 5.0d0, 4.0d0, 2.0d0, 3.0d0, &
+    !!         2.0d0, 2.0d0, -1.0d0, 0.0d0, 3.0d0], [nsamples, ncategories])
+    !!
+    !!     ! Perform the ANOVA
+    !!     rst = anova(x)
+    !!
+    !!     ! Display the results
+    !!     print '(A)', "Between Category Results:"
+    !!     print '(AI0)', achar(9) // "DOF: ", rst%between%dof
+    !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%between%sum_of_squares
+    !!     print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%between%mean_of_squares
+    !!     print '(AF0.3)', achar(9) // "F Statistic: ", rst%between%f_stat
+    !!     print '(AF0.5)', achar(9) // "Probability: ", rst%between%probability
+    !!
+    !!     print '(A)', new_line('a') // "Residual Results:"
+    !!     print '(AI0)', achar(9) // "DOF: ", rst%residual%dof
+    !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%residual%sum_of_squares
+    !!     print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%residual%mean_of_squares
+    !!
+    !!     print '(A)', new_line('a') // "Total Results:"
+    !!     print '(AI0)', achar(9) // "DOF: ", rst%total%dof
+    !!     print '(AF0.3)', achar(9) // "Sum of Squares: ", rst%total%sum_of_squares
+    !!     print '(AF0.3)', achar(9) // "Mean of Squares: ", rst%total%mean_of_squares
+    !! end program
+    !! @endcode
+    !! @code{.txt}
+    !! Between Category Results:
+    !!         DOF: 3
+    !!         Sum of Squares: 75.750 
+    !!         Mean of Squares: 25.250
+    !!         F Statistic: 8.559     
+    !!         Probability: .00128
+    !!
+    !! Residual Results:
+    !!         DOF: 16
+    !!         Sum of Squares: 47.200
+    !!         Mean of Squares: 2.950
+    !!
+    !! Total Results:
+    !!         DOF: 19
+    !!         Sum of Squares: 122.950
+    !!         Mean of Squares: 6.471
+    !! @endcode
     type, bind(C) :: anova_table
         !> @brief The results from comparison of variances between the data
         !! sets.
@@ -2181,6 +2367,861 @@ module measurements_core
     end interface
 
 ! ------------------------------------------------------------------------------
+    !> @brief Defines a normal distribution.
+    !!
+    !! @par
+    !! The probability distribution function is given as follows.
+    !! @par
+    !! \f$ \frac{1}{x \sigma \sqrt{2 \pi}} 
+    !! \exp{\left( -\frac{1}{2} \left( \frac{x - \mu}{\sigma} \right)^2 
+    !! \right)} \f$
+    !! @par 
+    !! The cumulative distribution function is given as follows.
+    !! @par
+    !! \f$ \frac{1}{2} + \frac{1}{2} 
+    !! erf{\left( \frac{x - \mu}{\sigma \sqrt{2}} \right)} \f$
+    !! @par 
+    !! The mean, median, mode, and variance are then as follows.
+    !! @par 
+    !! \f$ mean = \mu \f$
+    !! @par
+    !! \f$ median = \mu \f$
+    !! @par
+    !! \f$ mode = \mu \f$
+    !! @par
+    !! \f$ variance = \sigma^2 \f$
+    !!
+    !! @par Example
+    !! The following example illustrates a normal distribution with 
+    !! \f$ \mu = 0 \f$, and \f$ \sigma = \frac{1}{2} \f$.
+    !! @code{.f90}
+    !! program main
+    !!     use iso_fortran_env
+    !!     use measurements_core
+    !!     use fplot_core
+    !!     implicit none
+    !!
+    !!     ! Local Variables
+    !!     integer(int32), parameter :: npts = 100
+    !!     real(real64) :: x(npts), pdf(npts), cdf(npts)
+    !!     type(plot_2d) :: plt
+    !!     type(plot_data_2d) :: pd1, pd2
+    !!     class(legend), pointer :: lgnd
+    !!     type(normal_distribution) :: nd
+    !!
+    !!     ! Initialize the plot & set up font properties to improve readability
+    !!     call plt%initialize()
+    !!     call plt%set_font_size(14)
+    !!     lgnd => plt%get_legend()
+    !!     call lgnd%set_is_visible(.true.)
+    !!     call lgnd%set_horizontal_position(LEGEND_LEFT)
+    !!     call plt%set_use_y2_axis(.true.)
+    !!
+    !!     ! Compute the distribution
+    !!     x = linspace(-5.0d0, 5.0d0, npts)
+    !!     call nd%set_mu(0.0d0)
+    !!     call nd%set_sigma(0.5d0)
+    !!     pdf = nd%pdf(x)
+    !!     cdf = nd%cdf(x)
+    !!
+    !!     ! Plot the functions
+    !!     call plt%set_title("Normal Distribution")
+    !!     call pd1%define_data(x, pdf)
+    !!     call pd1%set_name("PDF")
+    !!     call pd1%set_line_width(2.0)
+    !!     call plt%push(pd1)
+    !!
+    !!     call pd2%define_data(x, cdf)
+    !!     call pd2%set_name("CDF (Y2)")
+    !!     call pd2%set_line_width(2.0)
+    !!     call pd2%set_line_style(LINE_DASHED)
+    !!     call pd2%set_draw_against_y2(.true.)
+    !!     call plt%push(pd2)
+    !! end program
+    !! @endcode
+    !! @image html normal_distribution.png
+    type, extends(distribution) :: normal_distribution
+    private
+        real(real64) :: m_mean = 0.0d0
+        real(real64) :: m_sigma = 1.0d0
+    contains
+        !> @brief Evaluates the probability distribution function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) pdf(class(normal_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in] this The normal_distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !!
+        !! @return The value of the distribution function at @p x.
+        procedure, public :: pdf => nrm_pdf
+        !> @brief Evaluates the cumulative distribution function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) pdf(class(normal_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in] this The normal_distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !!
+        !! @return The value of the distribution function at @p x.
+        procedure, public :: cdf => nrm_cdf
+        !> @brief Returns the mean of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) mean(class(normal_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The normal_distribution object.
+        !! @return The mean value.
+        procedure, public :: mean => nrm_mean
+        !> @brief Returns the median of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) median(class(normal_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The normal_distribution object.
+        !! @return The median value.
+        procedure, public :: median => nrm_median
+        !> @brief Returns the mode of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) mode(class(normal_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The normal_distribution object.
+        !! @return The mode value.
+        procedure, public :: mode => nrm_mode
+        !> @brief Returns the variance of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) variance(class(normal_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The normal_distribution object.
+        !! @return The variance value.
+        procedure, public :: variance => nrm_variance
+        !> @brief Updates the model parameters.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! set_model_parameters(class(normal_distribution) this, real(real64) x(:))
+        !! @endcode
+        !!
+        !! @param[in,out] this The normal_distribution object.
+        !! @param[in] x An array containing the model parameters.  The mean
+        !!  parameter (mu) is expected to be the first item in the array, and
+        !!  the standard deviation parameter (sigma) is expected to be the
+        !!  second.
+        procedure, public :: set_model_parameters => nrm_set_params
+        !> @brief Gets the mean value (mu parameter).
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) get_mu(class(normal_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The normal_distribution object.
+        !! @return The value.
+        procedure, public :: get_mu => nrm_get_mu
+        !> @brief Sets the mean value (mu parameter).
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! set_mu(class(normal_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in,out] this The normal_distribution object.
+        !! @param[in] x The value.
+        procedure, public :: set_mu => nrm_set_mu
+        !> @brief Gets the standard deviation value (sigma parameter).
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) get_sigma(class(normal_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The normal_distribution object.
+        !! @return The value.
+        procedure, public :: get_sigma => nrm_get_sigma
+        !> @brief Sets the standard deviation value (sigma parameter).
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! set_sigma(class(normal_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in,out] this The normal_distribution object.
+        !! @param[in] x The value.
+        procedure, public :: set_sigma => nrm_set_sigma
+    end type
+
+    interface
+        pure elemental module function nrm_pdf(this, x) result(rst)
+            class(normal_distribution), intent(in) :: this
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        pure elemental module function nrm_cdf(this, x) result(rst)
+            class(normal_distribution), intent(in) :: this
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        pure module function nrm_mean(this) result(rst)
+            class(normal_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function nrm_median(this) result(rst)
+            class(normal_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function nrm_mode(this) result(rst)
+            class(normal_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function nrm_variance(this) result(rst)
+            class(normal_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        module subroutine nrm_set_params(this, x)
+            class(normal_distribution), intent(inout) :: this
+            real(real64), intent(in), dimension(:) :: x
+        end subroutine
+
+        pure module function nrm_get_mu(this) result(rst)
+            class(normal_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        module subroutine nrm_set_mu(this, x)
+            class(normal_distribution), intent(inout) :: this
+            real(real64), intent(in) :: x
+        end subroutine
+
+        pure module function nrm_get_sigma(this) result(rst)
+            class(normal_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        module subroutine nrm_set_sigma(this, x)
+            class(normal_distribution), intent(inout) :: this
+            real(real64), intent(in) :: x
+        end subroutine
+    end interface
+
+! ------------------------------------------------------------------------------
+    !> @brief Defines a log-normal distribution.
+    !!
+    !! @par
+    !! The probability distribution function is given as follows.
+    !! @par
+    !! \f$ \frac{1}{x \sigma \sqrt{2 \pi}} 
+    !! \exp{\left( -\frac{(\ln{x} - \mu)^2}{2 \sigma^2} \right)} \f$
+    !! @par 
+    !! The cumulative distribution function is given as follows.
+    !! @par
+    !! \f$ \frac{1}{2} - \frac{1}{2} 
+    !! erf{\left( \frac{\ln{x} - \mu}{\sigma \sqrt{2}} \right)} \f$
+    !! @par 
+    !! The mean, median, mode, and variance are then as follows.
+    !! @par 
+    !! \f$ mean = \exp{\left( \mu + \frac{\sigma^2}{2} \right)} \f$
+    !! @par
+    !! \f$ median = \exp{\left(\mu \right)} \f$
+    !! @par
+    !! \f$ mode = \exp{\left( \mu - \sigma^2 \right)} \f$
+    !! @par
+    !! \f$ variance = \left[ \exp{\left( \sigma^2 \right)} - 1 \right] 
+    !! \exp{\left(2 \mu + \sigma^2 \right)}\f$
+    !!
+    !! @par Example
+    !! The following example illustrates a log-normal distribution with 
+    !! \f$ \mu = 0 \f$, and \f$ \sigma = \frac{1}{2} \f$.
+    !! @code{.f90}
+    !! program main
+    !!     use iso_fortran_env
+    !!     use measurements_core
+    !!     use fplot_core
+    !!     implicit none
+    !!
+    !!     ! Local Variables
+    !!     integer(int32), parameter :: npts = 100
+    !!     real(real64) :: x(npts), pdf(npts), cdf(npts)
+    !!     type(plot_2d) :: plt
+    !!     type(plot_data_2d) :: pd1, pd2
+    !!     class(legend), pointer :: lgnd
+    !!     type(log_normal_distribution) :: lnd
+    !!
+    !!     ! Initialize the plot & set up font properties to improve readability
+    !!     call plt%initialize()
+    !!     call plt%set_font_size(14)
+    !!     lgnd => plt%get_legend()
+    !!     call lgnd%set_is_visible(.true.)
+    !!     call lgnd%set_horizontal_position(LEGEND_RIGHT)
+    !!     call lgnd%set_vertical_position(LEGEND_CENTER)
+    !!     call plt%set_use_y2_axis(.true.)
+    !!
+    !!     ! Compute the distribution
+    !!     x = linspace(0.0d0, 3.0d0, npts)
+    !!     call lnd%set_mu(0.0d0)
+    !!     call lnd%set_sigma(0.5d0)
+    !!     pdf = lnd%pdf(x)
+    !!     cdf = lnd%cdf(x)
+    !!
+    !!     ! Plot the functions
+    !!     call plt%set_title("Log Normal Distribution")
+    !!     call pd1%define_data(x, pdf)
+    !!     call pd1%set_name("PDF")
+    !!     call pd1%set_line_width(2.0)
+    !!     call plt%push(pd1)
+    !!
+    !!     call pd2%define_data(x, cdf)
+    !!     call pd2%set_name("CDF (Y2)")
+    !!     call pd2%set_line_width(2.0)
+    !!     call pd2%set_line_style(LINE_DASHED)
+    !!     call pd2%set_draw_against_y2(.true.)
+    !!     call plt%push(pd2)
+    !! end program
+    !! @endcode
+    !! @image html log_normal_distribution.png
+    type, extends(normal_distribution) :: log_normal_distribution
+    contains
+        !> @brief Evaluates the probability distribution function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) pdf(class(log_normal_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in] this The log_normal_distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !!
+        !! @return The value of the distribution function at @p x.
+        procedure, public :: pdf => lnrm_pdf
+        !> @brief Evaluates the cumulative distribution function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) pdf(class(log_normal_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in] this The log_normal_distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !!
+        !! @return The value of the distribution function at @p x.
+        procedure, public :: cdf => lnrm_cdf
+        !> @brief Returns the mean of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) mean(class(log_normal_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The log_normal_distribution object.
+        !! @return The mean value.
+        procedure, public :: mean => lnrm_mean
+        !> @brief Returns the median of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) median(class(log_normal_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The log_normal_distribution object.
+        !! @return The median value.
+        procedure, public :: median => lnrm_median
+        !> @brief Returns the mode of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) mode(class(log_normal_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The log_normal_distribution object.
+        !! @return The mode value.
+        procedure, public :: mode => lnrm_mode
+        !> @brief Returns the variance of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) variance(class(log_normal_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The log_normal_distribution object.
+        !! @return The variance value.
+        procedure, public :: variance => lnrm_variance
+    end type
+
+    interface
+        pure elemental module function lnrm_pdf(this, x) result(rst)
+            class(log_normal_distribution), intent(in) :: this
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        pure elemental module function lnrm_cdf(this, x) result(rst)
+            class(log_normal_distribution), intent(in) :: this
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        pure module function lnrm_mean(this) result(rst)
+            class(log_normal_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function lnrm_median(this) result(rst)
+            class(log_normal_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function lnrm_mode(this) result(rst)
+            class(log_normal_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function lnrm_variance(this) result(rst)
+            class(log_normal_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+    end interface
+
+! ------------------------------------------------------------------------------
+    !> @brief Defines a Student's T-distribution.
+    !!
+    !! @par
+    !! The probability distribution function is given as follows.
+    !! @par
+    !! \f$ \frac{ \Gamma \left( \frac{\nu + 1}{2} \right)}{ \sqrt{\nu \pi} 
+    !! \Gamma \left( \frac{\nu}{2} \right)} \left( 1 + \frac{x^2}{\nu} \right)^
+    !! {-\frac{\nu + 1}{2}} \f$
+    !! @par 
+    !! The cumulative distribution function is given as follows.
+    !! @par
+    !! \f$ \frac{1}{2} + x \Gamma \left( \frac{\nu + 1}{2} \right) 
+    !! {}_{2}F_{1} \left( \frac{1}{2}, \frac{\nu + 1}{2}; \frac{3}{2}; 
+    !!  -\frac{x^2}{\nu} \right) \f$
+    !! @par
+    !! Where \f$ {}_{2}F_{1} \f$ is the hypergeometric function.
+    !! @par 
+    !! The mean, median, mode, and variance are then as follows.
+    !! @par 
+    !! \f$ mean = 0 \f$
+    !! @par
+    !! \f$ median = 0 \f$
+    !! @par
+    !! \f$ mode = 0 \f$
+    !! @par
+    !! \f$ variance = \frac{\nu}{\nu - 2} \f$
+    !!
+    !! @par Example
+    !! The following example illustrates a T distribution with 
+    !! \f$ \nu = 10 \f$.
+    !! @code{.f90}
+    !! program main
+    !!     use iso_fortran_env
+    !!     use measurements_core
+    !!     use fplot_core
+    !!     implicit none
+    !!
+    !!     ! Local Variables
+    !!     integer(int32), parameter :: npts = 100
+    !!     real(real64) :: x(npts), pdf(npts), cdf(npts)
+    !!     type(plot_2d) :: plt
+    !!     type(plot_data_2d) :: pd1, pd2
+    !!     class(legend), pointer :: lgnd
+    !!     type(t_distribution) :: td
+    !!
+    !!     ! Initialize the plot & set up font properties to improve readability
+    !!     call plt%initialize()
+    !!     call plt%set_font_size(14)
+    !!     lgnd => plt%get_legend()
+    !!     call lgnd%set_is_visible(.true.)
+    !!     call lgnd%set_horizontal_position(LEGEND_LEFT)
+    !!     call plt%set_use_y2_axis(.true.)
+    !!
+    !!     ! Compute the distribution
+    !!     x = linspace(-5.0d0, 5.0d0, npts)
+    !!     call td%set_dof(10.0d0)
+    !!     pdf = td%pdf(x)
+    !!     cdf = td%cdf(x)
+    !!
+    !!     ! Plot the functions
+    !!     call plt%set_title("Student's T Distribution")
+    !!     call pd1%define_data(x, pdf)
+    !!     call pd1%set_name("PDF")
+    !!     call pd1%set_line_width(2.0)
+    !!     call plt%push(pd1)
+    !!
+    !!     call pd2%define_data(x, cdf)
+    !!     call pd2%set_name("CDF (Y2)")
+    !!     call pd2%set_line_width(2.0)
+    !!     call pd2%set_line_style(LINE_DASHED)
+    !!     call pd2%set_draw_against_y2(.true.)
+    !!     call plt%push(pd2)
+    !! end program
+    !! @endcode
+    !! @image html t_distribution.png
+    type, extends(distribution) :: t_distribution
+    private
+        real(real64) :: m_dof = 1.0d1
+    contains
+        !> @brief Gets the number of degrees-of-freedom.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) function get_dof(class(t_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The t_distribution object.
+        !! @return The DOF value.
+        procedure, public :: get_dof => td_get_dof
+        !> @brief Gets the number of degrees-of-freedom.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! set_dof(class(t_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in,out] this The t_distribution object.
+        !! @param[in] x The DOF value.
+        procedure, public :: set_dof => td_set_dof
+        !> @brief Evaluates the probability distribution function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) pdf(class(t_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in] this The t_distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !!
+        !! @return The value of the distribution function at @p x.
+        procedure, public :: pdf => td_pdf
+        !> @brief Evaluates the cumulative distribution function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) pdf(class(t_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in] this The t_distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !!
+        !! @return The value of the distribution function at @p x.
+        procedure, public :: cdf => td_cdf
+        !> @brief Returns the mean of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) mean(class(t_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The t_distribution object.
+        !! @return The mean value.
+        procedure, public :: mean => td_mean
+        !> @brief Returns the median of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) median(class(t_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The t_distribution object.
+        !! @return The median value.
+        procedure, public :: median => td_median
+        !> @brief Returns the mode of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) mode(class(t_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The t_distribution object.
+        !! @return The mode value.
+        procedure, public :: mode => td_mode
+        !> @brief Returns the variance of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) variance(class(t_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The t_distribution object.
+        !! @return The variance value.
+        procedure, public :: variance => td_variance
+        !> @brief Updates the model parameters.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! set_model_parameters(class(t_distribution) this, real(real64) x(:))
+        !! @endcode
+        !!
+        !! @param[in,out] this The t_distribution object.
+        !! @param[in] x An array containing the model parameters.  The dof
+        !!  parameter (nu) is expected to be the first and only item in the 
+        !!  array.
+        procedure, public :: set_model_parameters => td_set_params
+    end type
+
+    interface
+        pure module function td_get_dof(this) result(rst)
+            class(t_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        module subroutine td_set_dof(this, x)
+            class(t_distribution), intent(inout) :: this
+            real(real64), intent(in) :: x
+        end subroutine
+
+        pure elemental module function td_pdf(this, x) result(rst)
+            class(t_distribution), intent(in) :: this
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        pure elemental module function td_cdf(this, x) result(rst)
+            class(t_distribution), intent(in) :: this
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        pure module function td_mean(this) result(rst)
+            class(t_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function td_median(this) result(rst)
+            class(t_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function td_mode(this) result(rst)
+            class(t_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function td_variance(this) result(rst)
+            class(t_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        module subroutine td_set_params(this, x)
+            class(t_distribution), intent(inout) :: this
+            real(real64), intent(in), dimension(:) :: x
+        end subroutine
+    end interface
+
+! ------------------------------------------------------------------------------
+    !> @brief Defines a beta distribution.
+    type, extends(distribution) :: beta_distribution
+    private
+        real(real64) :: m_alpha = 1.0d0
+        real(real64) :: m_beta = 1.0d0
+    contains
+        !> @brief Gets the alpha parameter.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) get_alpha(class(beta_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The beta_distribution object.
+        !! @return The parameter value.
+        procedure, public :: get_alpha => bd_get_alpha
+        !> @brief Sets the alpha parameter.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! set_alpha(class(beta_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in,out] this The beta_distribution object.
+        !! @param[in] x The parameter value.
+        procedure, public :: set_alpha => bd_set_alpha
+        !> @brief Gets the beta parameter.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) get_beta(class(beta_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The beta_distribution object.
+        !! @return The parameter value.
+        procedure, public :: get_beta => bd_get_beta
+        !> @brief Sets the beta parameter.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! set_beta(class(beta_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in,out] this The beta_distribution object.
+        !! @param[in] x The parameter value.
+        procedure, public :: set_beta => bd_set_beta
+        !> @brief Evaluates the probability distribution function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) pdf(class(beta_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in] this The beta_distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !!
+        !! @return The value of the distribution function at @p x.
+        procedure, public :: pdf => bd_pdf
+        !> @brief Evaluates the cumulative distribution function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) pdf(class(beta_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in] this The beta_distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !!
+        !! @return The value of the distribution function at @p x.
+        procedure, public :: cdf => bd_cdf
+        !> @brief Returns the mean of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) mean(class(beta_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The beta_distribution object.
+        !! @return The mean value.
+        procedure, public :: mean => bd_mean
+        !> @brief Returns the median of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) median(class(beta_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The beta_distribution object.
+        !! @return The median value.
+        procedure, public :: median => bd_median
+        !> @brief Returns the mode of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) mode(class(beta_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The beta_distribution object.
+        !! @return The mode value.
+        procedure, public :: mode => bd_mode
+        !> @brief Returns the variance of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) variance(class(beta_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The beta_distribution object.
+        !! @return The variance value.
+        procedure, public :: variance => bd_variance
+        !> @brief Updates the model parameters.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! set_model_parameters(class(beta_distribution) this, real(real64) x(:))
+        !! @endcode
+        !!
+        !! @param[in,out] this The beta_distribution object.
+        !! @param[in] x An array containing the model parameters.  The alpha
+        !!  parameter is expected to be the first item in the array, and
+        !!  the beta parameter is expected to be the second.
+        procedure, public :: set_model_parameters => bd_set_params
+        procedure, public :: geometric_mean => bd_geometric_mean
+    end type
+
+    interface
+        pure module function bd_get_alpha(this) result(rst)
+            class(beta_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+        module subroutine bd_set_alpha(this, x)
+            class(beta_distribution), intent(inout) :: this
+            real(real64), intent(in) :: x
+        end subroutine
+        
+        pure module function bd_get_beta(this) result(rst)
+            class(beta_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+        
+        module subroutine bd_set_beta(this, x)
+            class(beta_distribution), intent(inout) :: this
+            real(real64), intent(in) :: x
+        end subroutine
+
+        pure elemental module function bd_pdf(this, x) result(rst)
+            class(beta_distribution), intent(in) :: this
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        pure elemental module function bd_cdf(this, x) result(rst)
+            class(beta_distribution), intent(in) :: this
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        pure module function bd_mean(this) result(rst)
+            class(beta_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function bd_median(this) result(rst)
+            class(beta_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function bd_mode(this) result(rst)
+            class(beta_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function bd_variance(this) result(rst)
+            class(beta_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        module subroutine bd_set_params(this, x)
+            class(beta_distribution), intent(inout) :: this
+            real(real64), intent(in), dimension(:) :: x
+        end subroutine
+
+        pure module function bd_geometric_mean(this) result(rst)
+            class(beta_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+    end interface
+
+! ------------------------------------------------------------------------------
+    !> @brief Defines an F-distribution.
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
     interface
         !> @brief Evaluates the probability distribution function of the 
         !! normal distribution.
@@ -2360,198 +3401,6 @@ module measurements_core
             real(real64) :: rst
         end function
     end interface
-
-! ------------------------------------------------------------------------------
-    !> @brief Defines a normal distribution.
-    type, extends(distribution) :: normal_distribution
-    private
-        real(real64) :: m_mean = 0.0d0
-        real(real64) :: m_sigma = 1.0d0
-    contains
-        !> @brief Evaluates the probability distribution function.
-        !!
-        !! @par Syntax
-        !! @code{.f90}
-        !! real(real64) pdf(class(normal_distribution) this, real(real64) x)
-        !! @endcode
-        !!
-        !! @param[in] this The normal_distribution object.
-        !! @param[in] x The value at which to evaluate the function.
-        !!
-        !! @return The value of the distribution function at @p x.
-        procedure, public :: pdf => nrm_pdf
-        !> @brief Evaluates the cumulative distribution function.
-        !!
-        !! @par Syntax
-        !! @code{.f90}
-        !! real(real64) pdf(class(normal_distribution) this, real(real64) x)
-        !! @endcode
-        !!
-        !! @param[in] this The normal_distribution object.
-        !! @param[in] x The value at which to evaluate the function.
-        !!
-        !! @return The value of the distribution function at @p x.
-        procedure, public :: cdf => nrm_cdf
-        !> @brief Returns the mean of the distribution.
-        !!
-        !! @par Syntax
-        !! @code{.f90}
-        !! real(real64) mean(class(normal_distribution) this)
-        !! @endcode
-        !!
-        !! @param[in] this The normal_distribution object.
-        !! @return The mean value.
-        procedure, public :: mean => nrm_mean
-        !> @brief Returns the median of the distribution.
-        !!
-        !! @par Syntax
-        !! @code{.f90}
-        !! real(real64) median(class(normal_distribution) this)
-        !! @endcode
-        !!
-        !! @param[in] this The normal_distribution object.
-        !! @return The median value.
-        procedure, public :: median => nrm_median
-        !> @brief Returns the mode of the distribution.
-        !!
-        !! @par Syntax
-        !! @code{.f90}
-        !! real(real64) mode(class(normal_distribution) this)
-        !! @endcode
-        !!
-        !! @param[in] this The normal_distribution object.
-        !! @return The mode value.
-        procedure, public :: mode => nrm_mode
-        !> @brief Returns the variance of the distribution.
-        !!
-        !! @par Syntax
-        !! @code{.f90}
-        !! real(real64) variance(class(normal_distribution) this)
-        !! @endcode
-        !!
-        !! @param[in] this The normal_distribution object.
-        !! @return The variance value.
-        procedure, public :: variance => nrm_variance
-        !> @brief Updates the model parameters.
-        !!
-        !! @par Syntax
-        !! @code{.f90}
-        !! set_model_parameters(class(normal_distribution) this, real(real64) x(:))
-        !! @endcode
-        !!
-        !! @param[in,out] this The normal_distribution object.
-        !! @param[in] x An array containing the model parameters.
-        procedure, public :: set_model_parameters => nrm_set_params
-        !> @brief Gets the mean value.
-        !!
-        !! @par Syntax
-        !! @code{.f90}
-        !! real(real64) get_mean(class(normal_distribution) this)
-        !! @endcode
-        !!
-        !! @param[in] this The normal_distribution object.
-        !! @return The value.
-        procedure, public :: get_mean => nrm_get_mean
-        !> @brief Sets the mean value.
-        !!
-        !! @par Syntax
-        !! @code{.f90}
-        !! set_mean(class(normal_distribution) this, real(real64) x)
-        !! @endcode
-        !!
-        !! @param[in,out] this The normal_distribution object.
-        !! @param[in] x The value.
-        procedure, public :: set_mean => nrm_set_mean
-        !> @brief Gets the standard deviation value.
-        !!
-        !! @par Syntax
-        !! @code{.f90}
-        !! real(real64) get_standard_deviation(class(normal_distribution) this)
-        !! @endcode
-        !!
-        !! @param[in] this The normal_distribution object.
-        !! @return The value.
-        procedure, public :: get_standard_deviation => nrm_get_sigma
-        !> @brief Sets the standard deviation value.
-        !!
-        !! @par Syntax
-        !! @code{.f90}
-        !! set_standard_deviation(class(normal_distribution) this, real(real64) x)
-        !! @endcode
-        !!
-        !! @param[in,out] this The normal_distribution object.
-        !! @param[in] x The value.
-        procedure, public :: set_standard_deviation => nrm_set_sigma
-    end type
-
-    interface
-        pure elemental module function nrm_pdf(this, x) result(rst)
-            class(normal_distribution), intent(in) :: this
-            real(real64), intent(in) :: x
-            real(real64) :: rst
-        end function
-
-        pure elemental module function nrm_cdf(this, x) result(rst)
-            class(normal_distribution), intent(in) :: this
-            real(real64), intent(in) :: x
-            real(real64) :: rst
-        end function
-
-        pure module function nrm_mean(this) result(rst)
-            class(normal_distribution), intent(in) :: this
-            real(real64) :: rst
-        end function
-
-        pure module function nrm_median(this) result(rst)
-            class(normal_distribution), intent(in) :: this
-            real(real64) :: rst
-        end function
-
-        pure module function nrm_mode(this) result(rst)
-            class(normal_distribution), intent(in) :: this
-            real(real64) :: rst
-        end function
-
-        pure module function nrm_variance(this) result(rst)
-            class(normal_distribution), intent(in) :: this
-            real(real64) :: rst
-        end function
-
-        module subroutine nrm_set_params(this, x)
-            class(normal_distribution), intent(inout) :: this
-            real(real64), intent(in), dimension(:) :: x
-        end subroutine
-
-        pure module function nrm_get_mean(this) result(rst)
-            class(normal_distribution), intent(in) :: this
-            real(real64) :: rst
-        end function
-
-        module subroutine nrm_set_mean(this, x)
-            class(normal_distribution), intent(inout) :: this
-            real(real64), intent(in) :: x
-        end subroutine
-
-        pure module function nrm_get_sigma(this) result(rst)
-            class(normal_distribution), intent(in) :: this
-            real(real64) :: rst
-        end function
-
-        module subroutine nrm_set_sigma(this, x)
-            class(normal_distribution), intent(inout) :: this
-            real(real64), intent(in) :: x
-        end subroutine
-    end interface
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
 end module

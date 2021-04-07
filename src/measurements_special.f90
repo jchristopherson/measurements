@@ -1,6 +1,7 @@
 ! measurements_special.f90
 
 submodule (measurements_core) measurements_special
+    use ieee_arithmetic
 contains
 ! ------------------------------------------------------------------------------
 pure elemental module function beta(a, b) result(z)
@@ -46,6 +47,86 @@ pure elemental module function incomplete_beta(x, a, b) result(z)
         z = c * inc_beta_partial_fraction(x, a, b)
     end if
 end function
+
+! ------------------------------------------------------------------------------
+! REF:
+! - https://people.sc.fsu.edu/~jburkardt/f_src/asa103/asa103.f90
+pure elemental module function digamma(x) result(rst)
+    ! Arguments
+    real(real64), intent(in) :: x
+    real(real64) :: rst
+
+    ! Parameters
+    real(real64), parameter :: c = 8.5d0
+    real(real64), parameter :: euler_mascheroni = 0.57721566490153286060d0
+    
+    ! Local Variables
+    real(real64) :: r, x, x2, nan
+
+    ! If x <= 0.0
+    if (x <= 0.0) then
+        nan = ieee_value(nan, IEEE_QUIET_NAN)
+        rst = nan
+        return
+    end if
+
+    ! Approximation for a small argument
+    if (x <= 1.0d-6) then
+        rst = -euler_mascheroni - 1.0d0 / x + 1.6449340668482264365d0 * x
+        return
+    end if
+
+    ! Process
+    rst = 0.0d0
+    x2 = x
+    do while (x2 < c)
+        rst = rst - 1.0d0 / x2
+        x2 = x2 + 1.0d0
+    end do
+
+    r = 1.0d0 / x2
+    rst = rst + log(x2) - 0.5d0 * r
+    r = r * r
+    rst = rst &
+        -r * (1.0d0 / 12.0d0 &
+        - r * (1.0d0 / 120.0d0 &
+        - r * (1.0d0 / 252.0d0 &
+        - r * (1.0d0 / 240.0d0 &
+        - r * (1.0d0 / 132.0d0) &
+    ))))
+end function
+
+
+
+
+! !
+! !  Reduce to DIGAMA(X + N).
+! !
+!   digamma = 0.0D+00
+!   x2 = x
+
+!   do while ( x2 < c )
+!     digamma = digamma - 1.0D+00 / x2
+!     x2 = x2 + 1.0D+00
+!   end do
+! !
+! !  Use Stirling's (actually de Moivre's) expansion.
+! !
+!   r = 1.0D+00 / x2
+
+!   digamma = digamma + log ( x2 ) - 0.5D+00 * r
+
+!   r = r * r
+
+!   digamma = digamma &
+!     - r * ( 1.0D+00 / 12.0D+00 &
+!     - r * ( 1.0D+00 / 120.0D+00 &
+!     - r * ( 1.0D+00 / 252.0D+00 &
+!     - r * ( 1.0D+00 / 240.0D+00 &
+!     - r * ( 1.0D+00 / 132.0D+00 ) ) ) ) )
+
+!   return
+! end
 
 ! ******************************************************************************
 ! PRIVATE ROUTINES

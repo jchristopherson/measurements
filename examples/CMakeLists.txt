@@ -28,3 +28,7 @@ find_package(fplot)
 find_package(fcore)
 add_executable(distribution_example distribution_example.f90)
 target_link_libraries(distribution_example measurements fplot fcore)
+
+# Special Function Example
+add_executable(specials_example specials_example.f90)
+target_link_libraries(specials_example measurements fplot fcore)

@@ -13,6 +13,8 @@ program main
     type(plot_data_2d) :: pd1, pd2
     class(legend), pointer :: lgnd
     type(normal_distribution) :: nd
+    type(log_normal_distribution) :: lnd
+    type(beta_distribution) :: bd
 
     ! Initialize the plot & set up font properties to improve readability
     call plt%initialize()
@@ -24,8 +26,8 @@ program main
 
     ! Look at a Normal Distribution
     x = linspace(-5.0d0, 5.0d0, npts)
-    call nd%set_mean(0.0d0)
-    call nd%set_standard_deviation(0.5d0)
+    call nd%set_mu(0.0d0)
+    call nd%set_sigma(0.5d0)
     pdf = nd%pdf(x)
     cdf = nd%cdf(x)
 
@@ -83,8 +85,18 @@ program main
 
     ! Look at a Beta Distribution
     x = linspace(0.0d0, 1.0d0, npts)
-    pdf = beta_distribution_pdf(2.0d0, 5.0d0, x)
-    cdf = beta_distribution_cdf(2.0d0, 5.0d0, x)
+    call bd%set_alpha(2.0d0)
+    call bd%set_beta(5.0d0)
+    pdf = bd%pdf(x)
+    cdf = bd%cdf(x)
+
+    ! Display Model Parameters
+    print '(A)', new_line('a') // "Beta Distribution:"
+    print '(AF0.4)', achar(9) // "Mean = ", bd%mean()
+    print '(AF0.4)', achar(9) // "Geometric Mean = ", bd%geometric_mean()
+    print '(AF0.4)', achar(9) // "Median = ", bd%median()
+    print '(AF0.4)', achar(9) // "Mode = ", bd%mode()
+    print '(AF0.4)', achar(9) // "Variance = ", bd%variance()
 
     ! Plot the data
     call plt%set_title("Beta Distribution")
@@ -102,8 +114,10 @@ program main
 
     ! Look at the log normal distribution
     x = linspace(0.0d0, 3.0d0, npts)
-    pdf = log_normal_distribution_pdf(0.0d0, 0.5d0, x)
-    cdf = log_normal_distribution_cdf(0.0d0, 0.5d0, x)
+    call lnd%set_mu(0.0d0)
+    call lnd%set_sigma(0.5d0)
+    pdf = lnd%pdf(x)
+    cdf = lnd%cdf(x)
 
     ! Plot the data
     call plt%set_title("Log Normal Distribution")

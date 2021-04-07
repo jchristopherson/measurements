@@ -1,6 +1,7 @@
 ! measurements_distribtion.f90
 
 submodule (measurements_core) measurements_distribtion
+    use :: ieee_arithmetic
 contains
 ! ------------------------------------------------------------------------------
 pure elemental module function normal_distribution_pdf(mu, sigma, x) result(f)
@@ -145,8 +146,8 @@ pure elemental module function nrm_pdf(this, x) result(rst)
     real(real64), intent(in) :: x
     real(real64) :: rst
     rst = normal_distribution_pdf( &
-        this%get_mean(), &
-        this%get_standard_deviation(), &
+        this%get_mu(), &
+        this%get_sigma(), &
         x &
     )
 end function
@@ -157,8 +158,8 @@ pure elemental module function nrm_cdf(this, x) result(rst)
     real(real64), intent(in) :: x
     real(real64) :: rst
     rst = normal_distribution_cdf( &
-        this%get_mean(), &
-        this%get_standard_deviation(), &
+        this%get_mu(), &
+        this%get_sigma(), &
         x &
     )
 end function
@@ -200,14 +201,14 @@ module subroutine nrm_set_params(this, x)
 end subroutine
 
 ! ------------------------------------------------------------------------------
-pure module function nrm_get_mean(this) result(rst)
+pure module function nrm_get_mu(this) result(rst)
     class(normal_distribution), intent(in) :: this
     real(real64) :: rst
     rst = this%m_mean
 end function
 
 ! --------------------
-module subroutine nrm_set_mean(this, x)
+module subroutine nrm_set_mu(this, x)
     class(normal_distribution), intent(inout) :: this
     real(real64), intent(in) :: x
     this%m_mean = x
@@ -228,7 +229,260 @@ module subroutine nrm_set_sigma(this, x)
 end subroutine
 
 ! ******************************************************************************
+! LOG NORMAL DISTRIBUTION
+! ------------------------------------------------------------------------------
+pure elemental module function lnrm_pdf(this, x) result(rst)
+    class(log_normal_distribution), intent(in) :: this
+    real(real64), intent(in) :: x
+    real(real64) :: rst
+    rst = log_normal_distribution_pdf( &
+        this%get_mu(), &
+        this%get_sigma(), &
+        x &
+    )
+end function
+
+! ------------------------------------------------------------------------------
+pure elemental module function lnrm_cdf(this, x) result(rst)
+    class(log_normal_distribution), intent(in) :: this
+    real(real64), intent(in) :: x
+    real(real64) :: rst
+    rst = log_normal_distribution_cdf( &
+        this%get_mu(), &
+        this%get_sigma(), &
+        x &
+    )
+end function
+
+! ------------------------------------------------------------------------------
+pure module function lnrm_mean(this) result(rst)
+    class(log_normal_distribution), intent(in) :: this
+    real(real64) :: rst
+    rst = exp(this%m_mean + 0.5d0 * this%m_sigma**2)
+end function
+
+! ------------------------------------------------------------------------------
+pure module function lnrm_median(this) result(rst)
+    class(log_normal_distribution), intent(in) :: this
+    real(real64) :: rst
+    rst = exp(this%m_mean)
+end function
+
+! ------------------------------------------------------------------------------
+pure module function lnrm_mode(this) result(rst)
+    class(log_normal_distribution), intent(in) :: this
+    real(real64) :: rst
+    rst = exp(this%m_mean - this%m_sigma**2)
+end function
+
+! ------------------------------------------------------------------------------
+pure module function lnrm_variance(this) result(rst)
+    class(log_normal_distribution), intent(in) :: this
+    real(real64) :: rst
+    rst = (exp(this%m_sigma**2) - 1.0d0) * &
+        exp(2.0d0 * this%m_mean + this%m_sigma**2)
+end function
+
+! ******************************************************************************
 ! STUDENT'S T DISTRIBUTION
+! ------------------------------------------------------------------------------
+pure module function td_get_dof(this) result(rst)
+    class(t_distribution), intent(in) :: this
+    real(real64) :: rst
+    rst = this%m_dof
+end function
+
+! --------------------
+module subroutine td_set_dof(this, x)
+    class(t_distribution), intent(inout) :: this
+    real(real64), intent(in) :: x
+    this%m_dof = x
+end subroutine
+
+! ------------------------------------------------------------------------------
+pure elemental module function td_pdf(this, x) result(rst)
+    class(t_distribution), intent(in) :: this
+    real(real64), intent(in) :: x
+    real(real64) :: rst
+    rst = t_distribution_pdf(this%get_dof(), x)
+end function
+
+! ------------------------------------------------------------------------------
+pure elemental module function td_cdf(this, x) result(rst)
+    class(t_distribution), intent(in) :: this
+    real(real64), intent(in) :: x
+    real(real64) :: rst
+    rst = t_distribution_cdf(this%get_dof(), x)
+end function
+
+! ------------------------------------------------------------------------------
+pure module function td_mean(this) result(rst)
+    class(t_distribution), intent(in) :: this
+    real(real64) :: rst
+
+    real(real64) :: nan
+    nan = ieee_value(nan, IEEE_QUIET_NAN)
+
+    if (this%get_dof() < 1.0d0) then
+        rst = nan
+    else
+        rst = 0.0d0
+    end if
+end function
+
+! ------------------------------------------------------------------------------
+pure module function td_median(this) result(rst)
+    class(t_distribution), intent(in) :: this
+    real(real64) :: rst
+    rst = 0.0d0
+end function
+
+! ------------------------------------------------------------------------------
+pure module function td_mode(this) result(rst)
+    class(t_distribution), intent(in) :: this
+    real(real64) :: rst
+    rst = 0.0d0
+end function
+
+! ------------------------------------------------------------------------------
+pure module function td_variance(this) result(rst)
+    class(t_distribution), intent(in) :: this
+    real(real64) :: rst
+
+    real(real64) :: inf
+    inf = ieee_value(inf, IEEE_POSITIVE_INF)
+
+    if (this%get_dof() > 2.0d0) then
+        rst = this%get_dof() / (this%get_dof() - 2.0d0)
+    else
+        rst = inf
+    end if
+end function
+
+! ------------------------------------------------------------------------------
+module subroutine td_set_params(this, x)
+    class(t_distribution), intent(inout) :: this
+    real(real64), intent(in), dimension(:) :: x
+    this%m_dof = x(1)
+end subroutine
+
+! ******************************************************************************
+! BETA DISTRIBUTION
+! ------------------------------------------------------------------------------
+pure module function bd_get_alpha(this) result(rst)
+    class(beta_distribution), intent(in) :: this
+    real(real64) :: rst
+    rst = this%m_alpha
+end function
+
+! --------------------
+module subroutine bd_set_alpha(this, x)
+    class(beta_distribution), intent(inout) :: this
+    real(real64), intent(in) :: x
+    this%m_alpha = x
+end subroutine
+
+! ------------------------------------------------------------------------------
+pure module function bd_get_beta(this) result(rst)
+    class(beta_distribution), intent(in) :: this
+    real(real64) :: rst
+    rst = this%m_beta
+end function
+
+! --------------------
+module subroutine bd_set_beta(this, x)
+    class(beta_distribution), intent(inout) :: this
+    real(real64), intent(in) :: x
+    this%m_beta = x
+end subroutine
+
+! ------------------------------------------------------------------------------
+pure elemental module function bd_pdf(this, x) result(rst)
+    class(beta_distribution), intent(in) :: this
+    real(real64), intent(in) :: x
+    real(real64) :: rst
+    rst = beta_distribution_pdf( &
+        this%get_alpha(), &
+        this%get_beta(), &
+        x &
+    )
+end function
+
+! ------------------------------------------------------------------------------
+pure elemental module function bd_cdf(this, x) result(rst)
+    class(beta_distribution), intent(in) :: this
+    real(real64), intent(in) :: x
+    real(real64) :: rst
+    rst = beta_distribution_cdf( &
+        this%get_beta(), &
+        this%get_beta(), &
+        x &
+    )
+end function
+
+! ------------------------------------------------------------------------------
+pure module function bd_mean(this) result(rst)
+    class(beta_distribution), intent(in) :: this
+    real(real64) :: rst
+    rst = this%get_alpha() / (this%get_alpha() + this%get_beta())
+end function
+
+! ------------------------------------------------------------------------------
+pure module function bd_median(this) result(rst)
+    class(beta_distribution), intent(in) :: this
+    real(real64) :: rst
+    ! rst = 1.0d0 / regularized_beta(0.5d0, this%get_alpha(), this%get_beta())
+    ! Approximation
+    rst = (this%get_alpha() - 1.0d0 / 3.0d0) / ( &
+        this%get_alpha() + this%get_beta() - 2.0d0 / 3.0d0 &
+    )
+end function
+
+! ------------------------------------------------------------------------------
+pure module function bd_mode(this) result(rst)
+    class(beta_distribution), intent(in) :: this
+    real(real64) :: rst
+    rst = (this%get_alpha() - 1.0d0) / &
+        (this%get_alpha() + this%get_beta() - 2.0d0)
+end function
+
+! ------------------------------------------------------------------------------
+pure module function bd_variance(this) result(rst)
+    class(beta_distribution), intent(in) :: this
+    real(real64) :: rst
+    rst = this%get_alpha() * this%get_beta() / ( &
+        (this%get_alpha() + this%get_beta())**2 * &
+        (this%get_alpha() + this%get_beta() + 1.0d0) &
+    )
+end function
+
+! ------------------------------------------------------------------------------
+module subroutine bd_set_params(this, x)
+    class(beta_distribution), intent(inout) :: this
+    real(real64), intent(in), dimension(:) :: x
+    this%m_alpha = x(1)
+    this%m_beta = x(2)
+end subroutine
+
+! ------------------------------------------------------------------------------
+pure module function bd_geometric_mean(this) result(rst)
+    class(beta_distribution), intent(in) :: this
+    real(real64) :: rst
+    rst = exp(digamma(this%get_alpha()) - &
+        digamma(this%get_alpha() + this%get_beta()) &
+    )
+end function
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
 ! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
