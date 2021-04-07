@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['gage_5fanova_5ftable_149',['gage_anova_table',['../structmeasurements__core_1_1gage__anova__table.html',1,'measurements_core']]]
+  ['distribution_152',['distribution',['../structmeasurements__core_1_1distribution.html',1,'measurements_core']]],
+  ['distribution_5ffunction_153',['distribution_function',['../interfacemeasurements__core_1_1distribution__function.html',1,'measurements_core']]],
+  ['distribution_5fparameter_154',['distribution_parameter',['../interfacemeasurements__core_1_1distribution__parameter.html',1,'measurements_core']]],
+  ['distribution_5fset_5fmodel_5fparameters_155',['distribution_set_model_parameters',['../interfacemeasurements__core_1_1distribution__set__model__parameters.html',1,'measurements_core']]]
 ];

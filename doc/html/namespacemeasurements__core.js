@@ -2,6 +2,7 @@ var namespacemeasurements__core =
 [
     [ "anova_table", "structmeasurements__core_1_1anova__table.html", "structmeasurements__core_1_1anova__table" ],
     [ "anova_table_entry", "structmeasurements__core_1_1anova__table__entry.html", "structmeasurements__core_1_1anova__table__entry" ],
+    [ "beta_distribution", "structmeasurements__core_1_1beta__distribution.html", "structmeasurements__core_1_1beta__distribution" ],
     [ "distribution", "structmeasurements__core_1_1distribution.html", "structmeasurements__core_1_1distribution" ],
     [ "distribution_function", "interfacemeasurements__core_1_1distribution__function.html", "interfacemeasurements__core_1_1distribution__function" ],
     [ "distribution_parameter", "interfacemeasurements__core_1_1distribution__parameter.html", "interfacemeasurements__core_1_1distribution__parameter" ],

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['spline_5finterp_158',['spline_interp',['../structmeasurements__core_1_1spline__interp.html',1,'measurements_core']]],
-  ['statistic_159',['statistic',['../structstatistic.html',1,'statistic'],['../structmeasurements__core_1_1statistic.html',1,'measurements_core::statistic']]]
+  ['peak_5finfo_163',['peak_info',['../structmeasurements__core_1_1peak__info.html',1,'measurements_core']]],
+  ['polynomial_5finterp_164',['polynomial_interp',['../structmeasurements__core_1_1polynomial__interp.html',1,'measurements_core']]]
 ];

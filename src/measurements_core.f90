@@ -3029,6 +3029,86 @@ module measurements_core
 
 ! ------------------------------------------------------------------------------
     !> @brief Defines a beta distribution.
+    !!
+    !! @par
+    !! The probability distribution function is given as follows.
+    !! @par
+    !! \f$ \frac{ x^{\alpha - 1} \left( 1 - x \right)^{\beta - 1}}
+    !! { B \left( \alpha, \beta \right)} \f$ where \f$ B \left( \alpha, \beta
+    !! \right) = \frac{ \Gamma(\alpha) \Gamma(\beta) }{ \Gamma(\alpha + 
+    !! \beta) } \f$
+    !! @par 
+    !! The cumulative distribution function is given as follows.
+    !! @par
+    !! \f$ I_x \left( \alpha, \beta \right) \f$ where \f$ I_x \f$ is the
+    !!  regularized incomplete beta function.
+    !! @par 
+    !! The mean, median, mode, and variance are then as follows.
+    !! @par 
+    !! mean \f$ = \frac{ \alpha }{ \alpha + \beta } \f$
+    !! @par
+    !! geometric mean \f$ = \exp{ \left( \psi(\alpha) - \psi( \alpha + \beta) 
+    !! \right)} \f$
+    !! @par
+    !! median \f$ \approx \frac{\alpha - \frac{1}{3}}{\alpha+\beta - 
+    !! \frac{2}{3}} \f$ for \f$ \alpha, \beta > 1 \f$
+    !! @par
+    !! mode \f$ = \frac{ \alpha - 1}{ \alpha + \beta - 2} \f$ for 
+    !! \f$ \alpha, \beta > 1 \f$ 
+    !! @par
+    !! variance \f$ = \frac{ \alpha \beta}{\left( \alpha + \beta \right)^2 
+    !! \left( \alpha + \beta + 1 \right)} \f$
+    !!
+    !! @par Example
+    !! The following example illustrates a beta distribution with 
+    !! \f$ \alpha = 2 \f$ and \f$ \beta = 5 \f$.
+    !! @code{.f90}
+    !! program main
+    !!     use iso_fortran_env
+    !!     use measurements_core
+    !!     use fplot_core
+    !!     implicit none
+    !!
+    !!     ! Local Variables
+    !!     integer(int32), parameter :: npts = 100
+    !!     real(real64) :: x(npts), pdf(npts), cdf(npts)
+    !!     type(plot_2d) :: plt
+    !!     type(plot_data_2d) :: pd1, pd2
+    !!     class(legend), pointer :: lgnd
+    !!     type(beta_distribution) :: bd
+    !!
+    !!     ! Initialize the plot & set up font properties to improve readability
+    !!     call plt%initialize()
+    !!     call plt%set_font_size(14)
+    !!     lgnd => plt%get_legend()
+    !!     call lgnd%set_is_visible(.true.)
+    !!     call lgnd%set_horizontal_position(LEGEND_RIGHT)
+    !!     call lgnd%set_vertical_position(LEGEND_CENTER)
+    !!     call plt%set_use_y2_axis(.true.)
+    !!
+    !!     ! Compute the distribution
+    !!     x = linspace(0.0d0, 1.0d0, npts)
+    !!     call bd%set_alpha(2.0d0)
+    !!     call bd%set_beta(5.0d0)
+    !!     pdf = bd%pdf(x)
+    !!     cdf = bd%cdf(x)
+    !!
+    !!     ! Plot the functions
+    !!     call plt%set_title("Beta Distribution")
+    !!     call pd1%define_data(x, pdf)
+    !!     call pd1%set_name("PDF")
+    !!     call pd1%set_line_width(2.0)
+    !!     call plt%push(pd1)
+    !!
+    !!     call pd2%define_data(x, cdf)
+    !!     call pd2%set_name("CDF (Y2)")
+    !!     call pd2%set_line_width(2.0)
+    !!     call pd2%set_line_style(LINE_DASHED)
+    !!     call pd2%set_draw_against_y2(.true.)
+    !!     call plt%push(pd2)
+    !! end program
+    !! @endcode
+    !! @image html beta_distribution.png
     type, extends(distribution) :: beta_distribution
     private
         real(real64) :: m_alpha = 1.0d0
@@ -3150,6 +3230,15 @@ module measurements_core
         !!  parameter is expected to be the first item in the array, and
         !!  the beta parameter is expected to be the second.
         procedure, public :: set_model_parameters => bd_set_params
+        !> @brief Returns the geometric mean of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) geometric_mean(class(beta_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The beta_distribution object.
+        !! @return The geometric mean value.
         procedure, public :: geometric_mean => bd_geometric_mean
     end type
 

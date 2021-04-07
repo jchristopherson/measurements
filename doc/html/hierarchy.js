@@ -6,6 +6,7 @@ var hierarchy =
     [ "measurements_core::anova_table_entry", "structmeasurements__core_1_1anova__table__entry.html", null ],
     [ "measurements_c_api::c_window_function", "interfacemeasurements__c__api_1_1c__window__function.html", null ],
     [ "measurements_core::distribution", "structmeasurements__core_1_1distribution.html", [
+      [ "measurements_core::beta_distribution", "structmeasurements__core_1_1beta__distribution.html", null ],
       [ "measurements_core::normal_distribution", "structmeasurements__core_1_1normal__distribution.html", [
         [ "measurements_core::log_normal_distribution", "structmeasurements__core_1_1log__normal__distribution.html", null ]
       ] ],
