@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['second_5fderivative_193',['second_derivative',['../structmeasurements__core_1_1spline__interp.html#acb3ba28742a94ea4ff4f2306fc772564',1,'measurements_core::spline_interp']]],
-  ['smooth_194',['smooth',['../structmeasurements__core_1_1lowess__smoothing.html#a875bfe9eea71fd94c522b0fabf66db81',1,'measurements_core::lowess_smoothing']]]
+  ['pdf_235',['pdf',['../structmeasurements__core_1_1distribution.html#a6c85f5e1a4b5f1e3c48810f2c1f34996',1,'measurements_core::distribution::pdf()'],['../structmeasurements__core_1_1normal__distribution.html#ae18f3c59c2818b772c8d6c93b5b5fdd1',1,'measurements_core::normal_distribution::pdf()'],['../structmeasurements__core_1_1log__normal__distribution.html#a860a21ed9e1d11ae348b021928dd32b4',1,'measurements_core::log_normal_distribution::pdf()'],['../structmeasurements__core_1_1t__distribution.html#a51def6f737b272ae9fe41f9b82427639',1,'measurements_core::t_distribution::pdf()']]]
 ];

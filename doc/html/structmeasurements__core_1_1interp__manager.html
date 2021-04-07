@@ -264,98 +264,6 @@ real(real64), dimension(:), allocatable&#160;</td><td class="memItemRight" valig
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The confidence interval as referenced from the population mean.</dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>This value is computed as follows. \( CI = z^{*} \frac{\sigma}{\sqrt{n}} \)</dd></dl>
-<p>Evaluates the probability distribution function of the normal distribution.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">mu</td><td>The population mean. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">sigma</td><td>The population standard deviation. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The value at which to evaluate the distrubition funciton. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">comp</td><td>An optional input, that if set to true, allows evaluation of the cumulative distribution function; else, if set to false, the probability density function is evaluated. The default is false such that the probabidlity density function is evaluated.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The value of the distribution function at <code>x</code>.</dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>The normal distribution has the form \( f(x) = \frac{1}{\sigma \sqrt{2 \pi}} \exp(-\frac{1}{2}(\frac{x-\mu}{\sigma})^{2}) \).</dd></dl>
-<p>Evalautes the probability distribution function of Student's t-distribution.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">dof</td><td>The number of degrees of freedom of the data set. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>The value at which to evaluate the distribution. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">comp</td><td>An optional input, that if set to true, allows evaluation of the cumulative distribution function; else, if set to false, the probability density function is evaluated. The default is false such that the probabidlity density function is evaluated.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The value of the distribution function at <code>t</code>.</dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>Student's t-distribution has the form \( f(t) = \frac{\Gamma(\frac{\nu + 1}{2})}{\sqrt{\nu \pi} \Gamma(\frac{\nu}{2})} (1 + \frac{t^{2}}{\nu})^{-\frac{\nu + 1}{2}} \).</dd></dl>
-<p>Evaluates the probability distribution function of the beta distribution.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>The first argument of the function. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>The second argument of the function. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The value at which to evaluate the distrubition funciton. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">comp</td><td>An optional input, that if set to true, allows evaluation of the cumulative distribution function; else, if set to false, the probability density function is evaluated. The default is false such that the probabidlity density function is evaluated.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The value of the distribution function at <code>x</code>.</dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>The beta distribution has the form \( f(x) = \frac{x^{a-1} (1 - x)^{b-1}}{\beta(a,b)} \).</dd></dl>
-<p>Evaluates the probability distribution function of the F-distribution.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">d1</td><td>A model parameter. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">d2</td><td>A model parameter. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The value at which to evaluate the distrubition funciton.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The value of the distribution function at <code>x</code>.</dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>The F distribution has the form </dd></dl>
-<dl class="section user"><dt></dt><dd>\( f(x) = \frac{\sqrt{\alpha}}{x \beta(\frac{d_1}{2}, \frac{d_2}{2})} \) </dd></dl>
-<dl class="section user"><dt></dt><dd>where </dd></dl>
-<dl class="section user"><dt></dt><dd>\( \alpha = \frac{(d_1 x)^{d_1} d_{2}^{d_2}}{(d_1 x + d_2)^{d_1 + d_2}} \).</dd></dl>
-<p>Utilizes an analysis of variance (ANOVA) to determine the variance components of a measurement process represented by the supplied data set.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>An M-by-N-by-P data set from the measurement process to analyze where M is the number of parts tested (must be greater than 1), N is the number of tests performed per part (must be greater than 1), and P is the number of operators performing the tests (must be at least 1). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">alpha</td><td>An optional parameter used to determine the appropriate calculation path. The default value is 0.05.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The resulting variance components of the process.</dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>It is possible for this routine to return zero-valued variance components. In such an event it is recommended that another variance estimator is utilized.</dd></dl>
-<p>Utilizes a control chart type approach to evaluate the measurement process utilized to collect the supplied data set.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>An M-by-N-by-P data set from the measurement process to analyze where M is the number of parts tested (must be greater than 1), N is the number of tests performed per part (must be greater than 1), and P is the number of operators performing the tests (must be at least 1).</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The resulting variance components of the process.</dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>This approach is best suited for smaller data sets whose dimension doesn't exceed 25-30. Anything over this size is better served by another technique.</dd></dl>
-<p>Computes the gauge R&amp;R statistics given a supplied set of process variance data.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>The multiplier to use when computing the P/T ratio. Typically, a value of 6 is used for this factor. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The process variance data. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">usl</td><td>The upper specification limit. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lsl</td><td>The lower specification limit.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The gauge R&amp;R statistics.</dd></dl>
-<p>Computes the discrimination ratio.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">tv</td><td>The total variance. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mv</td><td>The measurement system variance.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The results of the operation.</dd></dl>
-<dl class="section user"><dt></dt><dd>The discrimination ratio is computed as follows. </dd></dl>
-<dl class="section user"><dt></dt><dd>/f$ DR = \sqrt{\frac{2 \sigma_{total}^2}{\sigma_{meas}^2} - 1} /f$ </dd></dl>
-<dl class="section user"><dt></dt><dd>An alternate means of computing this parameter (as used in JMP) is as follows. </dd></dl>
-<dl class="section user"><dt></dt><dd>/f$ DR = 1.41 \frac{\sigma_{parts}}{\sigma_{meas}} /f$</dd></dl>
 <p>Applies Student's t-test to compute the t-statistic. A two-tailed distribution is assumed.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -381,6 +289,50 @@ real(real64), dimension(:), allocatable&#160;</td><td class="memItemRight" valig
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The F-test statistic and associated probability term that establishes the signficance of the f-statistic.</dd></dl>
+<p>Removes all NaN's from an array.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The array.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The array <code>x</code> without any NaN's.</dd></dl>
+<p>Removes all values sufficiently close to zero from an array.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>The array. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">tol</td><td>An optional input that specifies the tolerance defining acceptable closeness to zero to consider zero. The default value is twice machine precision.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The array <code>x</code> without zero values.</dd></dl>
+<p>Computes the R-squared value of a data set and a model of the data.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>An N-element array containing the dependent variables from the data set. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ym</td><td>An N-element array containing the corresponding modeled values. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">err</td><td>An optional errors-based object that if provided can be used to retrieve information relating to any errors encountered during execution. If not provided, a default implementation of the errors class is used internally to provide error handling. Possible errors and warning messages that may be encountered are as follows.<ul>
+<li>M_ARRAY_SIZE_ERROR: Occurs if <code>y</code> and <code>ym</code> are not the same size.</li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The R-squared value.</dd></dl>
+<p>Computes the adjusted R-squared value of a data set and a model of the data.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p</td><td>The number of model parameters. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>An N-element array containing the dependent variables from the data set. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ym</td><td>An N-element array containing the corresponding modeled values. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">err</td><td>An optional errors-based object that if provided can be used to retrieve information relating to any errors encountered during execution. If not provided, a default implementation of the errors class is used internally to provide error handling. Possible errors and warning messages that may be encountered are as follows.<ul>
+<li>M_ARRAY_SIZE_ERROR: Occurs if <code>y</code> and <code>ym</code> are not the same size.</li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The R-squared value.</dd></dl>
 <p>Computes the beta function.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -416,7 +368,7 @@ real(real64), dimension(:), allocatable&#160;</td><td class="memItemRight" valig
 <p>Describes an abstract base class allowing for interpolation of X-Y type data sets.</p>
 <dl class="section user"><dt>Notes</dt><dd>This interpolation object is conceptually based upon the interpolation scheme utilized by the Numerical Recipes in C++ text. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="measurements__core_8f90_source.html#l00508">508</a> of file <a class="el" href="measurements__core_8f90_source.html">measurements_core.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="measurements__core_8f90_source.html#l00397">397</a> of file <a class="el" href="measurements__core_8f90_source.html">measurements_core.f90</a>.</p>
 </div><hr/>The documentation for this type was generated from the following file:<ul>
 <li>C:/Users/jchri/Documents/github/measurements/src/<a class="el" href="measurements__core_8f90_source.html">measurements_core.f90</a></li>
 </ul>

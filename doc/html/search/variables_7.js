@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['value_229',['value',['../structmeasurements__core_1_1statistic.html#a78bd5b14a8291627fab2b0a8bd16e6b8',1,'measurements_core::statistic::value()'],['../structstatistic.html#abd0bf66aca03d4ca82804f328d34cac5',1,'statistic::value()']]]
+  ['residual_276',['residual',['../structmeasurements__core_1_1anova__table.html#ad81d8f37582faf59bc8a09b2f6fdafa1',1,'measurements_core::anova_table::residual()'],['../structanova__table.html#ade57993a5d5422af1ca481c66daf45a6',1,'anova_table::residual()']]]
 ];

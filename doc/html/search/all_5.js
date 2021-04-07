@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['initialize_63',['initialize',['../structmeasurements__core_1_1interp__manager.html#a0c902ddd91853add5c7e9593576c4cc8',1,'measurements_core::interp_manager::initialize()'],['../structmeasurements__core_1_1polynomial__interp.html#a3a00ccd608318f4bebaf6ebfb6031a25',1,'measurements_core::polynomial_interp::initialize()'],['../structmeasurements__core_1_1spline__interp.html#ade0dc833fd1ed2cd1a16200ca9411d3b',1,'measurements_core::spline_interp::initialize()'],['../structmeasurements__core_1_1lowess__smoothing.html#a97544f9c79bbe44f8c28af522a605f88',1,'measurements_core::lowess_smoothing::initialize()']]],
-  ['initialize_5fspline_64',['initialize_spline',['../structmeasurements__core_1_1spline__interp.html#a0b1c4d524c9ff61cb81b19ed582add30',1,'measurements_core::spline_interp']]],
-  ['interp_5fmanager_65',['interp_manager',['../structmeasurements__core_1_1interp__manager.html',1,'measurements_core']]],
-  ['interp_5fxy_66',['interp_xy',['../interfacemeasurements__core_1_1interp__xy.html',1,'measurements_core']]],
-  ['interpolate_67',['interpolate',['../structmeasurements__core_1_1interp__manager.html#ab9602a84870c835183ca6dbd7d6fa4ab',1,'measurements_core::interp_manager']]]
+  ['f_5fstat_66',['f_stat',['../structmeasurements__core_1_1anova__table__entry.html#a78cc00b73ecbc54ff842454d5d1f3621',1,'measurements_core::anova_table_entry::f_stat()'],['../structanova__table__entry.html#a9197d904bb38aa40b6bb3e366e2b6a6e',1,'anova_table_entry::f_stat()']]],
+  ['first_5fderivative_67',['first_derivative',['../structmeasurements__core_1_1spline__interp.html#a52aa3d82305d7723b06365b39872e19b',1,'measurements_core::spline_interp']]]
 ];

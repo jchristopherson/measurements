@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['operator_5fby_5fpart_5fvariance_91',['operator_by_part_variance',['../structmeasurements__core_1_1process__variance.html#aefd42099427877e61d927b84d9f40cd2',1,'measurements_core::process_variance::operator_by_part_variance()'],['../structprocess__variance.html#a1b172a22aa622f10d1f034b477f249f7',1,'process_variance::operator_by_part_variance()']]],
-  ['operator_5fvariance_92',['operator_variance',['../structmeasurements__core_1_1process__variance.html#a78c75f224f0e95a029f035db7179d2f2',1,'measurements_core::process_variance::operator_variance()'],['../structprocess__variance.html#a039c141dc9527f5b795ab15c063f775f',1,'process_variance::operator_variance()']]]
+  ['initialize_77',['initialize',['../structmeasurements__core_1_1interp__manager.html#a0c902ddd91853add5c7e9593576c4cc8',1,'measurements_core::interp_manager::initialize()'],['../structmeasurements__core_1_1polynomial__interp.html#a3a00ccd608318f4bebaf6ebfb6031a25',1,'measurements_core::polynomial_interp::initialize()'],['../structmeasurements__core_1_1spline__interp.html#ade0dc833fd1ed2cd1a16200ca9411d3b',1,'measurements_core::spline_interp::initialize()'],['../structmeasurements__core_1_1lowess__smoothing.html#a97544f9c79bbe44f8c28af522a605f88',1,'measurements_core::lowess_smoothing::initialize()']]],
+  ['initialize_5fspline_78',['initialize_spline',['../structmeasurements__core_1_1spline__interp.html#a0b1c4d524c9ff61cb81b19ed582add30',1,'measurements_core::spline_interp']]],
+  ['interp_5fmanager_79',['interp_manager',['../structmeasurements__core_1_1interp__manager.html',1,'measurements_core']]],
+  ['interp_5fxy_80',['interp_xy',['../interfacemeasurements__core_1_1interp__xy.html',1,'measurements_core']]],
+  ['interpolate_81',['interpolate',['../structmeasurements__core_1_1interp__manager.html#ab9602a84870c835183ca6dbd7d6fa4ab',1,'measurements_core::interp_manager']]]
 ];

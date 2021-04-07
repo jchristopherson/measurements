@@ -1,9 +1,11 @@
 var dir_68267d1309a1af8e8297ef4c3efbcdba =
 [
     [ "measurement_stats.f90", "measurement__stats_8f90_source.html", null ],
+    [ "measurements_anova.f90", "measurements__anova_8f90_source.html", null ],
     [ "measurements_array.f90", "measurements__array_8f90_source.html", null ],
     [ "measurements_c_api.f90", "measurements__c__api_8f90_source.html", null ],
     [ "measurements_core.f90", "measurements__core_8f90_source.html", null ],
+    [ "measurements_distribution.f90", "measurements__distribution_8f90_source.html", null ],
     [ "measurements_filter.f90", "measurements__filter_8f90_source.html", null ],
     [ "measurements_interp.f90", "measurements__interp_8f90_source.html", null ],
     [ "measurements_peak.f90", "measurements__peak_8f90_source.html", null ],

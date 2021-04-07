@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['hunt_62',['hunt',['../structmeasurements__core_1_1interp__manager.html#a2ab362157e3eb5edcee6d1f94a1e639f',1,'measurements_core::interp_manager']]]
+  ['equal_5fvariance_5fassumption_64',['equal_variance_assumption',['../namespacemeasurements__core.html#a21dabc21c6838744aa907ce650c60e8f',1,'measurements_core']]],
+  ['equipment_65',['equipment',['../structmeasurements__core_1_1gage__anova__table.html#ad76366f1c259f6eb9df84133500d3da7',1,'measurements_core::gage_anova_table']]]
 ];

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['c_5fwindow_5ffunction_115',['c_window_function',['../interfacemeasurements__c__api_1_1c__window__function.html',1,'measurements_c_api']]]
+  ['anova_5ftable_142',['anova_table',['../structmeasurements__core_1_1anova__table.html',1,'measurements_core::anova_table'],['../structanova__table.html',1,'anova_table']]],
+  ['anova_5ftable_5fentry_143',['anova_table_entry',['../structanova__table__entry.html',1,'anova_table_entry'],['../structmeasurements__core_1_1anova__table__entry.html',1,'measurements_core::anova_table_entry']]]
 ];

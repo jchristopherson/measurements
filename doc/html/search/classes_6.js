@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['window_5ffunction_126',['window_function',['../interfacemeasurements__core_1_1window__function.html',1,'measurements_core']]]
+  ['normal_5fdistribution_155',['normal_distribution',['../structmeasurements__core_1_1normal__distribution.html',1,'measurements_core']]]
 ];
