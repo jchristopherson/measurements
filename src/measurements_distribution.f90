@@ -473,18 +473,93 @@ pure module function bd_geometric_mean(this) result(rst)
     )
 end function
 
+! ******************************************************************************
+! F DISTRIBUTION
 ! ------------------------------------------------------------------------------
+    pure module function fd_get_d1(this) result(rst)
+        class(f_distribution), intent(in) :: this
+        real(real64) :: rst
+        rst = this%m_d1
+    end function
+
+! --------------------
+    module subroutine fd_set_d1(this, x)
+        class(f_distribution), intent(inout) :: this
+        real(real64), intent(in) :: x
+        this%m_d1 = x
+    end subroutine
 
 ! ------------------------------------------------------------------------------
+    pure module function fd_get_d2(this) result(rst)
+        class(f_distribution), intent(in) :: this
+        real(real64) :: rst
+        rst = this%m_d2
+    end function
+
+! --------------------
+    module subroutine fd_set_d2(this, x)
+        class(f_distribution), intent(inout) :: this
+        real(real64), intent(in) :: x
+        this%m_d2 = x
+    end subroutine
 
 ! ------------------------------------------------------------------------------
+    pure elemental module function fd_pdf(this, x) result(rst)
+        class(f_distribution), intent(in) :: this
+        real(real64), intent(in) :: x
+        real(real64) :: rst
+        rst = f_distribution_pdf(this%get_d1(), this%get_d2(), x)
+    end function
 
 ! ------------------------------------------------------------------------------
+    pure elemental module function fd_cdf(this, x) result(rst)
+        class(f_distribution), intent(in) :: this
+        real(real64), intent(in) :: x
+        real(real64) :: rst
+        rst = f_distribution_cdf(this%get_d1(), this%get_d2(), x)
+    end function
 
 ! ------------------------------------------------------------------------------
+    pure module function fd_mean(this) result(rst)
+        class(f_distribution), intent(in) :: this
+        real(real64) :: rst
+        rst = this%get_d2() / (this%get_d2() - 2.0d0)
+    end function
 
 ! ------------------------------------------------------------------------------
+    pure module function fd_median(this) result(rst)
+        class(f_distribution), intent(in) :: this
+        real(real64) :: rst
+        rst = ieee_value(rst, IEEE_QUIET_NAN)
+    end function
 
+! ------------------------------------------------------------------------------
+    pure module function fd_mode(this) result(rst)
+        class(f_distribution), intent(in) :: this
+        real(real64) :: rst
+        rst = ((this%get_d1() - 2.0d0) / this%get_d1()) * &
+            (this%get_d2() / (this%get_d2() + 2.0d0))
+    end function
+
+! ------------------------------------------------------------------------------
+    pure module function fd_variance(this) result(rst)
+        class(f_distribution), intent(in) :: this
+        real(real64) :: rst, d1, d2
+        d1 = this%get_d1()
+        d2 = this%get_d2()
+        rst = 2.0d0 * d2**2 * (d1 + d2 - 2.0d0) / &
+            (d1 * (d2 - 2.0d0)**2 * (d2 - 4.0d0))
+    end function
+
+! ------------------------------------------------------------------------------
+    module subroutine fd_set_model_parameters(this, x)
+        class(f_distribution), intent(inout) :: this
+        real(real64), intent(in), dimension(:) :: x
+        if (size(x) >= 2) then
+            this%m_d1 = x(1)
+            this%m_d2 = x(2)
+        end if
+    end subroutine
 ! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------

@@ -2409,9 +2409,8 @@ module measurements_core
     !!     class(legend), pointer :: lgnd
     !!     type(normal_distribution) :: nd
     !!
-    !!     ! Initialize the plot & set up font properties to improve readability
+    !!     ! Initialize the plot
     !!     call plt%initialize()
-    !!     call plt%set_font_size(14)
     !!     lgnd => plt%get_legend()
     !!     call lgnd%set_is_visible(.true.)
     !!     call lgnd%set_horizontal_position(LEGEND_LEFT)
@@ -2666,9 +2665,8 @@ module measurements_core
     !!     class(legend), pointer :: lgnd
     !!     type(log_normal_distribution) :: lnd
     !!
-    !!     ! Initialize the plot & set up font properties to improve readability
+    !!     ! Initialize the plot
     !!     call plt%initialize()
-    !!     call plt%set_font_size(14)
     !!     lgnd => plt%get_legend()
     !!     call lgnd%set_is_visible(.true.)
     !!     call lgnd%set_horizontal_position(LEGEND_RIGHT)
@@ -2846,9 +2844,8 @@ module measurements_core
     !!     class(legend), pointer :: lgnd
     !!     type(t_distribution) :: td
     !!
-    !!     ! Initialize the plot & set up font properties to improve readability
+    !!     ! Initialize the plot
     !!     call plt%initialize()
-    !!     call plt%set_font_size(14)
     !!     lgnd => plt%get_legend()
     !!     call lgnd%set_is_visible(.true.)
     !!     call lgnd%set_horizontal_position(LEGEND_LEFT)
@@ -3077,9 +3074,8 @@ module measurements_core
     !!     class(legend), pointer :: lgnd
     !!     type(beta_distribution) :: bd
     !!
-    !!     ! Initialize the plot & set up font properties to improve readability
+    !!     ! Initialize the plot
     !!     call plt%initialize()
-    !!     call plt%set_font_size(14)
     !!     lgnd => plt%get_legend()
     !!     call lgnd%set_is_visible(.true.)
     !!     call lgnd%set_horizontal_position(LEGEND_RIGHT)
@@ -3307,6 +3303,218 @@ module measurements_core
 
 ! ------------------------------------------------------------------------------
     !> @brief Defines an F-distribution.
+    !!
+    !! @par
+    !! The probability distribution function is given as follows.
+    !! @par
+    !! \f$ f(x) = 
+    !! \frac{\sqrt{\alpha}}{x \beta(\frac{d_1}{2}, \frac{d_2}{2})} \f$
+    !! @par
+    !! where
+    !! @par
+    !! \f$ \alpha = 
+    !! \frac{(d_1 x)^{d_1} d_{2}^{d_2}}{(d_1 x + d_2)^{d_1 + d_2}} \f$.
+    !! @par
+    !! The cumulative distribution function is given as follows.
+    !! @par
+    !! \f$ f(x) = I_{\frac{d_1 x}{d_1 x + d_2}} 
+    !! \left( \frac{d_1}{2}, \frac{d_2}{2} \right) \f$, where \f$ I \f$ is the
+    !! regularized incomplete beta function.
+    !! @par
+    !! The mean, mode, and variance are as follows.
+    !! @par
+    !! mean \f$ = \frac{d_2}{d_2 - 2} \f$; however, this parameter is only 
+    !! defined for \f$ d_2 > 2 \f$.
+    !! @par
+    !! mode = \f$ = \frac{d_1 - 2}{d_1} \frac{d_2}{d_2 + 2} \f$; however, this 
+    !! parameter is only defined for \f$ d_1 > 2 \f$.
+    !! @par
+    !! variance = \f$ \frac{2 d_2^2 \left(d_1 + d_2 - 2 \right)}{d_1 
+    !! \left(d_2 - 2 \right)^2 \left(d_2 - 4 \right)} \f$; however, this 
+    !! parameter is only defined for \f$ d_2 > 4 \f$.
+    type, extends(distribution) :: f_distribution
+    private
+        !> The d1 parameter
+        real(real64) :: m_d1 = 1.0d0
+        !> The d2 parameter
+        real(real64) :: m_d2 = 1.0d0
+    contains
+        !> @brief Gets the d1 parameter.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) get_d1(class(f_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The f_distribution object.
+        !! @return The parameter value.
+        procedure, public :: get_d1 => fd_get_d1
+        !> @brief Sets the d1 parameter.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine set_d1(class(f_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in,out] this The f_distribution object.
+        !! @param[in] x The parameter value.
+        procedure, public :: set_d1 => fd_set_d1
+        !> @brief Gets the d2 parameter.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) get_d2(class(f_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The f_distribution object.
+        !! @return The parameter value.
+        procedure, public :: get_d2 => fd_get_d2
+        !> @brief Sets the d2 parameter.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine set_d2(class(f_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in,out] this The f_distribution object.
+        !! @param[in] x The parameter value.
+        procedure, public :: set_d2 => fd_set_d2
+        !> @brief Evaluates the probability distribution function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) pdf(class(f_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in] this The f_distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !!
+        !! @return The value of the distribution function at @p x.
+        procedure, public :: pdf => fd_pdf
+        !> @brief Evaluates the cumulative distribution function.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) pdf(class(f_distribution) this, real(real64) x)
+        !! @endcode
+        !!
+        !! @param[in] this The f_distribution object.
+        !! @param[in] x The value at which to evaluate the function.
+        !!
+        !! @return The value of the distribution function at @p x.
+        procedure, public :: cdf => fd_cdf
+        !> @brief Returns the mean of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) mean(class(f_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The f_distribution object.
+        !! @return The mean value.
+        procedure, public :: mean => fd_mean
+        !> @brief Returns the median of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) median(class(f_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The f_distribution object.
+        !! @return The median value.
+        procedure, public :: median => fd_median
+        !> @brief Returns the mode of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) mode(class(f_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The f_distribution object.
+        !! @return The mode value.
+        procedure, public :: mode => fd_mode
+        !> @brief Returns the variance of the distribution.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! real(real64) variance(class(f_distribution) this)
+        !! @endcode
+        !!
+        !! @param[in] this The f_distribution object.
+        !! @return The variance value.
+        procedure, public :: variance => fd_variance
+        !> @brief Updates the model parameters.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! set_model_parameters(class(f_distribution) this, real(real64) x(:))
+        !! @endcode
+        !!
+        !! @param[in,out] this The f_distribution object.
+        !! @param[in] x An array containing the model parameters.  The d1
+        !!  parameter is expected to be the first item in the array, and
+        !!  the d2 parameter is expected to be the second.
+        procedure, public :: set_model_parameters => fd_set_model_parameters
+    end type
+
+    interface
+        pure module function fd_get_d1(this) result(rst)
+            class(f_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        module subroutine fd_set_d1(this, x)
+            class(f_distribution), intent(inout) :: this
+            real(real64), intent(in) :: x
+        end subroutine
+
+        pure module function fd_get_d2(this) result(rst)
+            class(f_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        module subroutine fd_set_d2(this, x)
+            class(f_distribution), intent(inout) :: this
+            real(real64), intent(in) :: x
+        end subroutine
+
+        pure elemental module function fd_pdf(this, x) result(rst)
+            class(f_distribution), intent(in) :: this
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        pure elemental module function fd_cdf(this, x) result(rst)
+            class(f_distribution), intent(in) :: this
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        pure module function fd_mean(this) result(rst)
+            class(f_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function fd_median(this) result(rst)
+            class(f_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function fd_mode(this) result(rst)
+            class(f_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        pure module function fd_variance(this) result(rst)
+            class(f_distribution), intent(in) :: this
+            real(real64) :: rst
+        end function
+
+        module subroutine fd_set_model_parameters(this, x)
+            class(f_distribution), intent(inout) :: this
+            real(real64), intent(in), dimension(:) :: x
+        end subroutine
+    end interface
 
 ! ------------------------------------------------------------------------------
 

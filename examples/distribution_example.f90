@@ -15,10 +15,10 @@ program main
     type(normal_distribution) :: nd
     type(log_normal_distribution) :: lnd
     type(beta_distribution) :: bd
+    type(f_distribution) :: fd
 
     ! Initialize the plot & set up font properties to improve readability
     call plt%initialize()
-    call plt%set_font_size(14)
     lgnd => plt%get_legend()
     call lgnd%set_is_visible(.true.)
     call lgnd%set_horizontal_position(LEGEND_LEFT)
@@ -64,13 +64,21 @@ program main
 
     call plt%draw()
 
-    ! Look at an F Distribution
+    ! Look at an F-Distribution
     x = linspace(0.0d0, 5.0d0, npts)
-    pdf = f_distribution_pdf(5.0d0, 2.0d0, x)
-    cdf = f_distribution_cdf(5.0d0, 2.0d0, x)
+    call fd%set_d1(5.0d0)
+    call fd%set_d2(4.5d0)
+    pdf = fd%pdf(x)
+    cdf = fd%cdf(x)
+
+    ! Display Model Parameters
+    print '(A)', new_line('a') // "F-Distribution:"
+    print '(AF0.4)', achar(9) // "Mean = ", fd%mean()
+    print '(AF0.4)', achar(9) // "Mode = ", fd%mode()
+    print '(AF0.4)', achar(9) // "Variance = ", fd%variance()
 
     ! Plot the data
-    call plt%set_title("F Distribution")
+    call plt%set_title("F-Distribution")
     call lgnd%set_horizontal_position(LEGEND_RIGHT)
     call lgnd%set_vertical_position(LEGEND_CENTER)
     call plt%clear_all()
