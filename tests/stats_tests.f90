@@ -438,7 +438,7 @@ function normal_distribution_test() result(rst)
         4.968169870317840d-98]
 
     ! Process
-    computed = normal_distribution(avg, sigma, x)
+    computed = normal_distribution_pdf(avg, sigma, x)
 
     ! Test
     do i = 1, npts
@@ -486,7 +486,7 @@ function t_distribution_test() result(rst)
         0.0000789891062440353d0]
 
     ! Process
-    computed = t_distribution(dof, x)
+    computed = t_distribution_pdf(dof, x)
 
     ! Test
     do i = 1, npts
@@ -526,7 +526,7 @@ function beta_distribution_test() result(rst)
         0.27000d0, 0.18750d0, 0.12000d0, 0.06750d0, 0.03000d0, 0.00750d0]
 
     ! Process
-    computed = beta_distribution(a, b, x)
+    computed = beta_distribution_pdf(a, b, x)
 
     ! Test
     do i = 1, npts
@@ -570,7 +570,7 @@ function f_distribution_test() result(rst)
         0.24233930873721800d0]
 
     ! Process
-    computed = f_distribution(d1, d2, x)
+    computed = f_distribution_pdf(d1, d2, x)
 
     ! Test
     do i = 1, npts
