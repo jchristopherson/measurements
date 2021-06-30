@@ -86,6 +86,20 @@ typedef struct {
     anova_table_entry total;
 } anova_table;
 
+/** A Gage R&R table. */
+typedef struct {
+    /** The combined operator information. */
+    anova_table_entry operators;
+    /** The combined part information. */
+    anova_table_entry parts;
+    /** The operator-by-part information. */
+    anova_table_entry operator_by_part;
+    /** The measurement equipment information. */
+    anova_table_entry equipment;
+    /** The total variability information. */
+    anova_table_entry total;
+} gage_table;
+
 /**
  * Defines a window function.
  *
@@ -209,48 +223,6 @@ int c_t_score(double c, int n, double *t);
 double c_confidence_interval(int n, const double *x, double zval);
 
 /**
- * Evaluates the probability distribution function of a normal
- * distribution.
- *
- * @param mu The population mean.
- * @param sigma The population standard deviation.
- * @param n The number of values at which to evaluate the function.
- * @param x An N-element array containing the values at which to 
- *  evaluate the distrubition funciton.
- * @param f An N-element array where the function output will be
- *  written.
- */
-void c_normal_distribution(double mu, double sigma, int n, const double *x,
-    double *f);
-
-/**
- * Evalautes the probability distribution function of Student's
- * t-distribution.
- *
- * @param dof The number of degrees of freedom of the data set.
- * @param n The number of values at which to evaluat the function.
- * @param t An N-element array containing the values at which to 
- *  evaluate the distrubition funciton.
- * @param f An N-element array where the function output will be
- *  written.
- */
-void c_t_distribution(double dof, int n, const double *t, double *f);
-
-/**
- * Evaluates the probability distribution function of a beta
- * distribution.
- *
- * @param a The first argument of the function.
- * @param b The second argument of the function.
- * @param n The number of values at which to evaluat the function.
- * @param x An N-element array containing the values at which to 
- *  evaluate the distrubition funciton.
- * @param f An N-element array where the function output will be
- *  written.
- */
-void c_beta_distribution(double a, double b, int n, const double *x, double *f);
-
-/**
  * Evaluates the probability distribution function of the
  * F distribution.
  *
@@ -304,6 +276,55 @@ void c_f_test(int n1, const double *x1, int n2, const double *x2,
     statistic *rst);
 
 /**
+ * Removes all NaN's from an array.
+ * 
+ * @param nx The array length.
+ * @param x The array of length @p nx on which to operate.
+ * @param y An array of length @p nx where the results will be written.
+ * @param ny The actual number of items written to @p y.
+ */
+void c_remove_nans(int nx, const double *x, double *y, int *ny);
+
+/**
+ * Removes all zeros from an array.
+ * 
+ * @param nx The array length.
+ * @param x The array of length @p nx on which to operate.
+ * @param y An array of length @p nx where the results will be written.
+ * @param ny The actual number of items written to @p y.
+ */
+void c_remove_zeros(int nx, const double *x, double *y, int *ny);
+
+/**
+ * Computes the R-squared value of a data set and a model of
+ * the data.
+ *
+ * @param n The array length.
+ * @param y An N-element array containing the dependent variables 
+ *  from the data set.
+ * @param ym An N-element array containing the corresponding modeled
+ *  values.
+ *
+ * @return The R-squared value.
+ */
+double c_r_squared(int n, const double *y, const double *ym);
+
+/**
+ * Computes the adjusted R-squared value of a data set and a model of
+ * the data.
+ *
+ * @param p The number of model parameters.
+ * @param n The array length.
+ * @param y An N-element array containing the dependent variables 
+ *  from the data set.
+ * @param ym An N-element array containing the corresponding modeled
+ *  values.
+ *
+ * @return The R-squared value.
+ */
+double c_adjusted_r_squared(int p, int n, const double *y, const double *ym);
+
+/**
  * Computes the value of the regularized beta function.
  *
  * @param x The upper limit of the integration.
@@ -334,6 +355,16 @@ double c_beta(double a, double b);
  * @return The value of the incomplete beta function.
  */
 double c_incomplete_beta(double x, double a, double b);
+
+/**
+ * Computes the digamma function \f$ \psi(x) = 
+ * \frac{d}{dx}\left( \ln \left( \Gamma \left( x \right) \right) 
+ * \right) \f$.
+ *
+ * @param x The value at which to evaluate the function.
+ * @return The function value.
+ */
+double c_digamma(double x);
 
 /**
  * Performs a polynomial interpolation.
@@ -900,55 +931,6 @@ double c_trapz_integrate(int n, const double *x, const double *y);
 int c_remove_dc_offset(int n, const double *x, double *y);
 
 /**
- * Removes all NaN's from an array.
- * 
- * @param nx The array length.
- * @param x The array of length @p nx on which to operate.
- * @param y An array of length @p nx where the results will be written.
- * @param ny The actual number of items written to @p y.
- */
-void c_remove_nans(int nx, const double *x, double *y, int *ny);
-
-/**
- * Removes all zeros from an array.
- * 
- * @param nx The array length.
- * @param x The array of length @p nx on which to operate.
- * @param y An array of length @p nx where the results will be written.
- * @param ny The actual number of items written to @p y.
- */
-void c_remove_zeros(int nx, const double *x, double *y, int *ny);
-
-/**
- * Computes the R-squared value of a data set and a model of
- * the data.
- *
- * @param n The array length.
- * @param y An N-element array containing the dependent variables 
- *  from the data set.
- * @param ym An N-element array containing the corresponding modeled
- *  values.
- *
- * @return The R-squared value.
- */
-double c_r_squared(int n, const double *y, const double *ym);
-
-/**
- * Computes the adjusted R-squared value of a data set and a model of
- * the data.
- *
- * @param p The number of model parameters.
- * @param n The array length.
- * @param y An N-element array containing the dependent variables 
- *  from the data set.
- * @param ym An N-element array containing the corresponding modeled
- *  values.
- *
- * @return The R-squared value.
- */
-double c_adjusted_r_squared(int p, int n, const double *y, const double *ym);
-
-/**
  * Computes a one-way analysis of variance (ANOVA).
  *
  * @param npts The number of data points in each data set.
@@ -959,6 +941,84 @@ double c_adjusted_r_squared(int p, int n, const double *y, const double *ym);
  * @param tbl The ANOVA table to populate with results.
  */
 void c_anova(int npts, int nsets, const double *x, int ldx, anova_table *tbl);
+
+/**
+ * Computes a crossed-effects analysis of variance (ANOVA) for a set of 
+ * measurement data in order to better understand variance contributions of
+ * each part of a measurement system or gage analysis.
+ * 
+ * @param nparts The number of parts tested (must be greater than 1).
+ * @param ntests The number of times each part is tested (must be greater 
+ *  than 1).
+ * @param nops The number of operators performing the tests (must be greater 
+ *  than 1).
+ * @param x An NPARTS-by-NTESTS-by-NOPS column-major 3D array containing the 
+ *  data.
+ * @param rst The gage_table to populate with results.
+ * 
+ * @return An error flag with the following possible values.
+ *  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+ *      available.
+ *  - M_INSUFFICIENT_DATA_ERROR: Occurs if there is only 1 row or 1
+ *      column in @p x.
+ */
+int c_gage_anova(int nparts, int ntests, int nops, const double *x, 
+    gage_table *rst);
+
+/**
+ * Evaluates the probability distribution function of a normal
+ * distribution.
+ *
+ * @param mu The population mean.
+ * @param sigma The population standard deviation.
+ * @param n The number of values at which to evaluate the function.
+ * @param x An N-element array containing the values at which to 
+ *  evaluate the distrubition funciton.
+ * @param f An N-element array where the function output will be
+ *  written.
+ */
+void c_normal_distribution(double mu, double sigma, int n, const double *x,
+    double *f);
+
+/**
+ * Evalautes the probability distribution function of Student's
+ * t-distribution.
+ *
+ * @param dof The number of degrees of freedom of the data set.
+ * @param n The number of values at which to evaluat the function.
+ * @param t An N-element array containing the values at which to 
+ *  evaluate the distrubition funciton.
+ * @param f An N-element array where the function output will be
+ *  written.
+ */
+void c_t_distribution(double dof, int n, const double *t, double *f);
+
+/**
+ * Evaluates the probability distribution function of a beta
+ * distribution.
+ *
+ * @param a The first argument of the function.
+ * @param b The second argument of the function.
+ * @param n The number of values at which to evaluat the function.
+ * @param x An N-element array containing the values at which to 
+ *  evaluate the distrubition funciton.
+ * @param f An N-element array where the function output will be
+ *  written.
+ */
+void c_beta_distribution(double a, double b, int n, const double *x, double *f);
+
+/** Evaluates the probability distribution function of the F-distribution.
+ * 
+ * @param d1 A model parameter.
+ * @param d2 A model parameter.
+ * @param n The number of values at which to evaluat the function.
+ * @param x An N-element array containing the values at which to 
+ *  evaluate the distrubition funciton.
+ * @param f An N-element array where the function output will be
+ *  written.
+ */
+void c_f_distribution(double d1, double d2, int n, const double *x, double *f);
+
 
 #ifdef __cplusplus
 }

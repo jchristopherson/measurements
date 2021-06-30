@@ -21,6 +21,19 @@ module measurements_c_api
         end function
     end interface
 
+    !> @brief A C-compatible gage_table object.
+    type, bind(C) :: c_gage_table
+        !> The combined operator information.
+        type(anova_table_entry) :: operators;
+        !> The combined part information.
+        type(anova_table_entry) :: parts;
+        !> The operator-by-part information.
+        type(anova_table_entry) :: operator_by_part;
+        !> The measurement equipment information.
+        type(anova_table_entry) :: equipment;
+        !> The total variability information.
+        type(anova_table_entry) :: total;
+    end type
 contains
 ! ------------------------------------------------------------------------------
     !> @brief Tests to see if an array is monotonically increasing or 
@@ -1675,6 +1688,71 @@ contains
         ! Process
         tbl = anova(x(1:npts,1:nsets))
     end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Computes a crossed-effects analysis of variance (ANOVA) for a set 
+    !! of measurement data in order to better understand variance contributions 
+    !! of each part of a measurement system or gage analysis.
+    !!
+    !! @param[in] nparts The number of parts tested (must be greater than 1).
+    !! @param[in] ntests The number of times each part is tested (must be 
+    !!  greater than 1).
+    !! @param[in] nops The number of operators performing the tests (must be 
+    !!  greater than 1).
+    !! @param[in] x An NPARTS-by-NTESTS-by-NOPS 3D array containing the data.
+    !! @param[out] rst The gage_table to puplate with results.
+    !!
+    !! @return An error flag with the following possible values.
+    !!  - M_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    !!  - M_INSUFFICIENT_DATA_ERROR: Occurs if there is only 1 row or 1
+    !!      column in @p x.
+    function c_gage_anova(nparts, ntests, nops, x, rst) result(flag) &
+            bind(C, name = "c_gage_anova")
+        ! Arguments
+        integer(c_int), intent(in), value :: nparts, ntests, nops
+        real(c_double), intent(in) :: x(nparts, ntests, nops)
+        type(c_gage_table), intent(out) :: rst
+        integer(c_int) :: flag
+        
+        ! Local Variables
+        type(gage_anova_table) :: tbl
+        type(errors) :: err
+
+        ! Initialization
+        flag = M_NO_ERROR
+        call err%set_exit_on_error(.false.)
+
+        ! Perform the gage analysis
+        tbl = gage_anova(x, err)
+        if (err%has_error_occurred()) then
+            flag = err%get_error_flag()
+            return
+        end if
+
+        ! Format the output for C
+        rst%equipment = tbl%equipment
+        rst%operator_by_part = tbl%operator_by_part
+        rst%operators = tbl%operators
+        rst%parts = tbl%parts
+        rst%total = tbl%total
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Computes the digamma function \f$ \psi(x) = 
+    !! \frac{d}{dx}\left( \ln \left( \Gamma \left( x \right) \right) 
+    !! \right) \f$.
+    !!
+    !! @param[in] x The value at which to evaluate the function.
+    !! @return The function value.
+    function c_digamma(x) result(rst) bind(C, name = "c_digamma")
+        ! Arguments
+        real(c_double), intent(in), value :: x
+        real(c_double) :: rst
+
+        ! Process
+        rst = digamma(x)
+    end function
 
 ! ------------------------------------------------------------------------------
 end module
