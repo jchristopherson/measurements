@@ -51,7 +51,7 @@ target_link_libraries(measurements
     ${linalg_LIBRARIES} 
     ${ferror_LIBRARIES}
     ${nonlin_LIBRARIES}
-    ${integral_LIBRARIES}
+    # ${integral_LIBRARIES}
 )
 
 # ------------------------------------------------------------------------------

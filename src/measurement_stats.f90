@@ -4,7 +4,6 @@ submodule (measurements_core) measurement_stats
     use linalg_core
     use nonlin_core
     use nonlin_solve
-    use integral_core
 contains
 ! ------------------------------------------------------------------------------
 pure module function is_monotonic(x) result(rst)
