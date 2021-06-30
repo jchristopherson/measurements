@@ -1933,9 +1933,9 @@ module measurements_core
         type(anova_table_entry) :: operators
         !> @brief The individual part information.
         type(anova_table_entry), allocatable, dimension(:) :: part
-        !> @brief The combined part information
+        !> @brief The combined part information.
         type(anova_table_entry) :: parts
-        !> @brief The operator-by-part information
+        !> @brief The operator-by-part information.
         type(anova_table_entry) :: operator_by_part
         !> @brief The measurement equipment information.
         type(anova_table_entry) :: equipment
