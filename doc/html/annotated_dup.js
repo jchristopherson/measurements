@@ -4,5 +4,6 @@ var annotated_dup =
     [ "measurements_core", "namespacemeasurements__core.html", "namespacemeasurements__core" ],
     [ "anova_table", "structanova__table.html", "structanova__table" ],
     [ "anova_table_entry", "structanova__table__entry.html", "structanova__table__entry" ],
+    [ "gage_table", "structgage__table.html", "structgage__table" ],
     [ "statistic", "structstatistic.html", "structstatistic" ]
 ];

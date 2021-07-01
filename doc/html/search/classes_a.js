@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['t_5fdistribution_167',['t_distribution',['../structmeasurements__core_1_1t__distribution.html',1,'measurements_core']]]
+  ['spline_5finterp_179',['spline_interp',['../structmeasurements__core_1_1spline__interp.html',1,'measurements_core']]],
+  ['statistic_180',['statistic',['../structstatistic.html',1,'statistic'],['../structmeasurements__core_1_1statistic.html',1,'measurements_core::statistic']]]
 ];

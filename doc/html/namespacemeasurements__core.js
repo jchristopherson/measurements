@@ -7,6 +7,7 @@ var namespacemeasurements__core =
     [ "distribution_function", "interfacemeasurements__core_1_1distribution__function.html", "interfacemeasurements__core_1_1distribution__function" ],
     [ "distribution_parameter", "interfacemeasurements__core_1_1distribution__parameter.html", "interfacemeasurements__core_1_1distribution__parameter" ],
     [ "distribution_set_model_parameters", "interfacemeasurements__core_1_1distribution__set__model__parameters.html", "interfacemeasurements__core_1_1distribution__set__model__parameters" ],
+    [ "f_distribution", "structmeasurements__core_1_1f__distribution.html", "structmeasurements__core_1_1f__distribution" ],
     [ "gage_anova_table", "structmeasurements__core_1_1gage__anova__table.html", "structmeasurements__core_1_1gage__anova__table" ],
     [ "interp_manager", "structmeasurements__core_1_1interp__manager.html", "structmeasurements__core_1_1interp__manager" ],
     [ "interp_xy", "interfacemeasurements__core_1_1interp__xy.html", "interfacemeasurements__core_1_1interp__xy" ],
