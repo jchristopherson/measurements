@@ -3332,6 +3332,56 @@ module measurements_core
     !! variance = \f$ \frac{2 d_2^2 \left(d_1 + d_2 - 2 \right)}{d_1 
     !! \left(d_2 - 2 \right)^2 \left(d_2 - 4 \right)} \f$; however, this 
     !! parameter is only defined for \f$ d_2 > 4 \f$.
+    !!
+    !! @par Example
+    !! The following example illustrates a beta distribution with 
+    !! \f$ \alpha = 2 \f$ and \f$ \beta = 5 \f$.
+    !! @code{.f90}
+    !! program main
+    !!     use iso_fortran_env
+    !!     use measurements_core
+    !!     use fplot_core
+    !!     implicit none
+    !!
+    !!     ! Local Variables
+    !!     integer(int32), parameter :: npts = 100
+    !!     real(real64) :: x(npts), pdf(npts), cdf(npts)
+    !!     type(plot_2d) :: plt
+    !!     type(plot_data_2d) :: pd1, pd2
+    !!     class(legend), pointer :: lgnd
+    !!     type(f_distribution) :: fd
+    !!
+    !!     ! Initialize the plot
+    !!     call plt%initialize()
+    !!     lgnd => plt%get_legend()
+    !!     call lgnd%set_is_visible(.true.)
+    !!     call lgnd%set_horizontal_position(LEGEND_RIGHT)
+    !!     call lgnd%set_vertical_position(LEGEND_CENTER)
+    !!     call plt%set_use_y2_axis(.true.)
+    !!
+    !!     ! Compute the distribution
+    !!     x = linspace(0.0d0, 1.0d0, npts)
+    !!     call fd%set_d1(5.0d0)
+    !!     call fd%set_d2(4.5d0)
+    !!     pdf = fd%pdf(x)
+    !!     cdf = fd%cdf(x)
+    !!
+    !!     ! Plot the functions
+    !!     call plt%set_title("F-Distribution")
+    !!     call pd1%define_data(x, pdf)
+    !!     call pd1%set_name("PDF")
+    !!     call pd1%set_line_width(2.0)
+    !!     call plt%push(pd1)
+    !!
+    !!     call pd2%define_data(x, cdf)
+    !!     call pd2%set_name("CDF (Y2)")
+    !!     call pd2%set_line_width(2.0)
+    !!     call pd2%set_line_style(LINE_DASHED)
+    !!     call pd2%set_draw_against_y2(.true.)
+    !!     call plt%push(pd2)
+    !! end program
+    !! @endcode
+    !! @image html f_distribution.png
     type, extends(distribution) :: f_distribution
     private
         !> The d1 parameter
