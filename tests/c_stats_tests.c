@@ -26,6 +26,7 @@ bool beta_distribution_test();
 bool f_distribution_test();
 bool t_test_test();
 bool f_test_test();
+bool quantile_test();
 
 // Program
 int main() {
@@ -82,6 +83,9 @@ int main() {
     if (!local) overall = false;
 
     local = f_test_test();
+    if (!local) overall = false;
+
+    local = quantile_test();
     if (!local) overall = false;
 
     // End
@@ -785,5 +789,67 @@ bool f_test_test() {
     return rst;
 }
 
+bool quantile_test() {
+    // Local Variables
+    bool rst;
+    const int npts = 20;
+    const double tol = 1.0e-9;
+    const double q1ans = 0.188143114;
+    const double q2ans = 0.483826135;
+    const double q3ans = 0.793725532;
+    double delta;
+    double x[] = {
+        0.188143114,  
+        0.158016608, 
+        0.343052968, 
+        0.135365938, 
+        0.84443191, 
+        0.302428574, 
+        0.783756234, 
+        0.82156459, 
+        0.483826135, 
+        0.647532915, 
+        0.980534868, 
+        0.067951751, 
+        0.793725532, 
+        0.983121946, 
+        0.504286564, 
+        0.960117684, 
+        0.657508246, 
+        0.028214226, 
+        0.438941863, 
+        0.326985412};
+    quartile_information info;
+
+    // Process
+    rst = true;
+    c_quartiles(npts, x, &info);
+
+    // Compare the results
+    delta = q1ans - info.lower_quartile;
+    if (fabs(delta) > tol) {
+        rst = false;
+        printf("QUARTILE_TEST 1 FAILED\nExpected: %f\nComputed: %f\nDifference (Expected - Computed: %f\n",
+            q1ans, info.lower_quartile, delta);
+    }
+
+    delta = q2ans - info.middle_quartile;
+    if (fabs(delta) > tol) {
+        rst = false;
+        printf("QUARTILE_TEST 2 FAILED\nExpected: %f\nComputed: %f\nDifference (Expected - Computed: %f\n",
+            q2ans, info.middle_quartile, delta);
+    }
+
+    delta = q3ans - info.upper_quartile;
+    if (fabs(delta) > tol) {
+        rst = false;
+        printf("QUARTILE_TEST 3 FAILED\nExpected: %f\nComputed: %f\nDifference (Expected - Computed: %f\n",
+            q3ans, info.upper_quartile, delta);
+    }
+
+
+    // End
+    return rst;
+}
 
 

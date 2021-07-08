@@ -753,4 +753,73 @@ function f_test_test() result(rst)
 end function
 
 ! ------------------------------------------------------------------------------
+function quartile_test() result(rst)
+    ! Arguments
+    logical :: rst
+
+    ! Local Variables
+    integer(int32), parameter :: npts = 20
+    real(real64), parameter :: tol = 1.0e-9
+    real(real64), parameter :: q1ans = 0.188143114d0
+    real(real64), parameter :: q2ans = 0.483826135d0
+    real(real64), parameter :: q3ans = 0.793725532d0
+    real(real64) :: x(npts), delta
+    type(quartile_information) :: info
+
+    ! Initialization
+    rst = .true.
+    x = [0.188143114d0, & 
+        0.158016608d0, &
+        0.343052968d0, &
+        0.135365938d0, &
+        0.84443191d0, &
+        0.302428574d0, &
+        0.783756234d0, &
+        0.82156459d0, &
+        0.483826135d0, &
+        0.647532915d0, &
+        0.980534868d0, &
+        0.067951751d0, &
+        0.793725532d0, &
+        0.983121946d0, &
+        0.504286564d0, &
+        0.960117684d0, &
+        0.657508246d0, &
+        0.028214226d0, &
+        0.438941863d0, &
+        0.326985412d0]
+
+    ! Process
+    info = quartiles(x)
+
+    ! Compare the results
+    delta = q1ans - info%lower_quartile
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "QUARTILE_TEST 1 FAILED."
+        print *, "Expected: ", q1ans
+        print *, "Computed: ", info%lower_quartile
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+
+    delta = q2ans - info%middle_quartile
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "QUARTILE_TEST 2 FAILED."
+        print *, "Expected: ", q2ans
+        print *, "Computed: ", info%middle_quartile
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+
+    delta = q3ans - info%upper_quartile
+    if (abs(delta) > tol) then
+        rst = .false.
+        print '(A)', "QUARTILE_TEST 3 FAILED."
+        print *, "Expected: ", q3ans
+        print *, "Computed: ", info%upper_quartile
+        print *, "Difference (Expected - Computed): ", delta
+    end if
+end function
+
+! ------------------------------------------------------------------------------
 end module

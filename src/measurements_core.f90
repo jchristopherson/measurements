@@ -18,9 +18,14 @@
 ! TO DO:
 ! - provide a binning function to categorize data into a distribution type
 !   format
+!
+! REF:
+! - https://stats.stackexchange.com/questions/798/calculating-optimal-number-of-bins-in-a-histogram
+! - https://www.educba.com/quartile-formula/
 
 ! TO DO:
 ! - Include more distributions such as Chi-Squared, Poisson, Gamma
+
 
 
 !> @brief A module containing types and routines to support measurement-related 
@@ -82,6 +87,16 @@ module measurements_core
 ! ******************************************************************************
 ! MEASUREMENT_STATS.F90
 ! ------------------------------------------------------------------------------
+    !> @brief Defines quartile information.
+    type, bind(C) :: quartile_information
+        !> @brief The lower (Q1) quartile.
+        real(real64) :: lower_quartile
+        !> @brief The middle (Q2) quartile.
+        real(real64) :: middle_quartile
+        !> @brief The upper (Q3) quartile.
+        real(real64) :: upper_quartile
+    end type
+
     interface
         !> @brief Tests to see if an array is monotonically increasing or 
         !! decreasing.
@@ -330,6 +345,14 @@ module measurements_core
             real(real64) :: rst
         end function
 
+        !> @brief Computes the inner, middle, and upper quartiles of a data set.
+        !!
+        !! @param[in] x The data set.
+        !! @return The resulting quartiles.
+        module function quartiles(x) result(rst)
+            real(real64), intent(in), dimension(:) :: x
+            type(quartile_information) :: rst
+        end function
     end interface
 
 ! ******************************************************************************

@@ -545,5 +545,33 @@ pure function t_test_paired(x1, x2) result(rst)
         0.5d0)
 end function
 
+! ******************************************************************************
+! ADDED 07/04/2021 - JAC
+! ------------------------------------------------------------------------------
+module function quartiles(x) result(rst)
+    ! Arguments
+    real(real64), intent(in), dimension(:) :: x
+    type(quartile_information) :: rst
+
+    ! Local Variables
+    integer(int32) :: n, iq1, iq2, iq3
+    real(real64), allocatable, dimension(:) :: y
+
+    ! Initialization
+    n = size(x)
+    iq1 = (n + 1) / 4
+    iq2 = (n + 1) / 2
+    iq3 = 3 * (n + 1) / 4
+
+    ! Sort the data into ascending order
+    y = x
+    call sort(y, .true.)
+
+    ! Return the quartile information
+    rst%lower_quartile = y(iq1)
+    rst%middle_quartile = y(iq2)
+    rst%upper_quartile = y(iq3)
+end function
+
 ! ------------------------------------------------------------------------------
 end submodule

@@ -1755,4 +1755,20 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Computes the inner, middle, and upper quartiles of a data set.
+    !!
+    !! @param[in] n The number of items in the array.
+    !! @param[in] x The N-element array.
+    !! @param[out] rst The resulting quartiles.
+    subroutine c_quartiles(n, x, rst) bind(C, name = "c_quartiles")
+        ! Arguments
+        integer(c_int), intent(in), value :: n
+        real(c_double), intent(in) :: x(n)
+        type(quartile_information), intent(out) :: rst
+
+        ! Process
+        rst = quartiles(x)
+    end subroutine
+
+! ------------------------------------------------------------------------------
 end module

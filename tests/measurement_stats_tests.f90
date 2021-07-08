@@ -62,6 +62,9 @@ program main
     local = f_test_test()
     if (.not.local) overall = .false.
 
+    local = quartile_test()
+    if (.not.local) overall = .false.
+
     ! --------------------------------------------------------------------------
     ! Special Functions
 

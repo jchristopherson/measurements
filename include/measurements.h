@@ -100,6 +100,16 @@ typedef struct {
     anova_table_entry total;
 } gage_table;
 
+/** Defines quartile information. */
+typedef struct {
+    /** The lower (Q1) quartile. */
+    double lower_quartile;
+    /** The middle (Q2) quartile. */
+    double middle_quartile;
+    /** The upper (Q3) quartile. */
+    double upper_quartile;
+} quartile_information;
+
 /**
  * Defines a window function.
  *
@@ -1019,6 +1029,13 @@ void c_beta_distribution(double a, double b, int n, const double *x, double *f);
  */
 void c_f_distribution(double d1, double d2, int n, const double *x, double *f);
 
+/** Computes the inner, middle, and upper quartiles of a data set.
+ *
+ * @param n The number of items in the array.
+ * @param x The N-element array.
+ * @param rst The resulting quartiles.
+ */
+void c_quartiles(int n, const double *x, quartile_information *rst);
 
 #ifdef __cplusplus
 }
